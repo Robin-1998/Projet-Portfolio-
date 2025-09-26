@@ -14,7 +14,7 @@ Ce projet a pour objectif de mettre en pratique l’ensemble des compétences ac
 9. Création de nouvelle fonctionalités une par une
 
 ## Architecture
-
+```
 Portfolio Holberton/
 ├── app/
 │   ├── __init__.py
@@ -67,6 +67,6 @@ Portfolio Holberton/
 ├── requirements.txt
 ├── run-tests.py
 └── README.md
-
+```
 # Collaborateurs
 Il a été conçu et développé par Thérèse-Marie LEFOULON et Robin DAVID. 

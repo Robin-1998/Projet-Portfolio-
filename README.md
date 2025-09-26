@@ -22,15 +22,15 @@ Portfolio Holberton/
 │   │   ├── __init__.py
 │   │   └── V1/
 │   │       ├── __init__.py
-│   │       ├── admin.py
-│   │       ├── auth.py
-│   │       ├── users.py
-│   │       ├── places_map.py
-│   │       ├── events.py
-│   │       ├── races.py
-│   │       ├── characters.py
-│   │       ├── art.py
-│   │       └── map_data.py # données cartographiques x,y
+│   │       ├── api_admin.py
+│   │       ├── api_auth.py
+│   │       ├── api_users.py
+│   │       ├── api_places_map.py
+│   │       ├── api_events.py
+│   │       ├── api_races.py
+│   │       ├── api_characters.py
+│   │       ├── api_art.py
+│   │       └── api_map_data.py # données cartographiques x,y
 │   ├── database/
 │   │   ├── schema.sql
 │   │   └── migrations

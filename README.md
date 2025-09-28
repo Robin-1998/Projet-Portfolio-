@@ -15,7 +15,7 @@ Ce projet a pour objectif de mettre en pratique l’ensemble des compétences ac
 
 ## Architecture
 ```
-Portfolio Holberton/             # Racine du projet (fullstack Flask + React)
+Projet-Portfolio-/             # Racine du projet (fullstack Flask + React)
 ├── app/                             # Dossier principal de l’application backend + logique
 │   ├── __init__.py                          # Rend 'app' importable comme package Python
 │   ├── api/                           # Routes de l’API (contrôleurs Flask)

@@ -81,6 +81,8 @@ Portfolio Holberton/             # Racine du projet (fullstack Flask + React)
 │       ├── PortfolioAPI.postman_collection.json
 │       └── PortfolioAPI.postman_environment.json
 │
+├── Documentation/                       # Documentation technique pour le projet
+│
 ├── __init__.py                          # Rend la racine importable comme package Python
 ├── run.py                               # Script principal pour démarrer Flask
 ├── requirements.txt                     # Dépendances Python (Flask, SQLAlchemy, JWT…)

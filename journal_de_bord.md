@@ -13,6 +13,6 @@
 
 	-> Ajout d'une table "relation_type" pour lié le personnage, et aussi la table histoire : évolution facile, évite les erreurs de frappe, évite les doublons (anniversaire lié à Bilbon ET hobbit-bourg) peut être réutiliser pour d'autre table, plus flexible (ajoute de colonnes supplémentaire, meilleure compatibilité avec les ORM. On peut ajouter un champ category dans relation_types pour spécifier la relation (optionnel, ex : personnage, histoire, les_deux).
 
-  	-> insertion données 2 Users Admin : Robin Admin et Timi Admin + 1 User connecté John Doe
-	-> insertion données race_type
-	-> insertion données relation_type
+  	-> insertion données 2 Users Admin : Robin Admin et Timi Admin + 1 User connecté John Doe.  
+	-> insertion données race_type.  
+	-> insertion données relation_type.  

@@ -3,6 +3,6 @@
 
 29/09/25 - Timi
 - début création base de données à partir du document Base de données établie dans la Part 3 du projet (branche feature/basedonneeTM)
-  -> manque relation entre character et race  
-  -> choix de BIGSERIAL au lieu de BIGINT pour les id (PostgreSQL crée automatiquement une séquence. Chaque nouvel INSERT génère un nouvel ID unique automatiquement)
-  -> utilisation de SMALLINT pour star_year et death_year (2 octets au lieu de 4 pour int)  
+  -> manque relation entre character et race.  
+  -> choix de BIGSERIAL au lieu de BIGINT pour les id (PostgreSQL crée automatiquement une séquence. Chaque nouvel INSERT génère un nouvel ID unique automatiquement).  
+  -> utilisation de SMALLINT pour star_year et death_year (2 octets au lieu de 4 pour int).  

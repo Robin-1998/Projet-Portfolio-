@@ -1,14 +1,14 @@
 from app import db
 from datetime import datetime, timezone
 
-class BaseModel(db.model):
+class BaseModel(db.Model):
     """ Classe de base pour tout les modèles"""
 
     __abstract__ = True
 
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
-    updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), 
+    updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc),
                           onupdate=lambda: datetime.now(timezone.utc))
 
     def save(self):

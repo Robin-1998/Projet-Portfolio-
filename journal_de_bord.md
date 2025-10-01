@@ -1,7 +1,7 @@
-28/09/25 - Timi
+28/09/25
 - Création de la Structure en attente de Pull Request Robin (branche feature/structure).  
 
-29/09/25 - Timi
+29/09/25
 - début création base de données à partir du document Base de données établie dans la Part 3 du projet (branche feature/basedonneeTM).  
 	-> Problème observé : manque relation entre character et race dans le doc.  
 
@@ -16,3 +16,14 @@
   	-> insertion données 2 Users Admin : Robin Admin et Timi Admin + 1 User connecté John Doe.  
 	-> insertion données race_type.  
 	-> insertion données relation_type.  
+
+30/09/25
+- continue à implémenter la base de données.
+- début configuration aplication Flask.
+- début code class user.
+
+01/10/25
+- modification de la structure
+	-> supprimer des models inutiles (character, race, events).  
+  	-> ajout des models reviews et image_post.  
+  	-> ajout du dossier persistence et fichier repository.  

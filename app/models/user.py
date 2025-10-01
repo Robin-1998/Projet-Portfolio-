@@ -15,7 +15,7 @@ class User(BaseModel):
     password = db.Column(db.String(128), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
 
-    def __init__(self, first_name, last_name, email, password, is_admin=False)
+    def __init__(self, first_name, last_name, email, password, is_admin=False):
         """
         Récupérez les identifiants ID, created_at et update_at de
         classe BaseModel. Initialisation de first_name, last_name, email et

@@ -23,7 +23,7 @@
 - début code class user.
 
 01/10/25
-- modification de la structure
+- modification de la structure.  
 	-> supprimer des models inutiles (character, race, events).  
   	-> ajout des models reviews et image_post.  
   	-> ajout du dossier persistence et fichier repository.  

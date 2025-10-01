@@ -1,6 +1,7 @@
 from app.models.user import User
 from app import db
-from repositories.base_repository import SQLAlchemyRepository
+from app.persistence.repository import SQLAlchemyRepository
+from app.persistence.user_repository import SQLAlchemyRepository
 
 class PortfolioFacade:
 
@@ -48,3 +49,4 @@ class PortfolioFacade:
     self.user_repo.delete(user_id)
     db.session.commit()
     return True    
+

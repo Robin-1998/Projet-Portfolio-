@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 from app import db, bcrypt
+from app.models.base_model import BaseModel
 from email_validator import validate_email, EmailNotValidError
 from sqlalchemy.orm import validates
 import re
@@ -56,13 +57,15 @@ class User(BaseModel):
         Méthode de validation vérifiant la validité de l'adresse e-mail
         à l'aide de la bibliothèque email-Validator
         """
+        if not email:
+            raise ValueError("L'email ne peut pas être vide")
         try: # on appelle la bibliothèque validate_email et on la valide
             valid = validate_email(email)
             return valid.normalized
 
         # Renvoie l'email propre si valide
         except EmailNotValidError as email_error:
-            raise ValueError(f"Error, invalid email : {email_error}")
+            raise ValueError(f"Erreur, email invalide : {email_error}")
 
     def hash_password(self, password):
         """
@@ -83,8 +86,16 @@ class User(BaseModel):
         """
         Vérifie si le mot de passe fourni correspond au mot de passe haché.
         """
+        if not password:
+            return False
         return bcrypt.check_password_hash(self.password, password)
-
+    
+    """
+    def update_password(self, new_password):
+        met à jour le mdp de l'utilisateur
+        Utilise hash_password pour valider et hacher le nouveau mot de passe.
+        self.hash_password(new_password)
+    """
     @validates('is_admin')
     def validate_is_admin(self, _key, is_admin):
         """

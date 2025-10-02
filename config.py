@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
 
 # Charger les variables d'environnement depuis .env
 load_dotenv()
@@ -19,6 +20,8 @@ class Config:
 
     # UTF-8 pour JSON
     JSON_AS_ASCII = False
+
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(days=365)
 
     # ITEMS_PER_PAGE = 20, définir un nombre par défaut d’éléments à afficher par page
 

@@ -10,7 +10,7 @@ class Review(BaseModel):
     user_id = db.Column(db.BigInteger, db.ForeignKey('users.id'), nullable=False)
     post_image_id = db.Column(db.BigInteger, db.ForeignKey('post_images.id'), nullable=False)
 
-    def __init__(self, comment, user_id):
+    def __init__(self, comment, user_id, post_image_id):
         super().__init__()
         self.comment = self.validate_text("comment", comment)
         self.user_id = self.validate_user_id("user_id", user_id)

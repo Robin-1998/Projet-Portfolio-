@@ -6,7 +6,7 @@ from app.persistence.user_repository import UserRepository
 
 class PortfolioFacade:
     def __init__(self):
-        self.user_repo = UserRepository
+        self.user_repo = UserRepository()
 
 # -------------------- Authentification de l'utilisateur --------------------
 
@@ -25,12 +25,12 @@ class PortfolioFacade:
             # user.hash_password(user_data['password']) DOUBLON ????
             self.user_repo.add(user)
             return user
-        
+
         except ValueError:
             # Erreurs de validation ou logique métier
             db.session.rollback()
             raise
-        
+
         except Exception as e:
             db.session.rollback()
             raise ValueError(f"Erreur lors de la création de l'utilisateur: {str(e)}")
@@ -97,17 +97,17 @@ class PortfolioFacade:
     def update_user(self, user_id, current_user_id, data):
         """
         Met à jour les données d'un utilisateur.
-        
-        IMPORTANT : Ne pas inclure 'password' dans data. 
+
+        IMPORTANT : Ne pas inclure 'password' dans data.
         Utilisez update_user_password() pour changer le mot de passe.
-        
+
         Args:
             user_id: ID de l'utilisateur
             data (dict): Dictionnaire contenant les champs à mettre à jour
-        
+
         Returns:
             User: L'objet utilisateur mis à jour
-        
+
         Raises:
             ValueError: Si tentative de modification du mot de passe ou données invalides
         """
@@ -139,10 +139,10 @@ class PortfolioFacade:
 
             # Met à jour (le repository fait le commit)
             self.user_repo.update(user_id, data)
-            
+
             # Récupère l'utilisateur mis à jour
             updated_user = self.user_repo.get(user_id)
-            
+
             return updated_user
 
         except ValueError:
@@ -156,15 +156,15 @@ class PortfolioFacade:
     def update_user_password(self, user_id, old_password, new_password):
         """
         Met à jour le mot de passe d'un utilisateur de manière sécurisée.
-        
+
         Args:
             user_id: ID de l'utilisateur
             old_password (str): Ancien mot de passe pour vérification
             new_password (str): Nouveau mot de passe
-        
+
         Returns:
             User: L'objet utilisateur mis à jour
-        
+
         Raises:
             ValueError: Si l'ancien mot de passe est incorrect
         """
@@ -194,13 +194,13 @@ class PortfolioFacade:
     def delete_user(self, user_id):
         """
         Supprime un utilisateur (opération admin).
-        
+
         Args:
             user_id: ID de l'utilisateur à supprimer
-        
+
         Returns:
             bool: True si la suppression a réussi
-        
+
         Raises:
             ValueError: Si l'utilisateur n'existe pas
         """
@@ -211,7 +211,7 @@ class PortfolioFacade:
 
             # Supprime l'utilisateur (le repository fait le commit)
             self.user_repo.delete(user_id)
-            
+
             return True
 
         except ValueError:
@@ -227,48 +227,48 @@ class PortfolioFacade:
     def delete_image_post(self, image_id, user_id):
         Supprime une image ET son fichier physique
         image = self.image_repo.get(image_id)
-        
+
         # Vérification des permissions
         if image.user_id != user_id and not is_admin(user_id):
             raise PermissionError("Vous ne pouvez pas supprimer cette image")
-        
+
         # Supprime le fichier physique
         os.remove(image.file_path)
-        
+
         # Supprime de la base de données
         self.image_repo.delete(image_id)
 
     def update_review(self, review_id, data, user_id):
         Met à jour une review avec validation
         review = self.review_repo.get(review_id)
-        
+
         # Vérification : seul l'auteur peut modifier
         if review.user_id != user_id:
             raise PermissionError("Vous ne pouvez modifier que vos propres reviews")
-        
+
         # Validation du rating
         if 'rating' in data and not (1 <= data['rating'] <= 5):
             raise ValueError("Le rating doit être entre 1 et 5")
-        
+
         self.review_repo.update(review_id, data)
 
     def delete_post(self, post_id, user_id):
         Supprime un post avec toutes ses dépendances
         post = self.post_repo.get(post_id)
-        
+
         # Vérification
         if post.user_id != user_id and not is_admin(user_id):
             raise PermissionError("Permission refusée")
-        
+
         # Supprime les images associées (avec fichiers physiques)
         for image in post.images:
             self.delete_image_post(image.id, user_id)
-        
+
         # Supprime les reviews associées
         reviews = self.review_repo.get_by_attribute('post_id', post_id)
         for review in reviews:
             self.review_repo.delete(review.id)
-        
+
         # Supprime le post
         self.post_repo.delete(post_id)
     """

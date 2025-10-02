@@ -17,14 +17,29 @@ class BaseModel(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    def delete(self):
-        """Supprime l'objet de la base"""
-        db.session.delete(self)
-        db.session.commit()
+    def to_dict(self):
+        """
+        Convertit l'objet en dictionnaire de base.
+        DOIT être surchargée dans les classes enfants pour inclure leurs attributs.
+        
+        Returns:
+            dict: Dictionnaire avec id, created_at, updated_at
+        """
+        return {
+            'id': self.id,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None
+        }
 
-    def update(self, data):
-        """Met à jour les attributs de l'objet"""
-        for key, value in data.items():
-            if hasattr(self, key) and key not in ['id', 'created_at']:  # Protège id et created_at
-                setattr(self, key, value)
-        self.save()
+# ⚠️ IMPORTANT : J'ai supprimé les méthodes delete() et update() de BaseModel
+# Car elles entrent en conflit avec le pattern Repository que vous utilisez.
+# 
+# Avec le pattern Repository :
+# - Les opérations CRUD passent par le Repository
+# - Le Repository gère les transactions (commit/rollback)
+# - Les modèles restent des objets de données simples
+#
+# Si vous voulez vraiment garder ces méthodes, utilisez plutôt :
+# - obj.save() pour sauvegarder les changements d'un objet existant
+# - repository.delete(obj_id) pour supprimer
+# - repository.update(obj_id, data) pour mettre à jour

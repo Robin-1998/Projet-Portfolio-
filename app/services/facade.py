@@ -1,11 +1,12 @@
 from app.models.user import User
 from app import db
-from app.persistence.repository import SQLAlchemyRepository
-from app.persistence.user_repository import SQLAlchemyRepository
+from app.persistence.user_repository import UserRepository
+
+# from app.persistence.repository import SQLAlchemyRepository
 
 class PortfolioFacade:
     def __init__(self):
-        self.user_repo = SQLAlchemyRepository(User)
+        self.user_repo = UserRepository
 
 # -------------------- Authentification de l'utilisateur --------------------
 
@@ -93,7 +94,7 @@ class PortfolioFacade:
         except Exception as e:
             raise ValueError(f"Erreur lors de la recherche par email : {str(e)}")
 
-    def update_user(self, user_id, data):
+    def update_user(self, user_id, current_user_id, data):
         """
         Met à jour les données d'un utilisateur.
         
@@ -126,6 +127,15 @@ class PortfolioFacade:
             user = self.user_repo.get(user_id)
             if not user:
                 raise ValueError(f"Aucun utilisateur trouvé avec l'ID {user_id}.")
+
+            current_user = self.user_repo.get(current_user_id)
+            if not current_user:
+                raise PermissionError("Utilisateur connecté invalide.")
+
+            if user_id != current_user_id and not current_user.is_admin:
+                raise PermissionError(
+                    "Vous ne pouvez modifier que votre propre profil."
+                )
 
             # Met à jour (le repository fait le commit)
             self.user_repo.update(user_id, data)

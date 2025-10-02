@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 from app import db, bcrypt
-from app.models.base_model import BaseModel
+from app.models.basemodel import BaseModel
 from email_validator import validate_email, EmailNotValidError
 from sqlalchemy.orm import validates
 import re
@@ -90,12 +90,12 @@ class User(BaseModel):
             return False
         return bcrypt.check_password_hash(self.password, password)
     
-    """
+
     def update_password(self, new_password):
-        met à jour le mdp de l'utilisateur
-        Utilise hash_password pour valider et hacher le nouveau mot de passe.
+        #met à jour le mdp de l'utilisateur
+        # Utilise hash_password pour valider et hacher le nouveau mot de passe.
         self.hash_password(new_password)
-    """
+    
     @validates('is_admin')
     def validate_is_admin(self, _key, is_admin):
         """

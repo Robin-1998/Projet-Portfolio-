@@ -9,9 +9,7 @@ class UserRepository(SQLAlchemyRepository):
 
     def get_user_by_email(self, email):
         """ Retrieve a user instance by their email address."""
-        if not email:
-            return None
-        return self.get_by_attribute('email', email)
+        return self.model.query.filter_by(email=email).first()
     
     def email_exists(self, email):
         """
@@ -42,3 +40,5 @@ class UserRepository(SQLAlchemyRepository):
             list: Liste des utilisateurs avec is_admin=False
         """
         return self.model.query.filter_by(is_admin=False).all()
+    
+

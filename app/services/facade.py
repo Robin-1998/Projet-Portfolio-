@@ -1,6 +1,9 @@
 from app.models.user import User
+from app.models.review import Review
+from app.models.image_post import ImagePost
 from app import db
 from app.persistence.user_repository import UserRepository
+from app.persistence.repository import Repository
 
 # from app.persistence.repository import SQLAlchemyRepository
 
@@ -93,6 +96,20 @@ class PortfolioFacade:
 
         except Exception as e:
             raise ValueError(f"Erreur lors de la recherche par email : {str(e)}")
+    
+    def get_user_by_id(self, user_id):
+        """Récupère un utilisateur par son identifiant unique"""
+        try:
+            if not user_id:
+                raise ValueError("L'identifiant utilisateur est requis.")
+            user = self.user_repo.get_by_attribute('id', user_id)
+            if not user:
+                raise ValueError(f"Aucun utilisateur trouvé avec l'id {user_id}.")
+            return user
+        except ValueError:
+            raise
+        except Exception as e:
+            raise ValueError(f"Erreur lors de la recherche par ID : {str(e)}")
 
     def update_user(self, user_id, current_user_id, data):
         """
@@ -222,7 +239,94 @@ class PortfolioFacade:
             db.session.rollback()
             raise ValueError(f"Erreur lors de la suppression : {str(e)}")
 
-######################################################################################
+# -------------------- Review --------------------
+
+    def create_review(self, review_data):
+        """ création d'un nouveau commentaire basé sur image + user """
+        #récupération des IDS
+        user_id = review_data.get('user_id')
+        image_post_id = review_data.get('post_image_id')
+
+        if not user_id:
+            raise ValueError("user_id est requis")
+        if not image_post_id:
+            raise ValueError("post_image_id est requis")
+        
+        user = self.get_user_by_id(user_id)
+        if not user:
+            raise ValueError(f"Aucun utilisateur trouvé avec l'ID {user_id}")
+        post_image = self.get_post_image(image_post_id)
+        if not post_image:
+            raise ValueError(f"Aucune image trouvé avec l'ID {image_post_id}")
+        
+        comment = review_data.get('comment')
+
+        review = Review(
+            comment=comment,
+            user_id=user.id,
+            image_post_id=post_image.id
+        )
+
+        self.review_repo.add(review)
+        db.session.commit()
+        return review
+    
+    def get_review(self, review_id):
+        """ Liste un commentaire spécifique """
+        try:
+            review = self.review_repo.get(review_id)
+            if not review:
+                raise ValueError(f"Aucun commentaire trouvé avec l'ID {review_id}.")
+            return review
+        except ValueError:
+            raise
+        except Exception as e:
+            raise ValueError(f"Erreur lors de la récupération de l'utilisateur : {str(e)}")
+
+    def get_all_reviews(self):
+        """ Liste tout les commentaires """
+        try:
+            reviews = self.review_repo.get_all()
+            return [review.to_dict() for review in reviews]
+        except Exception as e:
+            raise ValueError(f"Erreur lors de la récupération des commentaires : {str(e)}")
+
+    def get_reviews_by_image(self, image_post_id):
+        """ Retourne tous les commentaires liés à une image spécifique """
+        return self.review_repo.get_by_post_image_id(image_post_id)
+    
+    def update_review(self, review_id, review_data):
+        """ mettre à jour un commentaire """
+        self.review_repo.update(review_id, review_data)
+        review = self.review_repo.get(review_id)
+        db.session.commit()
+        return review
+    
+    def delete_review(self, review_id):
+        """ supprime un commentaire """
+        review = self.review_repo.get(review_id)
+        if not review:
+            return False  # Ne rien supprimer si l'ID est inconnu
+        # Supprime la review
+        self.review_repo.delete(review_id)
+        db.session.commit()
+        # Confirme qu'elle n'existe plus
+        return True
+
+# -------------------- Post_image  --------------------
+
+    def get_post_image(self, image_post_id):
+        """ retourne une image spécifique """
+        try:
+            image = self.image_post_repo.get(image_post_id)
+            if not image:
+                raise ValueError(f"Aucun utilisateur trouvé avec l'ID {image_post_id}.")
+            return image
+        except ValueError:
+            raise
+        except Exception as e:
+            raise ValueError(f"Erreur lors de la récupération de l'image : {str(e)}")
+
     """
     def delete_image_post(self, image_id, user_id):
         Supprime une image ET son fichier physique

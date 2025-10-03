@@ -26,4 +26,17 @@
 - modification de la structure.  
 	-> supprimer des models inutiles (character, race, events).  
   	-> ajout des models reviews et image_post.  
-  	-> ajout du dossier persistence et fichier repository.  
+  	-> ajout du dossier persistence et fichier repository.
+- début implémentation de api_user, facade user, repository, repository_user.  
+
+02/10/25
+- continue sur api_user, facade user, repository, repository_user.
+- test avec Postman pour User Post get, get_id, put TEST OK.  
+- implémentation de reviews model, image_post fini.
+- implémentation de la facade reviews et image_post en cours.
+- implémentation de api_auth et api_admin en cours, récupération de Token OK.
+- implémentation de la base de données pour Timi en local OK.
+- ajout des routes dans __init__.py de app.  
+
+03/10/25
+

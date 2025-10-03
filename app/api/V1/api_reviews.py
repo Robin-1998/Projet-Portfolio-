@@ -8,58 +8,73 @@ api = Namespace('reviews', description='Review operations')
 
 @api.route('/')
 class ReviewList(Resource):
+    @jwt_required()
     def post(self):
-        """ Envoie d'un nouveau commentaire"""
+        """Envoie d'un nouveau commentaire"""
         review_data = request.json
         if not review_data:
             return {"error": "Données manquantes"}, 400
 
+        # Récupération de l'utilisateur connecté
         user_identity = get_jwt_identity()
         user_id = user_identity.get("id")
+        
+        # Récupération de l'ID de l'image depuis les données envoyées
         image_post_id = review_data.get('image_post_id')
 
-        # présence de l'id de l'image et de l'utilisateur obligatoire
-        if not user_id or not image_post_id:
-            return {'erreur': 'user_id or image_post_id manquant'}, 400
-
-        # On vérifie que l'utilisateur existe sinon on retourne une erreur
-        user = facade.get_user_by_id(user_id)
-        if not user:
-            return {'erreur': 'Utilisateur non trouvé'}, 400
-
-        # On vérifie que l'image existe sinon on retourne une erreur
-        image = facade.get_post_image(image_post_id)
-        if not image:
-            return {'erreur': 'Image non trouvé'}, 400
-
-        # Récupère toutes les reviews existantes pour une image
-        existing_reviews = facade.get_reviews_by_image(image_post_id) or []
-
-        # Vérifie si l'utilisateur a déjà posté une review pour cette image
-        for rev in existing_reviews:
-            if rev.user and str(rev.user.id) == str(user_id):
-                return {'error': 'Vous avez déjà laissé un commentaire'}, 400
-
-        # Injecte l'user_id dans les données de review avant de créer
-        review_data['user_id'] = user_id # Injection du user_id côté serveur
+        # Présence de l'id de l'image obligatoire
+        if not image_post_id:
+            return {'error': 'image_post_id manquant'}, 400
 
         try:
-            new_review = facade.create_review(review_data)
+            # Vérifie que l'utilisateur existe
+            user = facade.get_user_by_id(user_id)
+            if not user:
+                return {'error': 'Utilisateur non trouvé'}, 404
+
+            # Vérifie que l'image existe
+            image = facade.get_post_image(image_post_id)
+            if not image:
+                return {'error': 'Image non trouvée'}, 404
+
+            # Récupère toutes les reviews existantes pour cette image
+            existing_reviews = facade.get_reviews_by_image(image_post_id) or []
+
+            # Vérifie si l'utilisateur a déjà posté une review pour cette image
+            for rev in existing_reviews:
+                if rev.user and str(rev.user_id) == str(user_id):
+                    return {'error': 'Vous avez déjà laissé un commentaire sur cette image'}, 400
+
+            # Prépare les données avec le bon nom de champ
+            # IMPORTANT: Votre facade attend 'post_image_id', pas 'image_post_id'
+            review_create_data = {
+                'user_id': user_id,
+                'post_image_id': image_post_id,  # Nom attendu par la facade
+                'comment': review_data.get('comment')
+            }
+
+            # Crée la review
+            new_review = facade.create_review(review_create_data)
+
+            return {
+                'id': new_review.id,
+                'comment': new_review.comment,
+                'user_id': new_review.user_id,
+                'image_post_id': new_review.image_post_id
+            }, 201
+
         except ValueError as error:
             return {"error": str(error)}, 400
-        return {
-            'id': new_review.id,
-            'comment': new_review.text,
-            'user_id': new_review.user.id,
-            'post_image_id': new_review.post_image_id.id
-        }, 201
+        except Exception as e:
+            return {"error": f"Erreur serveur: {str(e)}"}, 500
 
     def get(self):
         reviews = facade.get_all_reviews()
         return reviews, 200
 
-@api.route('/<reviews_id>')
+@api.route('/<int:review_id>')
 class ReviewResource(Resource):
+    @jwt_required()
     def get(self, review_id):
         review = facade.get_review(review_id)
         
@@ -85,45 +100,52 @@ class ReviewResource(Resource):
         if not review_data:
             return {'erreur': 'Commentaire non trouvé'}, 404
 
-        # 1. Vérifier si la review existe
-        review = facade.get_review(review_id)
-
-        user_id = get_jwt_identity()["id"]
-        if not review.user or str(review.user.id) != str(user_id):
-            return {"erreur": "Action non autorisé"}, 403
-
-        # 2. Valider les données fournies
-        if 'text' in review_data:
-            text = review_data['text'].strip()
-            if not text:
-                return {'erreur': 'Le texte ne peut pas être vide'}, 400
-
-        # 3. Mettre à jour la review via la façade
         try:
-            updated_review = facade.update_review(review_id, review_data)
-        except Exception as e:
-            # Capture toute erreur inattendue (ex: validation côté modèle)
-            return {'erreur': str(e)}, 400
+            # Vérifie si la review existe
+            review = facade.get_review(review_id)
+            if not review:
+                return {'error': 'Commentaire non trouvé'}, 404
 
-        # 4. Retourner la review mise à jour
-        return {
-            'review': {
-                'id': updated_review.id,
-                'comment': updated_review.text,
-                'user': updated_review.user.id if updated_review.user else None,
-                'image_post': updated_review.image_post.id if updated_review.image_post else None
-            },
-            'message': 'Commentaire correctement mis à jour'
-        }, 200
+            # Vérifie que l'utilisateur connecté est le propriétaire
+            user_id = get_jwt_identity()["id"]
+            if not review.user_id or str(review.user_id) != str(user_id):
+                return {"error": "Action non autorisée"}, 403
+
+            # Valide les données fournies
+            if 'comment' in review_data:
+                comment = review_data['comment'].strip()
+                if not comment:
+                    return {'error': 'Le commentaire ne peut pas être vide'}, 400
+
+            # Met à jour la review via la façade
+            updated_review = facade.update_review(review_id, review_data)
+
+            # Retourne la review mise à jour
+            return {
+                'review': {
+                    'id': updated_review.id,
+                    'comment': updated_review.comment,
+                    'user_id': updated_review.user_id,
+                    'image_post_id': updated_review.image_post_id
+                },
+                'message': 'Commentaire correctement mis à jour'
+            }, 200
+
+        except ValueError as e:
+            return {'error': str(e)}, 400
+        except Exception as e:
+            return {'error': f"Erreur serveur: {str(e)}"}, 500
     
     @jwt_required()
     def delete(self, review_id):
         """ supprimer un commentaire (avec l'ID) """
-        review_delete = facade.get_review(review_id)
+        review = facade.get_review(review_id)
+        if not review:
+            return {'error': 'Commentaire non trouvé'}, 404
 
         # Étape 2 : Vérifier que l'utilisateur connecté est bien le propriétaire
         user_id = get_jwt_identity()["id"]
-        if not review_delete.user or str(review_delete.user.id) != str(user_id):
+        if not review.user or str(review.user.id) != str(user_id):
             return {"erreur": " Action non autorisé"}, 403
 
         # Étape 3 : delete the review

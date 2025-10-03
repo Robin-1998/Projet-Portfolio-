@@ -3,13 +3,17 @@ from app.models.review import Review
 from app.models.image_post import ImagePost
 from app import db
 from app.persistence.user_repository import UserRepository
-from app.persistence.repository import Repository
+from app.persistence.review_repository import ReviewRepository
+from app.persistence.image_post_repository import ImagePostRepository
+import base64
 
 # from app.persistence.repository import SQLAlchemyRepository
 
 class PortfolioFacade:
     def __init__(self):
         self.user_repo = UserRepository()
+        self.review_repo = ReviewRepository()
+        self.image_post_repo = ImagePostRepository()
 
 # -------------------- Authentification de l'utilisateur --------------------
 
@@ -244,32 +248,39 @@ class PortfolioFacade:
     def create_review(self, review_data):
         """ création d'un nouveau commentaire basé sur image + user """
         #récupération des IDS
-        user_id = review_data.get('user_id')
-        image_post_id = review_data.get('post_image_id')
+        try:
+            user_id = review_data.get('user_id')
+            image_post_id = review_data.get('post_image_id')
 
-        if not user_id:
-            raise ValueError("user_id est requis")
-        if not image_post_id:
-            raise ValueError("post_image_id est requis")
-        
-        user = self.get_user_by_id(user_id)
-        if not user:
-            raise ValueError(f"Aucun utilisateur trouvé avec l'ID {user_id}")
-        post_image = self.get_post_image(image_post_id)
-        if not post_image:
-            raise ValueError(f"Aucune image trouvé avec l'ID {image_post_id}")
-        
-        comment = review_data.get('comment')
+            if not user_id:
+                raise ValueError("user_id est requis")
+            if not image_post_id:
+                raise ValueError("post_image_id est requis")
+            
+            user = self.get_user_by_id(user_id)
+            if not user:
+                raise ValueError(f"Aucun utilisateur trouvé avec l'ID {user_id}")
+            post_image = self.get_post_image(image_post_id)
+            if not post_image:
+                raise ValueError(f"Aucune image trouvé avec l'ID {image_post_id}")
+            
+            comment = review_data.get('comment')
 
-        review = Review(
-            comment=comment,
-            user_id=user.id,
-            image_post_id=post_image.id
-        )
+            review = Review(
+                comment=comment,
+                user_id=user.id,
+                image_post_id=post_image.id
+            )
 
-        self.review_repo.add(review)
-        db.session.commit()
-        return review
+            self.review_repo.add(review)
+            return review
+
+        except ValueError:
+            db.session.rollback()
+            raise
+        except Exception as e:
+            db.session.rollback()
+            raise ValueError(f"Erreur lors de la création du commentaire : {str(e)}")
     
     def get_review(self, review_id):
         """ Liste un commentaire spécifique """
@@ -292,28 +303,111 @@ class PortfolioFacade:
             raise ValueError(f"Erreur lors de la récupération des commentaires : {str(e)}")
 
     def get_reviews_by_image(self, image_post_id):
-        """ Retourne tous les commentaires liés à une image spécifique """
-        return self.review_repo.get_by_post_image_id(image_post_id)
+        """Retourne tous les commentaires liés à une image spécifique"""
+        try:
+            reviews = self.review_repo.get_by_post_image_id(image_post_id)
+            return reviews
+        except Exception as e:
+            raise ValueError(f"Erreur lors de la récupération des commentaires : {str(e)}")
+        
+    def get_reviews_by_user(self, user_id):
+        """Retourne tous les commentaires d'un utilisateur"""
+        try:
+            reviews = self.review_repo.get_by_user_id(user_id)
+            return reviews
+        except Exception as e:
+            raise ValueError(f"Erreur lors de la récupération des commentaires : {str(e)}")
     
     def update_review(self, review_id, review_data):
-        """ mettre à jour un commentaire """
-        self.review_repo.update(review_id, review_data)
-        review = self.review_repo.get(review_id)
-        db.session.commit()
-        return review
+        """Met à jour un commentaire"""
+        try:
+            review = self.review_repo.get(review_id)
+            if not review:
+                raise ValueError(f"Aucun commentaire trouvé avec l'ID {review_id}.")
+            
+            # Mise à jour via le repository (qui fait le commit)
+            self.review_repo.update(review_id, review_data)
+            updated_review = self.review_repo.get(review_id)
+            return updated_review
+
+        except ValueError:
+            db.session.rollback()
+            raise
+        except Exception as e:
+            db.session.rollback()
+            raise ValueError(f"Erreur lors de la mise à jour : {str(e)}")
     
     def delete_review(self, review_id):
-        """ supprime un commentaire """
-        review = self.review_repo.get(review_id)
-        if not review:
-            return False  # Ne rien supprimer si l'ID est inconnu
-        # Supprime la review
-        self.review_repo.delete(review_id)
-        db.session.commit()
-        # Confirme qu'elle n'existe plus
-        return True
+        """Supprime un commentaire"""
+        try:
+            review = self.review_repo.get(review_id)
+            if not review:
+                raise ValueError(f"Aucun commentaire trouvé avec l'ID {review_id}.")
+            
+            # Suppression via le repository (qui fait le commit)
+            self.review_repo.delete(review_id)
+            return True
 
-# -------------------- Post_image  --------------------
+        except ValueError:
+            db.session.rollback()
+            raise
+        except Exception as e:
+            db.session.rollback()
+            raise ValueError(f"Erreur lors de la suppression : {str(e)}")
+
+# -------------------- Post_image  --------------------    
+    def create_image_post(self, image_post_data): 
+        try:
+            user_id = image_post_data.get("user_id")
+            if not user_id:
+                raise ValueError("user_id est requis")
+
+            # S'assurer que user_id est bien un int
+            if not isinstance(user_id, int):
+                try:
+                    user_id = int(user_id)
+                except (ValueError, TypeError):
+                    raise ValueError("user_id doit être un entier valide")
+
+            user = self.get_user_by_id(user_id)
+            if not user:
+                raise ValueError("Aucun utilisateur trouvé avec cet ID")
+
+            title = image_post_data.get("title")
+            
+            # Vérifie s’il existe déjà un post du même titre pour cet utilisateur
+            existing_post = self.image_post_repo.get_by_title_and_user(title, user_id)
+            if existing_post:
+                raise ValueError("Cette image existe déjà pour cet utilisateur")
+            
+            # ✅ Décodage base64 → bytes
+            image_data_b64 = image_post_data.get("image_data")
+            try:
+                image_data_bytes = base64.b64decode(image_data_b64)
+            except Exception:
+                raise ValueError("L'image n'est pas un base64 valide")
+
+            # 🔒 Vérification finale du type
+            if not isinstance(image_data_bytes, bytes):
+                raise ValueError("L'image doit être de type binaire (bytes)")
+            # Le modèle gère lui-même la validation complète
+            new_post = ImagePost(
+                title=image_post_data.get("title"),
+                description=image_post_data.get("description"),
+                image_data=image_data_bytes,
+                image_mime_type=image_post_data.get("image_mime_type"),
+                user_id=user_id
+            )
+            # Ajout via le repository (qui fait le commit)
+            self.image_post_repo.add(new_post)
+            return new_post
+
+        except ValueError:
+            db.session.rollback()
+            raise
+        except Exception as e:
+            db.session.rollback()
+            raise ValueError(f"Erreur lors de la création du post : {str(e)}")
 
     def get_post_image(self, image_post_id):
         """ retourne une image spécifique """
@@ -326,53 +420,91 @@ class PortfolioFacade:
             raise
         except Exception as e:
             raise ValueError(f"Erreur lors de la récupération de l'image : {str(e)}")
+        
+    def get_all_post_images(self):
+        """Liste toutes les images postées"""
+        try:
+            image_posts = self.image_post_repo.get_all()
+            return [image_post.to_dict() for image_post in image_posts]
+        except Exception as e:
+            raise ValueError(f"Erreur lors de la récupération des images : {str(e)}")
 
-    """
-    def delete_image_post(self, image_id, user_id):
-        Supprime une image ET son fichier physique
-        image = self.image_repo.get(image_id)
+    def get_post_images_by_user(self, user_id):
+        """Retourne toutes les images d'un utilisateur"""
+        try:
+            images = self.image_post_repo.get_by_user_id(user_id)
+            return images
+        except Exception as e:
+            raise ValueError(f"Erreur lors de la récupération des images : {str(e)}")
 
-        # Vérification des permissions
-        if image.user_id != user_id and not is_admin(user_id):
-            raise PermissionError("Vous ne pouvez pas supprimer cette image")
+    def update_image_post(self, post_id, user_id, update_data):
+        """Met à jour un post image"""
+        try:
+            image_post = self.image_post_repo.get(post_id)
+            if not image_post:
+                raise ValueError("Image non trouvée")
 
-        # Supprime le fichier physique
-        os.remove(image.file_path)
+            # S'assurer que user_id est bien un int
+            if not isinstance(user_id, int):
+                try:
+                    user_id = int(user_id)
+                except (ValueError, TypeError):
+                    raise ValueError("user_id doit être un entier valide")
 
-        # Supprime de la base de données
-        self.image_repo.delete(image_id)
+            # Vérification de propriété
+            if image_post.user_id != user_id:
+                raise PermissionError("Vous n'êtes pas autorisé à modifier cette image")
 
-    def update_review(self, review_id, data, user_id):
-        Met à jour une review avec validation
-        review = self.review_repo.get(review_id)
+            # 🔁 Si l'image est mise à jour, la décoder du base64
+            if "image_data" in update_data:
+                try:
+                    update_data["image_data"] = base64.b64decode(update_data["image_data"])
+                except Exception:
+                    raise ValueError("L'image n'est pas un base64 valide")
 
-        # Vérification : seul l'auteur peut modifier
-        if review.user_id != user_id:
-            raise PermissionError("Vous ne pouvez modifier que vos propres reviews")
+                if not isinstance(update_data["image_data"], bytes):
+                    raise ValueError("L'image doit être de type binaire (bytes).")
 
-        # Validation du rating
-        if 'rating' in data and not (1 <= data['rating'] <= 5):
-            raise ValueError("Le rating doit être entre 1 et 5")
+            # Mise à jour
+            self.image_post_repo.update(post_id, update_data)
+            updated_post = self.image_post_repo.get(post_id)
 
-        self.review_repo.update(review_id, data)
+            return updated_post
 
-    def delete_post(self, post_id, user_id):
-        Supprime un post avec toutes ses dépendances
-        post = self.post_repo.get(post_id)
+        except (ValueError, PermissionError):
+            db.session.rollback()
+            raise
+        except Exception as e:
+            db.session.rollback()
+            raise ValueError(f"Erreur lors de la mise à jour : {str(e)}")
+        
+    def delete_image_post(self, post_id, user_id):
+        """Supprime un post image"""
+        try:
+            # Récupération via le repository
+            image_post = self.image_post_repo.get(post_id)
+            if not image_post:
+                raise ValueError("Image non trouvée")
+            
+            # S'assurer que user_id est bien un int
+            if not isinstance(user_id, int):
+                try:
+                    user_id = int(user_id)
+                except (ValueError, TypeError):
+                    raise ValueError("user_id doit être un entier valide")
 
-        # Vérification
-        if post.user_id != user_id and not is_admin(user_id):
-            raise PermissionError("Permission refusée")
+            # Vérification de propriété
+            if image_post.user_id != user_id:
+                raise PermissionError("Vous n'êtes pas autorisé à supprimer cette image")
 
-        # Supprime les images associées (avec fichiers physiques)
-        for image in post.images:
-            self.delete_image_post(image.id, user_id)
+            # Suppression via le repository (qui fait le commit)
+            self.image_post_repo.delete(post_id)
+            return True
 
-        # Supprime les reviews associées
-        reviews = self.review_repo.get_by_attribute('post_id', post_id)
-        for review in reviews:
-            self.review_repo.delete(review.id)
+        except (ValueError, PermissionError):
+            db.session.rollback()
+            raise
+        except Exception as e:
+            db.session.rollback()
+            raise ValueError(f"Erreur lors de la suppression : {str(e)}")
 
-        # Supprime le post
-        self.post_repo.delete(post_id)
-    """

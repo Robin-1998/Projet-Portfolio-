@@ -1,5 +1,17 @@
 # Projet-Portfolio-
-Ce projet a pour objectif de mettre en pratique l’ensemble des compétences acquises tout au long de la formation des fondamentaux à travers le développement d’un concept personnel. L'école de formation est Holberton school Laval dans les fondamentaux du dev en full stack 
+Ce projet a pour objectif de mettre en pratique l’ensemble des compétences acquises tout au long de la formation des fondamentaux à travers le développement d’un concept personnel. L'école de formation est Holberton school Laval dans les fondamentaux du dev en full stack
+
+Wiki Interactif - Univers du Seigneur des Anneaux
+Ce projet est un site web immersif inspiré de l'univers du Seigneur des Anneaux, combinant une carte interactive, une encyclopédie enrichie de données (personnages, lieux, races) et un espace communautaire pour partager des créations artistiques. Il intègre une authentification sécurisée, une API REST, une base de données relationnelle, ainsi qu'une interface moderne construite avec React.
+
+# Fonctionalité
+
+- Carte interactive -> Navigation entre les régions/villes avec affichage des points d'intérêt via marqueur (gestion POSTGIS)
+- Authentification -> Inscription, connexion (gestion par JWT)
+- Wiki SDA -> Consultation des races, histoires, personnages
+- Galerie artistique -> Ajout de créations artistiques en images liées à l’univers SDA
+- Backend RESTful API -> Flask, avec endpoints organisés par version
+- Frontend React -> SPA avec Vite, composants modulaires
 
 # Ordre de développement du projet :
 

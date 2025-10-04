@@ -31,7 +31,7 @@
 
 02/10/25
 - continue sur api_user, facade user, repository, repository_user.
-- test avec Postman pour User Post get, get_id, put TEST OK.  
+- test avec Postman pour User Post get, get_id, put TEST OK.
 - implémentation de reviews model, image_post fini.
 - implémentation de la facade reviews et image_post en cours.
 - implémentation de api_auth et api_admin en cours, récupération de Token OK.
@@ -39,4 +39,33 @@
 - ajout des routes dans __init__.py de app.  
 
 03/10/25
+✅ Tests fonctionnels (Postman)
 
+Réalisation de tests Postman pour toutes les fonctionnalités CRUD sur les parties suivantes :
+- admin
+- auth
+- post_image
+
+➕ Ajout de nouvelles fonctionnalités
+
+Intégration de l’API reviews :
+L'API a été ajoutée mais pas encore testée sous Postman.
+
+🛠️ Modifications sur post_image
+Modification du schéma de la base de données :
+
+Ajout de deux colonnes :
+- image_data (type BYTEA) pour stocker les images directement en base.
+- image_mime_type pour conserver le type MIME (ex: image/png, image/jpeg, etc.).
+
+Raisons du changement :
+Les images sont uploadées par les utilisateurs → pas d’URL, donc stockage en base requis.
+
+Mise à jour des modèles et des fonctions CRUD pour refléter ces changements de structure.
+
+🖥️ Environnement local
+
+Mise en place des bases de données locales dédiées pour :
+- Robin
+- Timi
+→ Serveurs de développement indépendants configurés localement.

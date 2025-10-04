@@ -8,13 +8,16 @@ class Review(BaseModel):
 
     comment = db.Column(db.String(400), nullable=False)
     user_id = db.Column(db.BigInteger, db.ForeignKey('users.id'), nullable=False)
-    post_image_id = db.Column(db.BigInteger, db.ForeignKey('post_images.id'), nullable=False)
+    image_post_id = db.Column(db.BigInteger, db.ForeignKey('image_post.id'), nullable=False)
 
-    def __init__(self, comment, user_id, post_image_id):
+    user = db.relationship('User', backref='reviews')
+    image_post = db.relationship('ImagePost', backref='reviews')
+
+    def __init__(self, comment, user_id, image_post_id):
         super().__init__()
         self.comment = self.validate_text("comment", comment)
         self.user_id = self.validate_user_id("user_id", user_id)
-        self.post_image_id = self.validate_post_image_id("post_image_id", post_image_id)
+        self.image_post_id = self.validate_image_post_id("image_post_id", image_post_id)
 
     @validates('comment')
     def validate_text(self, _key, comment):
@@ -36,14 +39,14 @@ class Review(BaseModel):
             raise ValueError("user_iddoit être un entier posifif")
         return user_id
     
-    @validates('post_image_id')
-    def validate_post_image_id(self, _key, post_image_id):
-        """ Valide que post_image_id est un entier positif """
-        if not isinstance(post_image_id, int):
-            raise ValueError("post_image_id doit être un entier")
-        if post_image_id <= 0:
-            raise ValueError("post_image_id doit être un entier positif.")
-        return post_image_id
+    @validates('image_post_id')
+    def validate_image_post_id(self, _key, image_post_id):
+        """ Valide que image_post_id est un entier positif """
+        if not isinstance(image_post_id, int):
+            raise ValueError("image_post_id doit être un entier")
+        if image_post_id <= 0:
+            raise ValueError("image_post_id doit être un entier positif.")
+        return image_post_id
 
     def to_dict(self):
         """Convert the Review instance to a Python dictionary for serialization."""
@@ -51,5 +54,5 @@ class Review(BaseModel):
             "id": self.id,
             "comment": self.comment,
             "user_id": self.user_id,
-            "post_image_id": self.post_image_id
+            "image_post_id": self.image_post_id
         }

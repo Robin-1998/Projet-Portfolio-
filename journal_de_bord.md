@@ -42,46 +42,42 @@
 ✅ Tests fonctionnels (Postman)
 
 Réalisation de tests Postman pour toutes les fonctionnalités CRUD sur les parties suivantes :
-- admin
-- auth
-- post_image
+- admin, auth, post_image ➕ Ajout de nouvelles fonctionnalités
 
-➕ Ajout de nouvelles fonctionnalités
-
-Ajout des modèles suivants :
-- Race
-- Character
-- History
+Ajout des modèles et des namespaces associés suivants :
+- Race, Character, History
 
 Implémentation des APIs :
-- Race
-- Character
-- History
-- Reviews (non testé sur Postman)
-
-Ajout des namespaces associés :
-- race
-- character
-- history
+- Race, Character, History, Reviews (non testé sur Postman)
 
 🛠️ Modifications sur post_image
-Modification du schéma de la base de données :
+- Modification du schéma de la base de données :
 
 Ajout de deux colonnes :
 - image_data (type BYTEA) pour stocker les images directement en base.
 - image_mime_type pour conserver le type MIME (ex: image/png, image/jpeg, etc.).
 
 Raisons du changement :
-Les images sont uploadées par les utilisateurs → pas d’URL, donc stockage en base requis.
-
-Mise à jour des modèles et des fonctions CRUD pour refléter ces changements de structure.
+- Les images sont uploadées par les utilisateurs → pas d’URL, donc stockage en base requis.
+- Mise à jour des modèles et des fonctions CRUD pour refléter ces changements de structure.
 
 Refactorisation de la facade :
-Mise en place de facade2 pour la gestion centralisée des entités race, character, et history.
+- Mise en place de facade2 pour la gestion centralisée des entités race, character, et history.
 
 🖥️ Environnement local
-
-Mise en place des bases de données locales dédiées pour :
-- Robin
-- Timi
+Mise en place des bases de données locales dédiées pour Robin & Timi
 → Serveurs de développement indépendants configurés localement.
+
+## 06/10/25
+
+- Review test API Postman ok GET_id, GET_ALL, POST, PUT, DELETE.
+  
+- Implémentation de search api et facade, test GET sur race, personnage, histoire OK.
+  
+- Mise à jour de la base de données avec les modifications sur table image_post pour Timi en local.
+  
+- En cours :
+	- API - model - facade pour Place - map_marker et map_région.  
+	- ajout de model pour marker et région.  
+	- test api fonctionne mais désordonnée.  
+	- problème lié entre parent_id et children, en cours de recherche.  

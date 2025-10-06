@@ -250,18 +250,18 @@ class PortfolioFacade:
         #récupération des IDS
         try:
             user_id = review_data.get('user_id')
-            image_post_id = review_data.get('post_image_id')
+            image_post_id = review_data.get('image_post_id')
 
             if not user_id:
                 raise ValueError("user_id est requis")
             if not image_post_id:
-                raise ValueError("post_image_id est requis")
+                raise ValueError("image_post_id est requis")
             
             user = self.get_user_by_id(user_id)
             if not user:
                 raise ValueError(f"Aucun utilisateur trouvé avec l'ID {user_id}")
-            post_image = self.get_post_image(image_post_id)
-            if not post_image:
+            image_post = self.get_post_image(image_post_id)
+            if not image_post:
                 raise ValueError(f"Aucune image trouvé avec l'ID {image_post_id}")
             
             comment = review_data.get('comment')
@@ -269,7 +269,7 @@ class PortfolioFacade:
             review = Review(
                 comment=comment,
                 user_id=user.id,
-                image_post_id=post_image.id
+                image_post_id=image_post.id
             )
 
             self.review_repo.add(review)
@@ -305,7 +305,7 @@ class PortfolioFacade:
     def get_reviews_by_image(self, image_post_id):
         """Retourne tous les commentaires liés à une image spécifique"""
         try:
-            reviews = self.review_repo.get_by_post_image_id(image_post_id)
+            reviews = self.review_repo.get_by_image_post_id(image_post_id)
             return reviews
         except Exception as e:
             raise ValueError(f"Erreur lors de la récupération des commentaires : {str(e)}")

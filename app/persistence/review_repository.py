@@ -8,8 +8,7 @@ class ReviewRepository(SQLAlchemyRepository):
         """Initialise le repository avec le modèle Review"""
         super().__init__(Review)
     
-    def get_by_post_image_id(self, image_post_id):
-        """Récupère tous les commentaires d'une image spécifique"""
+    def get_by_image_post_id(self, image_post_id):
         return self.model.query.filter_by(image_post_id=image_post_id).all()
     
     def get_by_user_id(self, user_id):

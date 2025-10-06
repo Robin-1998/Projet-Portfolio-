@@ -46,10 +46,10 @@ class ReviewList(Resource):
                     return {'error': 'Vous avez déjà laissé un commentaire sur cette image'}, 400
 
             # Prépare les données avec le bon nom de champ
-            # IMPORTANT: Votre facade attend 'post_image_id', pas 'image_post_id'
+            # IMPORTANT: Votre facade attend 'image_post_id', pas 'image_post_id'
             review_create_data = {
                 'user_id': user_id,
-                'post_image_id': image_post_id,  # Nom attendu par la facade
+                'image_post_id': image_post_id,  # Nom attendu par la facade
                 'comment': review_data.get('comment')
             }
 
@@ -77,24 +77,24 @@ class ReviewResource(Resource):
     @jwt_required()
     def get(self, review_id):
         review = facade.get_review(review_id)
-        
+
         if review.user is not None:
             user_data = review.user.to_dict()
         else:
             user_data = None
 
-        if review.image_post is not None: 
+        if review.image_post is not None:
             image_post_data = review.image_post.to_dict()
         else:
             image_post_data = None
 
         return {
         'id': review.id,
-        'comment': review.text,
-        'user': user_data,
-        'image_post': image_post_data
+        'comment': review.comment,
+        'image_post_id': review.image_post_id
     }, 200
 
+    @jwt_required()
     def put (self, review_id):
         review_data = request.json
         if not review_data:

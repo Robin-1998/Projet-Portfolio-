@@ -1,7 +1,7 @@
-28/09/25
+## 28/09/25
 - Création de la Structure en attente de Pull Request Robin (branche feature/structure).  
 
-29/09/25
+## 29/09/25
 - début création base de données à partir du document Base de données établie dans la Part 3 du projet (branche feature/basedonneeTM).  
 	-> Problème observé : manque relation entre character et race dans le doc.  
 
@@ -17,26 +17,71 @@
 	-> insertion données race_type.  
 	-> insertion données relation_type.  
 
-30/09/25
+## 30/09/25
 - continue à implémenter la base de données.
 - début configuration aplication Flask.
 - début code class user.
 
-01/10/25
+## 01/10/25
 - modification de la structure.  
 	-> supprimer des models inutiles (character, race, events).  
   	-> ajout des models reviews et image_post.  
   	-> ajout du dossier persistence et fichier repository.
 - début implémentation de api_user, facade user, repository, repository_user.  
 
-02/10/25
+## 02/10/25
 - continue sur api_user, facade user, repository, repository_user.
-- test avec Postman pour User Post get, get_id, put TEST OK.  
+- test avec Postman pour User Post get, get_id, put TEST OK.
 - implémentation de reviews model, image_post fini.
 - implémentation de la facade reviews et image_post en cours.
 - implémentation de api_auth et api_admin en cours, récupération de Token OK.
 - implémentation de la base de données pour Timi en local OK.
 - ajout des routes dans __init__.py de app.  
 
-03/10/25
+## 03/10/25
+✅ Tests fonctionnels (Postman)
 
+Réalisation de tests Postman pour toutes les fonctionnalités CRUD sur les parties suivantes :
+- admin
+- auth
+- post_image
+
+➕ Ajout de nouvelles fonctionnalités
+
+Ajout des modèles suivants :
+- Race
+- Character
+- History
+
+Implémentation des APIs :
+- Race
+- Character
+- History
+- Reviews (non testé sur Postman)
+
+Ajout des namespaces associés :
+- race
+- character
+- history
+
+🛠️ Modifications sur post_image
+Modification du schéma de la base de données :
+
+Ajout de deux colonnes :
+- image_data (type BYTEA) pour stocker les images directement en base.
+- image_mime_type pour conserver le type MIME (ex: image/png, image/jpeg, etc.).
+
+Raisons du changement :
+Les images sont uploadées par les utilisateurs → pas d’URL, donc stockage en base requis.
+
+Mise à jour des modèles et des fonctions CRUD pour refléter ces changements de structure.
+
+Refactorisation de la facade :
+Mise en place de facade2 pour la gestion centralisée des entités race, character, et history.
+
+🖥️ Environnement local
+
+Mise en place des bases de données locales dédiées pour :
+- Robin
+- Timi
+→ Serveurs de développement indépendants configurés localement.

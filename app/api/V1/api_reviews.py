@@ -94,6 +94,7 @@ class ReviewResource(Resource):
         'image_post_id': review.image_post_id
     }, 200
 
+    @jwt_required()
     def put (self, review_id):
         review_data = request.json
         if not review_data:

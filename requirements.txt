@@ -7,3 +7,6 @@ flask-jwt-extended
 PyJWT==2.8.0
 psycopg2-binary
 python-dotenv
+geoalchemy2
+Shapely
+flask-Migrate

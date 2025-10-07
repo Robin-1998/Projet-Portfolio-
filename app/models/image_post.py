@@ -1,7 +1,6 @@
 from app.models.basemodel import BaseModel
 from app import db
 from sqlalchemy.orm import validates
-from app.models.user import User
 
 class ImagePost(BaseModel):
     """ Un utilisateur connecté peut poster une image """

@@ -37,8 +37,6 @@ def create_app(config_name=None):
     from app.api.V1.api_histories import api as histories_ns
     from app.api.V1.api_image_post import api as image_post_ns
     from app.api.V1.api_search import api as search_ns
-    from app.api.V1.api_map_data import api as map_ns
-
 
     # Initialiser Flask-RESTX
     api = Api(
@@ -57,8 +55,6 @@ def create_app(config_name=None):
     api.add_namespace(characters_ns, path='/api/v1/characters')
     api.add_namespace(histories_ns, path='/api/v1/histories')
     api.add_namespace(review_ns, path='/api/v1/reviews')
-    api.add_namespace(image_post_ns, path='/api/v1/image_post')
     api.add_namespace(search_ns, path='/api/v1/search')
-    api.add_namespace(map_ns, path='/api/v1/map')
 
     return app

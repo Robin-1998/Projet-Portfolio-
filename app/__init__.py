@@ -63,5 +63,6 @@ def create_app(config_name=None):
     api.add_namespace(histories_ns, path='/api/v1/histories')
     api.add_namespace(review_ns, path='/api/v1/reviews')
     api.add_namespace(search_ns, path='/api/v1/search')
+    api.add_namespace(image_post_ns, path='/api/v1/images')
 
     return app

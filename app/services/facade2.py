@@ -1,11 +1,13 @@
 from app.models.race import Race
 from app.models.character import Character
 from app.models.history import History
+from app.models.image_post import ImagePost
 from app.models.place_map import PlaceMap
 from app.models.map_region import MapRegion
 from app.models.map_marker import MapMarker
 from sqlalchemy.orm import joinedload
 from geoalchemy2.shape import to_shape
+
 from app import db
 
 class PortfolioFacade:
@@ -41,6 +43,30 @@ class PortfolioFacade:
         if not history:
             raise ValueError(f"History avec id {history_id} introuvable.")
         return history
+    
+
+# -------------------------SEARCH------------------------------------------
+
+    def search_all(self, query):
+        if not query:
+            return {"error": "Aucun terme de recherche fourni"}
+
+        characters = Character.query.filter(Character.name.ilike(f"%{query}%")).all()
+        races = Race.query.filter(Race.name.ilike(f"%{query}%")).all()
+        history = History.query.filter(History.name.ilike(f"%{query}%")).all()
+        #places = Place.query.filter(Place.name.ilike(f"%{query}%")).all()
+        image_post = ImagePost.query.filter(ImagePost.title.ilike(f"%{query}%")).all()
+
+        return {
+            "query": query,
+            "results": {
+                "characters": [c.to_dict() for c in characters],
+                "races": [r.to_dict() for r in races],
+                "history": [h.to_dict() for h in history],
+                #"places": [i.to_dict() for p in places],
+                "image_post": [i.to_dict() for i in image_post]
+            }
+        }
 
 #--------------------------place-----------------------------------------
     # ============================================

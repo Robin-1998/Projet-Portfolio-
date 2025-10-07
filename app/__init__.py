@@ -1,14 +1,20 @@
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from flask_restx import Api
-import os
+from flask_migrate import Migrate
+from config import config
 
 # Initialisation des extensions
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 jwt = JWTManager()
+migrate = Migrate()
 
 def create_app(config_name=None):
     """Factory pour créer l'application Flask"""
@@ -26,6 +32,7 @@ def create_app(config_name=None):
     db.init_app(app)
     bcrypt.init_app(app)
     jwt.init_app(app)
+    migrate.init_app(app, db)
 
     # Importer les namespaces APRÈS l'initialisation des extensions
     from app.api.V1.api_users import api as users_ns
@@ -37,8 +44,6 @@ def create_app(config_name=None):
     from app.api.V1.api_histories import api as histories_ns
     from app.api.V1.api_image_post import api as image_post_ns
     from app.api.V1.api_search import api as search_ns
-    from app.api.V1.api_map_data import api as map_ns
-
 
     # Initialiser Flask-RESTX
     api = Api(
@@ -57,8 +62,6 @@ def create_app(config_name=None):
     api.add_namespace(characters_ns, path='/api/v1/characters')
     api.add_namespace(histories_ns, path='/api/v1/histories')
     api.add_namespace(review_ns, path='/api/v1/reviews')
-    api.add_namespace(image_post_ns, path='/api/v1/image_post')
     api.add_namespace(search_ns, path='/api/v1/search')
-    api.add_namespace(map_ns, path='/api/v1/map')
 
     return app

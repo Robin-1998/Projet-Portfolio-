@@ -2,8 +2,10 @@ from flask import request
 from app.services import facade
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restx import Namespace, Resource
+import base64
 
 api = Namespace('images', description='Image post operations')
+
 
 @api.route('/')
 class ImagePostList(Resource):
@@ -55,7 +57,33 @@ class ImagePostList(Resource):
         """Liste tous les posts d'images"""
         try:
             images = facade.get_all_post_images()
-            return images, 200
+            result = []
+
+            for image in images:
+                # Convertir le BYTEA en Base64 pour JSON
+                b64 = base64.b64encode(image.image_data).decode('utf-8') if image.image_data else None
+                image_data_uri = f"data:{image.image_mime_type};base64,{b64}" if b64 else None
+
+                user_data = None
+                if hasattr(image, 'user') and image.user:
+                    user_data = {
+                        'id': image.user.id,
+                        'first_name': getattr(image.user, 'first_name', None),
+                        'email': getattr(image.user, 'email', None)
+                    }
+
+                result.append({
+                    'id': image.id,
+                    'title': image.title,
+                    'description': image.description,
+                    'image_mime_type': image.image_mime_type,
+                    'image_data': image_data_uri,
+                    'user': user_data,
+                    'created_at': image.created_at.isoformat() if hasattr(image, 'created_at') else None
+                })
+
+            return result, 200
+
         except Exception as e:
             return {"error": f"Erreur lors de la récupération: {str(e)}"}, 500
 
@@ -66,17 +94,20 @@ class ImagePostResource(Resource):
         """Récupère un post image spécifique"""
         try:
             image = facade.get_post_image(image_id)
-            
             if not image:
                 return {'error': 'Image non trouvée'}, 404
 
+            # Convertir le BYTEA en Base64
+            b64 = base64.b64encode(image.image_data).decode('utf-8') if image.image_data else None
+            image_data_uri = f"data:{image.image_mime_type};base64,{b64}" if b64 else None
+
             # Prépare les données utilisateur
             user_data = None
-            if image.user:
+            if hasattr(image, 'user') and image.user:
                 user_data = {
                     'id': image.user.id,
-                    'first_name': image.user.first_name if hasattr(image.user, 'first_name') else None,
-                    'email': image.user.email if hasattr(image.user, 'email') else None
+                    'first_name': getattr(image.user, 'first_name', None),
+                    'email': getattr(image.user, 'email', None)
                 }
 
             return {
@@ -84,6 +115,7 @@ class ImagePostResource(Resource):
                 'title': image.title,
                 'description': image.description,
                 'image_mime_type': image.image_mime_type,
+                'image_data': image_data_uri,
                 'user': user_data,
                 'created_at': image.created_at.isoformat() if hasattr(image, 'created_at') else None
             }, 200
@@ -101,30 +133,26 @@ class ImagePostResource(Resource):
             return {'error': 'Données manquantes'}, 400
 
         try:
-            # Récupère l'utilisateur connecté
             user_id = get_jwt_identity()["id"]
-
-            # Vérifie que l'image existe et appartient à l'utilisateur
             image = facade.get_post_image(image_id)
             if not image:
                 return {'error': 'Image non trouvée'}, 404
-
             if str(image.user_id) != str(user_id):
                 return {"error": "Action non autorisée"}, 403
 
-            # Valide les données
-            if 'title' in update_data and not update_data['title'].strip():
-                return {'error': 'Le titre ne peut pas être vide'}, 400
-
-            # Met à jour via la facade
             updated_image = facade.update_image_post(image_id, user_id, update_data)
+
+            # Convertir le BYTEA en Base64
+            b64 = base64.b64encode(updated_image.image_data).decode('utf-8') if updated_image.image_data else None
+            image_data_uri = f"data:{updated_image.image_mime_type};base64,{b64}" if b64 else None
 
             return {
                 'image': {
                     'id': updated_image.id,
                     'title': updated_image.title,
                     'description': updated_image.description,
-                    'image_mime_type': updated_image.image_mime_type
+                    'image_mime_type': updated_image.image_mime_type,
+                    'image_data': image_data_uri
                 },
                 'message': 'Image mise à jour avec succès'
             }, 200
@@ -135,26 +163,19 @@ class ImagePostResource(Resource):
             return {'error': str(e)}, 400
         except Exception as e:
             return {'error': f"Erreur serveur: {str(e)}"}, 500
-    
+
     @jwt_required()
     def delete(self, image_id):
         """Supprime un post image"""
         try:
-            # Récupère l'utilisateur connecté
             user_id = get_jwt_identity()["id"]
-
-            # Vérifie que l'image existe
             image = facade.get_post_image(image_id)
             if not image:
                 return {'error': 'Image non trouvée'}, 404
-
-            # Vérifie les permissions
             if str(image.user_id) != str(user_id):
                 return {"error": "Action non autorisée"}, 403
 
-            # Supprime via la facade
             facade.delete_image_post(image_id, user_id)
-            
             return {'message': 'Image supprimée avec succès'}, 200
 
         except PermissionError as e:
@@ -171,18 +192,19 @@ class UserImagePosts(Resource):
         """Récupère tous les posts d'un utilisateur"""
         try:
             images = facade.get_post_images_by_user(user_id)
-            
-            if not images:
-                return [], 200
-
-            # Formatte la réponse
             result = []
+
             for image in images:
+                # Convertir le BYTEA en Base64
+                b64 = base64.b64encode(image.image_data).decode('utf-8') if image.image_data else None
+                image_data_uri = f"data:{image.image_mime_type};base64,{b64}" if b64 else None
+
                 result.append({
                     'id': image.id,
                     'title': image.title,
                     'description': image.description,
                     'image_mime_type': image.image_mime_type,
+                    'image_data': image_data_uri,
                     'created_at': image.created_at.isoformat() if hasattr(image, 'created_at') else None
                 })
 

@@ -30,6 +30,9 @@ CREATE TABLE image_post (
     image_mime_type VARCHAR(50) NOT NULL,
     user_id BIGINT REFERENCES users(id) ON DELETE CASCADE
 );
+-- -----------------------------
+-- Tables reviews
+-- -----------------------------
 DROP TABLE IF EXISTS reviews CASCADE;
 CREATE TABLE reviews (
     id BIGSERIAL PRIMARY KEY,
@@ -52,11 +55,10 @@ CREATE TABLE places (
     id BIGSERIAL PRIMARY KEY,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    title VARCHAR(200) NOT NULL,
+    title VARCHAR(200) NOT NULL UNIQUE,
     type_place place_enum NOT NULL,
     description TEXT NOT NULL,
-    parent_id BIGINT REFERENCES places(id),
-    UNIQUE(title, parent_id)
+    parent_id BIGINT REFERENCES places(id)
 );
 -- -----------------------------
 -- Table Races
@@ -88,7 +90,7 @@ CREATE TABLE history (
     id BIGSERIAL PRIMARY KEY,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    name VARCHAR(150) NOT NULL,
+    name VARCHAR(150) NOT NULL UNIQUE,
     description TEXT NOT NULL,
     start_year SMALLINT,
     end_year SMALLINT,
@@ -105,7 +107,7 @@ CREATE TABLE characters (
     id BIGSERIAL PRIMARY KEY,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    name VARCHAR(100) NOT NULL,
+    name VARCHAR(100) NOT NULL UNIQUE,
     birth_date SMALLINT NOT NULL,
     death_date SMALLINT,
     era_birth VARCHAR(25) NOT NULL,
@@ -149,7 +151,7 @@ CREATE TABLE map_region (
     id BIGSERIAL PRIMARY KEY,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    name VARCHAR(100) NOT NULL,
+    name VARCHAR(100) NOT NULL UNIQUE,
     shape_data GEOMETRY(POLYGON, 0) NOT NULL,
     place_id BIGINT REFERENCES places(id)
 );
@@ -158,7 +160,7 @@ CREATE TABLE map_marker (
     id BIGSERIAL PRIMARY KEY,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    name VARCHAR(100) NOT NULL,
+    name VARCHAR(100) NOT NULL UNIQUE,
     location GEOMETRY(POINT, 0) NOT NULL,
     place_id BIGINT REFERENCES places(id)
 );
@@ -170,79 +172,9 @@ CREATE TABLE entity_descriptions (
     id BIGSERIAL PRIMARY KEY,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    title VARCHAR(100) NOT NULL,
+    title VARCHAR(100) NOT NULL UNIQUE,
     content TEXT NOT NULL,
     order_index INT,
     relation_type_id BIGINT REFERENCES relation_types(id),
     entity_id BIGINT
 );
--- -----------------------------
--- Inserts utilisateurs
--- -----------------------------
-INSERT INTO users (first_name, last_name, email, password, is_admin)
-VALUES
-('Robin','Admin','10616@holbertonstudents.com','$2y$10$pNic29UShtoK5gwuE0DS8eNQEK.RsZLIt/EO4dkS22aAqrcchuzEm',TRUE),
-('Timi','Admin','10614@holbertonstudents.com','$2y$10$1QljT3VlKRLmxEeokVLxKOS/eocY8xb3LP95mSVLJaCURQucH9pKO',TRUE),
-('John','Doe','johndoe@gmail.com','$2y$10$O8b3kgMMMZhZ5m0t6bVxZOCHoDXTSgBkJrdwNJixVQXk1Z04TKwBS',FALSE);
--- -----------------------------
--- Inserts Relation Types
--- -----------------------------
-INSERT INTO relation_types (name)
-VALUES
-('naissance'), ('résidence'), ('décès'), ('union'), ('voyage'), ('quête'),
-('bataille'), ('rencontre'), ('trahison'), ('cérémonie'), ('exploration');
--- -----------------------------
--- Inserts Places
--- -----------------------------
-INSERT INTO places (title, type_place, description, parent_id)
-VALUES
-('Gondor', 'Région', 'Région du Gondor', NULL),
-('Rohan', 'Région', 'Région du Rohan', NULL);
--- Sous-places
-INSERT INTO places (title, type_place, description, parent_id)
-VALUES
-('Minas Tirith', 'Ville', 'Capitale du Gondor', 1),
-('Osgiliath', 'Village', 'Cité fortifiée en ruine attaquée par les orques', 1),
-('Forêt de Fangorn', 'Rivière', 'Ancienne et mystérieuse forêt peuplée d’Ents, gardiens des arbres', 2);
--- -----------------------------
--- Inserts Races
--- -----------------------------
-INSERT INTO races (name, weakness, strength, description, place_id)
-VALUES
-('Humain',
- 'Corruptibles par le pouvoir, influençable, faiblesse aux maladies et magie',
- 'Stratèges militaires, nombreux',
- 'Dans le pays que les elfes appelaient Hildórien, situé dans la partie extrême-orientale de la Terre du Milieu',
- 1),
-('Nain',
- 'Orgueilleux et avare',
- 'Résistant et force physique',
- 'Aulë, le forgeron des Valar, façonna les septs père des nains dans une grande caverne sous les montagnes de la Terre du Milieu',
- 2);
--- -----------------------------
--- Inserts Characters
--- -----------------------------
-INSERT INTO characters (name, birth_date, death_date, era_birth, era_death, gender, profession, description, race_id)
-VALUES
-('Gimli', 2879, 120, 'Troisième âge', 'Quatrième âge', 'Masculin', 'Guerrier', 'Nain robuste et fier du royaume d’Erebor, membre de la Communauté de l’Anneau.', 2),
-('Eowyn', 2995, NULL, 'Troisième âge', 'Quatrième âge', 'Féminin', 'Guerrière, noble', 'Fille du Rohan, nièce du roi Théoden et sœur d’Eomer', 1);
--- -----------------------------
--- Inserts History
--- -----------------------------
-INSERT INTO history (name, description, start_year, end_year, era, place_id, relation_type_id)
-VALUES
-('Bataille des Champs du Pelennor',
- 'Affrontement décisif devant Minas Tirith entre Gondor et les forces de Sauron.',
- 3019, 3019, 'Troisième âge', 3, 7), -- 3 = Minas Tirith, 7 = bataille
-('Anniversaire de Bilbon Sacquet',
- 'Bilbon organisa une grande fête pour ses 111 ans.',
- 3001, 3001, 'Troisième âge', 3, 4); -- 3 = Minas Tirith, 4 = union/fête
--- -----------------------------
--- Inserts Map
--- -----------------------------
-INSERT INTO map_region (name, shape_data, place_id)
-VALUES
-('Gondor', ST_GeomFromGeoJSON('{"type":"Polygon","coordinates":[[[400,450],[650,450],[650,600],[400,600],[400,450]]]}'), 1);
-INSERT INTO map_marker (name, location, place_id)
-VALUES
-('Minas Tirith', ST_GeomFromGeoJSON('{"type":"Point","coordinates":[500,500]}'), 3);

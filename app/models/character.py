@@ -16,6 +16,10 @@ class Character(BaseModel):
     profession = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
 
+    race_id = db.Column(db.BigInteger, db.ForeignKey('races.id'))
+
+    race = db.relationship('Race', back_populates='characters')
+
     def to_dict(self):
         return {
             "id": self.id,

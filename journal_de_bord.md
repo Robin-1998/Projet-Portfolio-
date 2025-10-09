@@ -101,3 +101,21 @@ Mise en place des bases de données locales dédiées pour Robin & Timi
 	- pour géoréférencer l'image et visualiser les points.
 	- point cardinaux ok
 
+## 08/10/25
+
+- Tests back-end
+	- Commencement des tests pour les différents modèles et API
+	- Github actions ne sera peut-être pas utilisé car utilisation des tests en brut sans interrogé une base de donnée fictive
+
+- Apprentissage de React
+
+## 09/10/25
+
+- Tests back-end
+	- Test en utilisant une copie de notre base de donnée (DB test) pour éviter de faire les tests sur notre base de donnée
+
+- QGIS
+	- QGIS ne sera utile que pour la visualisation des coordonnées pour après les implémenter via postgresql/leaflet.
+	- QGIS sera également utile pour visualiser les polygones en tant réelle pour avoir un visuel de ce que ça pourrait donner.
+
+- Apprentissage de React

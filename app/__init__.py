@@ -1,14 +1,16 @@
 import os
 import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from flask_restx import Api
 from flask_migrate import Migrate
+from dotenv import load_dotenv  # 👈 on ajoute ceci
 from config import config
+
+# Permet d'importer depuis la racine du projet
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Initialisation des extensions
 db = SQLAlchemy()
@@ -18,17 +20,27 @@ migrate = Migrate()
 
 def create_app(config_name=None):
     """Factory pour créer l'application Flask"""
-    app = Flask(__name__)
-
     # Déterminer l'environnement
     if config_name is None:
-        config_name = os.environ.get('FLASK_ENV', 'development')
+        config_name = os.environ.get("FLASK_ENV", "development")
 
-    # Charger la configuration
-    from config import config
+    # Charger le bon fichier .env
+    # ---------------------------------
+    if config_name == "testing":
+        env_path = os.path.join(os.path.dirname(__file__), "..", ".env.test")
+    else:
+        env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
+
+    load_dotenv(env_path)
+    # ---------------------------------
+
+    # Créer l'application Flask
+    app = Flask(__name__)
+
+    # Charger la configuration selon l'environnement
     app.config.from_object(config[config_name])
 
-    # Initialiser les extensions avec l'app
+    # Initialiser les extensions
     db.init_app(app)
     bcrypt.init_app(app)
     jwt.init_app(app)
@@ -48,21 +60,21 @@ def create_app(config_name=None):
     # Initialiser Flask-RESTX
     api = Api(
         app,
-        version='1.0',
-        title='HBnB API',
-        description='HBnB Application API',
-        doc='/api/v1/'
+        version="1.0",
+        title="HBnB API",
+        description="HBnB Application API",
+        doc="/api/v1/"
     )
 
     # Ajouter les namespaces
-    api.add_namespace(users_ns, path='/api/v1/users')
-    api.add_namespace(auth_ns, path='/api/v1/auth')
-    api.add_namespace(admin_ns, path='/api/v1/admin')
-    api.add_namespace(races_ns, path='/api/v1/races')
-    api.add_namespace(characters_ns, path='/api/v1/characters')
-    api.add_namespace(histories_ns, path='/api/v1/histories')
-    api.add_namespace(review_ns, path='/api/v1/reviews')
-    api.add_namespace(search_ns, path='/api/v1/search')
-    api.add_namespace(image_post_ns, path='/api/v1/images')
+    api.add_namespace(users_ns, path="/api/v1/users")
+    api.add_namespace(auth_ns, path="/api/v1/auth")
+    api.add_namespace(admin_ns, path="/api/v1/admin")
+    api.add_namespace(races_ns, path="/api/v1/races")
+    api.add_namespace(characters_ns, path="/api/v1/characters")
+    api.add_namespace(histories_ns, path="/api/v1/histories")
+    api.add_namespace(review_ns, path="/api/v1/reviews")
+    api.add_namespace(search_ns, path="/api/v1/search")
+    api.add_namespace(image_post_ns, path="/api/v1/images")
 
     return app

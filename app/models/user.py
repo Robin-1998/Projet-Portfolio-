@@ -91,13 +91,12 @@ class User(BaseModel):
         if not password:
             return False
         return bcrypt.check_password_hash(self.password, password)
-    
 
     def update_password(self, new_password):
         #met à jour le mdp de l'utilisateur
         # Utilise hash_password pour valider et hacher le nouveau mot de passe.
         self.hash_password(new_password)
-    
+
     @validates('is_admin')
     def validate_is_admin(self, _key, is_admin):
         """

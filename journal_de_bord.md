@@ -119,3 +119,20 @@ Mise en place des bases de données locales dédiées pour Robin & Timi
 	- QGIS sera également utile pour visualiser les polygones en tant réelle pour avoir un visuel de ce que ça pourrait donner.
 
 - Apprentissage de React
+
+## 10/10/2025
+
+- Test back-end
+	- Finalisation des tests unitaires sur modèle + façade + API à l'aide de pytest qui interroge une copie de notre base de donnée
+	- Script de test postman réalisé sur toutes les routes API terminé
+
+## 13/10/2025
+## 14/10/2025
+## 15/10/2025
+## 16/10/2025
+## 17/10/2025
+## 20/10/2025
+## 21/10/2025
+## 22/10/2025
+## 23/10/2025
+## 24/10/2025

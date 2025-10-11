@@ -17,7 +17,7 @@ class historyList(Resource):
 class HistoryDetail(Resource):
     def get(self, history_id):
         try:
-            histories = facade.get_histories(history_id)
+            history = facade.get_history(history_id)
             return history.to_dict(), 200
         except ValueError as error:
             return {"error": str(error)}, 404

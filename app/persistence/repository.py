@@ -50,7 +50,8 @@ class SQLAlchemyRepository(Repository):
             raise
 
     def get(self, obj_id):
-        return self.model.query.get(obj_id)
+        # ✅ Nouvelle version compatible SQLAlchemy 2.x
+        return db.session.get(self.model, obj_id)
 
     def get_all(self):
         return self.model.query.all()

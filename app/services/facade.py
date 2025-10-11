@@ -170,6 +170,10 @@ class PortfolioFacade:
             db.session.rollback()
             raise
 
+        except PermissionError:
+            db.session.rollback()
+            raise  # ne pas transformer en ValueError
+
         except Exception as e:
             db.session.rollback()
             raise ValueError(f"Erreur lors de la mise à jour : {str(e)}")

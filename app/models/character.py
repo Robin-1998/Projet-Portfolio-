@@ -12,9 +12,9 @@ class Character(BaseModel):
     death_date = db.Column(db.Integer, nullable=True)
     era_birth = db.Column(db.String(25), nullable=False)
     era_death = db.Column(db.String(25), nullable=True)
-    gender = db.Column(db.String(10), nullable=False)
-    profession = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.Text, nullable=False)
+    gender = db.Column(db.String(10), nullable=True)
+    profession = db.Column(db.String(100), nullable=True)
+    description = db.Column(db.Text, nullable=True)
 
     race_id = db.Column(db.BigInteger, db.ForeignKey('races.id'))
 

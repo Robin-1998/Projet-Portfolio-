@@ -17,7 +17,7 @@ class PortfolioFacade:
         return Race.query.all()
 
     def get_race(self, race_id):
-        race = Race.query.get(race_id)
+        race = db.session.get(Race, race_id)
         if not race:
             raise ValueError(f"Race avec id {race_id} introuvable.")
         return race
@@ -28,7 +28,7 @@ class PortfolioFacade:
         return Character.query.all()
 
     def get_character(self, character_id):
-        character = Character.query.get(character_id)
+        character = db.session.get(Character, character_id)
         if not character:
             raise ValueError(f"Character avec id {character_id} introuvable.")
         return character
@@ -39,7 +39,7 @@ class PortfolioFacade:
         return History.query.all()
 
     def get_history(self, history_id):
-        history = History.query.get(history_id)
+        history = db.session.get(History, history_id)
         if not history:
             raise ValueError(f"History avec id {history_id} introuvable.")
         return history

@@ -12,6 +12,9 @@ class Race(BaseModel):
     strength = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(255), nullable=False)
 
+    characters = db.relationship('Character', back_populates='race', lazy='dynamic')
+
+
     def to_dict(self):
         return {
             "id": self.id,

@@ -71,8 +71,7 @@ CREATE TABLE races (
     name VARCHAR(50) NOT NULL UNIQUE,
     weakness VARCHAR(255) NOT NULL,
     strength VARCHAR(255) NOT NULL,
-    description TEXT NOT NULL,
-    place_id BIGINT REFERENCES places(id)
+    description TEXT NOT NULL
 );
 -- -----------------------------
 -- Table Relation Types

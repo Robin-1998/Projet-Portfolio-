@@ -57,15 +57,15 @@ class UserResource(Resource):
     def put(self, user_id):
         data = request.json
         if not data:
-            return jsonify({"error": "Missing data"}), 400
+            return {"error": "Missing data"}, 400
 
         current_user = get_jwt_identity()
         try:
             user = facade.update_user(user_id, current_user["id"], data)
         except PermissionError as e:
-            return jsonify({"error": str(e)}), 403
+            return {"error": str(e)}, 403
         except ValueError as e:
-            return jsonify({"error": str(e)}), 400
+            return {"error": str(e)}, 400
 
         return {
             "id": user.id,

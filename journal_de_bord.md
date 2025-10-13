@@ -130,6 +130,8 @@ Mise en place des bases de données locales dédiées pour Robin & Timi
 
 - Supression de fichier et dossier inutile
 - Apprentissage de React
+- Architecture du projet grandement modifié sur la partie front-end avec react
+- Familiarisation avec React : test de démarrage utilisant Vite sur les fichiers main.jsx et app.jsx
 
 ## 14/10/2025
 ## 15/10/2025

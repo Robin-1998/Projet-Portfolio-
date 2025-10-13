@@ -127,6 +127,10 @@ Mise en place des bases de données locales dédiées pour Robin & Timi
 	- Script de test postman réalisé sur toutes les routes API terminé
 
 ## 13/10/2025
+
+- Supression de fichier et dossier inutile
+- Apprentissage de React
+
 ## 14/10/2025
 ## 15/10/2025
 ## 16/10/2025

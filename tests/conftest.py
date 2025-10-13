@@ -5,49 +5,66 @@ Fixtures pytest pour l'application Flask avec base PostgreSQL/PostGIS.
 import os
 import pytest
 from app import create_app, db
-from sqlalchemy_utils import create_database, drop_database, database_exists
-from sqlalchemy import create_engine, text
+from sqlalchemy import text, event
+from sqlalchemy.pool import StaticPool
 
-# Récupérer l'URL de la base de test depuis la config
-TEST_DATABASE_URI = os.getenv("DATABASE_URL")  # .env.test doit être chargé via config.py
-
-# Créer l'engine SQLAlchemy pour la base de test
-engine = create_engine(TEST_DATABASE_URI)
+TEST_DATABASE_URI = os.getenv("DATABASE_URL")
 
 
 @pytest.fixture(scope="session")
 def app():
-    """Créer l'application Flask configurée pour les tests et initialiser la base."""
+    """Créer l'application Flask configurée pour les tests."""
+    app = create_app("testing")
 
-    # Créer la base de test si elle n'existe pas
-    if not database_exists(TEST_DATABASE_URI):
-        create_database(TEST_DATABASE_URI)
-
-    # Créer l'app Flask en mode testing
-    app = create_app("testing")  # utilisera TestingConfig et .env.test
+    # Configuration pour éviter les problèmes de session
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+        'poolclass': StaticPool,
+    }
 
     with app.app_context():
-        # Supprimer les tables existantes (pas besoin de supprimer le schéma)
-        db.drop_all()
-
-        # Créer l'extension PostGIS si nécessaire
-        db.session.execute(text('CREATE EXTENSION IF NOT EXISTS postgis'))
-        db.session.commit()
+        # Créer l'extension PostGIS
+        try:
+            db.session.execute(text('CREATE EXTENSION IF NOT EXISTS postgis'))
+            db.session.commit()
+        except Exception as e:
+            print(f"Avertissement : PostGIS extension : {e}")
+            db.session.rollback()
 
         # Créer toutes les tables
         db.create_all()
+        db.session.commit()
 
-        yield app  # <-- ici les tests vont s'exécuter
-
-        # Nettoyer la DB après les tests
-        db.session.remove()
-        db.drop_all()
+    yield app
 
 
 @pytest.fixture
 def client(app):
-    """Créer un client Flask pour simuler les requêtes HTTP."""
-    return app.test_client()
+    """Créer un client Flask avec support de la BD."""
+
+    with app.app_context():
+        # Supprimer les données avant chaque test
+        db.drop_all()
+        db.create_all()
+        db.session.commit()
+
+        # Créer le client
+        test_client = app.test_client()
+
+        yield test_client
+
+
+@pytest.fixture
+def app_with_context(app):
+    """Fournir l'app avec son contexte actif."""
+    with app.app_context():
+        yield app
+
+
+@pytest.fixture
+def db_session(app):
+    """Fournir une session DB pour les tests directs."""
+    with app.app_context():
+        yield db
 
 
 @pytest.fixture

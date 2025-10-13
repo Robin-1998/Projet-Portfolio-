@@ -1,5 +1,6 @@
 from app.models.basemodel import BaseModel
 from app import db
+from sqlalchemy.orm import validates
 
 
 class PlaceMap(BaseModel):
@@ -38,6 +39,21 @@ class PlaceMap(BaseModel):
         self.type_place = type_place
         self.description = description
         self.parent_id = parent_id
+
+    @validates("title", "description")
+    def validate_non_empty(self, key, value):
+        """Empêcher les champs vides ou None."""
+        if not value or not str(value).strip():
+            raise ValueError(f"Le champ '{key}' ne peut pas être vide.")
+        return value
+
+    @validates("type_place")
+    def validate_type_place(self, key, value):
+        """Vérifier que le type_place est valide."""
+        valid_types = {"Région", "Ville", "Village", "Forteresse", "Mer", "Lac/Marais", "Rivière"}
+        if value not in valid_types:
+            raise ValueError(f"Type de lieu invalide : '{value}'.")
+        return value
 
     def to_dict(self, include_geometry=False):
         data = {

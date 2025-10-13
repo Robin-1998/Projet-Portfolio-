@@ -10,3 +10,5 @@ python-dotenv
 geoalchemy2
 Shapely
 flask-Migrate
+pytest
+pytest-mock

@@ -17,7 +17,7 @@ class PortfolioFacade:
         return Race.query.all()
 
     def get_race(self, race_id):
-        race = Race.query.get(race_id)
+        race = db.session.get(Race, race_id)
         if not race:
             raise ValueError(f"Race avec id {race_id} introuvable.")
         return race
@@ -28,7 +28,7 @@ class PortfolioFacade:
         return Character.query.all()
 
     def get_character(self, character_id):
-        character = Character.query.get(character_id)
+        character = db.session.get(Character, character_id)
         if not character:
             raise ValueError(f"Character avec id {character_id} introuvable.")
         return character
@@ -39,22 +39,21 @@ class PortfolioFacade:
         return History.query.all()
 
     def get_history(self, history_id):
-        history = History.query.get(history_id)
+        history = db.session.get(History, history_id)
         if not history:
             raise ValueError(f"History avec id {history_id} introuvable.")
         return history
-    
+
 
 # -------------------------SEARCH------------------------------------------
 
     def search_all(self, query):
-        if not query:
-            return {"error": "Aucun terme de recherche fourni"}
+        if not query or query.strip() == '':
+            raise ValueError("Aucun terme de recherche fourni")
 
         characters = Character.query.filter(Character.name.ilike(f"%{query}%")).all()
         races = Race.query.filter(Race.name.ilike(f"%{query}%")).all()
         history = History.query.filter(History.name.ilike(f"%{query}%")).all()
-        #places = Place.query.filter(Place.name.ilike(f"%{query}%")).all()
         image_post = ImagePost.query.filter(ImagePost.title.ilike(f"%{query}%")).all()
 
         return {
@@ -63,7 +62,6 @@ class PortfolioFacade:
                 "characters": [c.to_dict() for c in characters],
                 "races": [r.to_dict() for r in races],
                 "history": [h.to_dict() for h in history],
-                #"places": [i.to_dict() for p in places],
                 "image_post": [i.to_dict() for i in image_post]
             }
         }
@@ -77,7 +75,7 @@ class PortfolioFacade:
         """
         Récupère toutes les régions (places de type 'Région' qui ont un MapRegion)
         avec leur hiérarchie complète d'enfants
-        
+
         Returns:
             Liste de dict avec structure :
             {
@@ -94,10 +92,10 @@ class PortfolioFacade:
         regions = db.session.query(PlaceMap).join(
             MapRegion, PlaceMap.id == MapRegion.place_id
         ).filter(PlaceMap.parent_id.is_(None)).all()
-        
+
         return [PortfolioFacade._build_place_hierarchy(region) for region in regions]
-    
-    
+
+
     # ============================================
     # GET REGION BY ID avec hiérarchie
     # ============================================
@@ -105,10 +103,10 @@ class PortfolioFacade:
     def get_region_by_id_with_hierarchy(region_id):
         """
         Récupère UNE région spécifique avec sa hiérarchie complète
-        
+
         Args:
             region_id: ID du MapRegion (pas du Place!)
-            
+
         Returns:
             Dict avec structure identique à get_all_regions_with_hierarchy
         """
@@ -116,13 +114,13 @@ class PortfolioFacade:
         map_region = db.session.query(MapRegion).options(
             joinedload(MapRegion.place)
         ).filter_by(id=region_id).first()
-        
+
         if not map_region or not map_region.place:
             return None
-        
+
         return PortfolioFacade._build_place_hierarchy(map_region.place)
-    
-    
+
+
     # ============================================
     # GET PLACE BY ID (pour les marqueurs)
     # ============================================
@@ -130,10 +128,10 @@ class PortfolioFacade:
     def get_place_by_id(place_id):
         """
         Récupère UN lieu spécifique (ville, village, etc. avec marqueur)
-        
+
         Args:
             place_id: ID du Place
-            
+
         Returns:
             Dict avec structure :
             {
@@ -147,13 +145,13 @@ class PortfolioFacade:
             }
         """
         place = db.session.query(PlaceMap).filter_by(id=place_id).first()
-        
+
         if not place:
             return None
-        
+
         return PortfolioFacade._build_place_hierarchy(place)
-    
-    
+
+
     # ============================================
     # MÉTHODE PRIVÉE : Construction récursive
     # ============================================
@@ -161,10 +159,10 @@ class PortfolioFacade:
     def _build_place_hierarchy(place):
         """
         Construit récursivement la hiérarchie d'un lieu avec ses enfants
-        
+
         Args:
             place: Instance de PlaceMap
-            
+
         Returns:
             Dict avec toute la hiérarchie
         """
@@ -177,7 +175,7 @@ class PortfolioFacade:
                 "type": "Polygon",
                 "coordinates": list(geom.exterior.coords)
             }
-        
+
         # Récupérer les coordonnées du marqueur (si lieu avec marqueur)
         marker_location = None
         if place.map_markers:
@@ -187,7 +185,7 @@ class PortfolioFacade:
                 "type": "Point",
                 "coordinates": [geom.x, geom.y]
             }
-        
+
         # Construire la structure de base
         place_dict = {
             "id": place.id,
@@ -198,17 +196,17 @@ class PortfolioFacade:
             "region_shape": region_shape,
             "marker_location": marker_location
         }
-        
+
         # Récupérer et construire récursivement les enfants
         if place.children:
             place_dict["children"] = [
-                PortfolioFacade._build_place_hierarchy(child) 
+                PortfolioFacade._build_place_hierarchy(child)
                 for child in place.children
             ]
-        
+
         return place_dict
-    
-    
+
+
     # ============================================
     # GET MAP DATA (version légère pour initialisation)
     # ============================================

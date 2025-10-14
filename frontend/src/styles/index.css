@@ -1,0 +1,16 @@
+html {
+  height: 100%;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+	margin: 0;
+}
+
+/* Le main prend tout l’espace dispo pour pousser le footer en bas */
+main {
+  flex: 1;
+}

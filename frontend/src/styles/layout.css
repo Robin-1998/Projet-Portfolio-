@@ -1,0 +1,121 @@
+/*------------------------- POLICE ----------------------------------*/
+@font-face {
+  font-family: 'Anirb';
+  src: url('./assets/fonts/anirb__.ttf') format('truetype'); /* ajuster le chemin si besoin */
+}
+
+/* --------- HEADER --------- */
+.header {
+  background-color: #BFAD8A;   /* fond beige doré */
+  padding: 0.3% 0.9%;          /* marges internes */
+  color: #403221;              /* texte brun foncé */
+  font-family: 'Anirb';   /* police perso */
+  display: flex;               /* met les deux côtés sur une ligne */
+  justify-content: space-between; /* sépare gauche et droite */
+  align-items: center;         /* aligne verticalement */
+}
+
+/* --------- CÔTÉ GAUCHE (logo + titre) --------- */
+.left-side {
+  display: flex;               /* logo + titre sur la même ligne */
+  align-items: center;
+  gap: 2%;
+}
+
+.logo {
+  width: 7%;
+  height: 7%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* --------- CÔTÉ DROIT (recherche + bouton login) --------- */
+.right-side {
+  display: flex;               /* barre de recherche + login côte à côte */
+  align-items: center;
+  gap: 50px;                   /* espace entre les deux */
+  margin: 2%;
+}
+
+/* --------- BARRE DE RECHERCHE --------- */
+.search-bar {
+  display: flex;               /* barre + icône alignés */
+  align-items: center;
+  gap: 10%;
+  background-color: #f5f0e6;
+  border-radius: 20px;
+  padding: 6px 16px;
+}
+
+.search-bar input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 90%;
+  color: #403221;
+}
+
+.search-bar button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 90%;
+}
+
+/* --------- BOUTON LOGIN --------- */
+.login-bouton {
+  background-color: #403221;
+  color: #f5f0e6;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 20px;
+  cursor: pointer;
+  font-size: 90%;
+  transition: background-color 0.3s ease;
+  margin-left: 40px;
+}
+
+.login-bouton:hover {
+  background-color: #2c2417;
+}
+
+/* ------------ LISTE PUCE ------------ */
+li {
+    list-style: none;
+}
+
+/* ------------ BARRE NAVIGATION ------------ */
+.image_nav {
+    text-decoration: none;
+    background-color: white;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.contenair_nav {
+    background-color: brown;
+}
+
+.contenair_nav nav {
+    padding: 0;
+    margin: 0;
+}
+
+/* ------------ FOOTER ------------ */
+footer {
+    background-color: black;
+    padding: 1rem;
+    text-align: center;
+}
+
+a {
+  text-decoration: none;
+  color: white; /* ou une couleur spécifique comme #fff */
+  font-family: 'Anirb', sans-serif;
+}
+
+footer nav ul {
+    display: flex;
+    justify-content: space-around;
+}

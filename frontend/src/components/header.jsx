@@ -1,6 +1,5 @@
 import '../styles/layout.css'; // extension .css obligatoire
 import logoArbre from '../assets/logo_arbre.png';
-import '../styles/layout.css';
 
 function Header() {
     return (

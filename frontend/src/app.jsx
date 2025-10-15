@@ -1,9 +1,11 @@
 import Header from './components/header';
+import Navigation from './components/navigation';
+import Footer from './components/footer';
 
 function App() {
   return (
     <>
-      <Header /> /* !! c'est le nom de la fonction pas le nom html !!*/
+      <Header />
       <Navigation />
       <Footer />
     </>

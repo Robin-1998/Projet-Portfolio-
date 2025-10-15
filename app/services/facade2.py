@@ -33,7 +33,7 @@ class PortfolioFacade:
             raise ValueError(f"Character avec id {character_id} introuvable.")
         return character
 
-# -------------------------EVENTS------------------------------------------
+# ------------------------- HISTORY ------------------------------------------
 
     def get_all_histories(self):
         return History.query.all()
@@ -45,7 +45,7 @@ class PortfolioFacade:
         return history
 
 
-# -------------------------SEARCH------------------------------------------
+# ------------------------- SEARCH ------------------------------------------
 
     def search_all(self, query):
         if not query or query.strip() == '':
@@ -66,10 +66,8 @@ class PortfolioFacade:
             }
         }
 
-#--------------------------place-----------------------------------------
-    # ============================================
-    # GET ALL REGIONS avec hiérarchie complète
-    # ============================================
+#-------------------------- PLACE -----------------------------------------
+# -- Get all régions avec enfants
     @staticmethod
     def get_all_regions_with_hierarchy():
         """
@@ -95,10 +93,7 @@ class PortfolioFacade:
 
         return [PortfolioFacade._build_place_hierarchy(region) for region in regions]
 
-
-    # ============================================
-    # GET REGION BY ID avec hiérarchie
-    # ============================================
+# -- Get 1 region by ID avec enfant
     @staticmethod
     def get_region_by_id_with_hierarchy(region_id):
         """
@@ -120,10 +115,7 @@ class PortfolioFacade:
 
         return PortfolioFacade._build_place_hierarchy(map_region.place)
 
-
-    # ============================================
-    # GET PLACE BY ID (pour les marqueurs)
-    # ============================================
+# -- Get 1 Place by ID
     @staticmethod
     def get_place_by_id(place_id):
         """
@@ -151,10 +143,7 @@ class PortfolioFacade:
 
         return PortfolioFacade._build_place_hierarchy(place)
 
-
-    # ============================================
-    # MÉTHODE PRIVÉE : Construction récursive
-    # ============================================
+#-- Construit dictionnaire Région place
     @staticmethod
     def _build_place_hierarchy(place):
         """
@@ -207,9 +196,7 @@ class PortfolioFacade:
         return place_dict
 
 
-    # ============================================
-    # GET MAP DATA (version légère pour initialisation)
-    # ============================================
+# -- Get marker des Place ou région
     @staticmethod
     def get_map_data():
         """

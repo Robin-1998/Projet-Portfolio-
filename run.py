@@ -4,7 +4,7 @@ Il crée l’application via create_app() et la lance en mode debug si le
 fichier est exécuté directement, suivant une architecture Flask modulaire.
 """
 
-from app import create_app
+from backend.app import create_app
 
 app = create_app()
 

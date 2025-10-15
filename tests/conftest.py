@@ -4,7 +4,7 @@ Fixtures pytest pour l'application Flask avec base PostgreSQL/PostGIS.
 
 import os
 import pytest
-from app import create_app, db
+from backend.app import create_app, db
 from sqlalchemy import text, event
 from sqlalchemy.pool import StaticPool
 

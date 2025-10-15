@@ -110,7 +110,6 @@ Projet-Portfolio-/             # Racine du projet (fullstack Flask + React)
 ├── journal_de_bord.md                   # Journal quotidien par jour des taches effectués et problème rencontré
 └── README.md                            # Documentation principale du projet
 ├── requirements.txt                     # Dépendances Python (Flask, SQLAlchemy, JWT…)
-├── run-tests.py                         # Script pour exécuter la suite de tests
 ├── run.py                               # Script principal pour démarrer Flask
 ```
 # Collaborateurs

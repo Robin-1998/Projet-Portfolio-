@@ -9,14 +9,6 @@
   src: url('../assets/fonts/Kalam-Regular.ttf') format('truetype'); /* chemin police */
 }
 
-
-/* ------------------------- APP LAYOUT ------------------------- */
-.app-layout {
-  display: flex; /* sidebar + contenu côte à côte */
-  flex: 1; /* prend tout l’espace restant */
-  min-height: calc(100vh - 113px); /* espace hors header/footer */
-}
-
 /* ------------------------- Barre Menu Navigation------------------------- */
 .menu-gauche {
   width: 100px; /* largeur fixe */
@@ -152,7 +144,7 @@
 
 /* ------------------------- CONTENU PRINCIPAL ------------------------- */
 .contenu-principal {
-  flex: 1; /* prend tout l’espace dispo */
+
   padding: 20px; /* marges internes */
   background-color: #f8f5ef; /* fond clair */
   color: #403221; /* texte brun */

@@ -1,16 +1,19 @@
 import { Link } from 'react-router-dom';
 import Navigation from './navigation';
+import Header from './header';
+import Footer from './footer';
 
-function BodyAllPage({ children }) {
+function BodyPage({ children }) {
   return (
-    <div className="app-layout">
-        <Navigation />
-
+    <>
+      <Header />
+      <Navigation />
       <main className="contenu-principal">
         {children ? children : <p>Voici le contenu principal</p>}
       </main>
-    </div>
+      <Footer />
+    </>
   );
 }
 
-export default BodyAllPage;
+export default BodyPage;

@@ -134,8 +134,21 @@ Mise en place des bases de données locales dédiées pour Robin & Timi
 - Familiarisation avec React : test de démarrage utilisant Vite sur les fichiers main.jsx et app.jsx
 
 ## 14/10/2025
+
+- Apprentissage de React
+- Ajout des composants de fonction pour footer + header et navigation (non terminés)
+- Images redimensionné pour la barre de navigation
+
 ## 15/10/2025
+
+- Familiarisation avec les routes react (premier test réussi pour le login)
+- Restructuration de l'architecture dans le README
+- Continuation sur le footer / header / Navigation
+- Contenu des pages mentions légales et sources ajoutés
+
 ## 16/10/2025
+
+- 
 ## 17/10/2025
 ## 20/10/2025
 ## 21/10/2025

@@ -36,70 +36,81 @@ Projet-Portfolio-/             # Racine du projet (fullstack Flask + React)
 │   │       ├── __init__.py                  # Rend 'V1' importable comme package
 │   │       ├── api_admin.py                 # Endpoints liés à l’administration
 │   │       ├── api_auth.py                  # Endpoints d’authentification (login, JWT)
-│   │       ├── api_users.py                 # Endpoints pour la gestion des utilisateurs
-│   │       ├── api_places_map.py            # Endpoints pour les lieux/cartes (points sur la carte)
-│   │       ├── api_events.py                # Endpoints pour les événements
-│   │       ├── api_races.py                 # Endpoints pour les races (univers/lore)
 │   │       ├── api_characters.py            # Endpoints pour les personnages
-│   │       ├── api_art.py                   # Endpoints pour les créations artistiques
-│   │       └── api_map_data.py              # Endpoints pour données cartographiques (coord. X,Y)
+│   │       ├── api_histories.py             # Endpoints pour les événements
+│   │       ├── api_image_post.py            # Endpoints pour l'envoie d'image par un utilisateur connecté
+│   │       └── api_map_data.py              # Endpoints pour les marqueurs et un lieu
+│   │       ├── api_races.py                 # Endpoints pour les races (univers/lore)
+│   │       └── api_reviews.py               # Endpoints pour les commentaires sur le post d'une image
+│   │       ├── api_search.py                # Endpoints pour la gestion d'une barre de recherche
+│   │       ├── api_users.py                 # Endpoints pour la gestion des utilisateurs
 │   │
 │   ├── database/                        # Gestion de la base de données
 │   │   ├── schema.sql                       # Script SQL pour création initiale des tables
-│   │   └── migrations                       # Scripts de migration (Alembic/Flask-Migrate)
+│   │   └── data.sql                         # Scripts SQL pour toute les inserctions de tables
 │   │
 │   ├── models/                          # Définitions des modèles ORM
 │   │   ├── __init__.py                      # Rend 'models' importable comme package
 │   │   ├── basemodel.py                     # Classe mère (id, created_at, updated_at)
-│   │   ├── events.py                        # Modèle Event (événements)
-│   │   ├── races.py                         # Modèle Race (races de l’univers)
-│   │   ├── characters.py                    # Modèle Character (personnages)
+│   │   ├── character.py                     # Modèle character (Personnage)
+│   │   ├── history.py                       # Modèle history (événements de l'univers)
+│   │   ├── image_post.py                    # Modèle Image_post (envoie d'une image)
+│   │   ├── map_marker.py                    # Modèle Map_marker (marqueur/point d'un lieu sur la carte interactive)
+│   │   ├── map_region.py                    # Modèle Map_region (polygone d'une région sur la carte interactive)
 │   │   ├── place_map.py                     # Modèle PlaceMap (lieux/cartes)
-│   │   ├── spatial.py                       # Modèle Spatial (coordonnées/objets géographiques)
+│   │   ├── race.py                          # Modèle Race (races de l’univers)
+│   │   ├── review.py                        # Modèle Review (Commentaire sur une image)
 │   │   └── user.py                          # Modèle User (utilisateurs)
+│   │
+│   ├── persistence/                     # Accès et gestion de la base de donnée CRUD
+│   │   ├── __init__.py                      # Rend 'persistence' importable comme package
+│   │   ├── image_post_repository            # Classe qui gère les opérations CRUD pour l'entité ImagePost
+│   │   ├── repository                       # Repository générique pour les implémentation CRUD
+│   │   ├── review_repository                # Classe qui gère les opérations CRUD pour l'entité review
+│   │   ├── user_repository                  # Classe qui gère les opérations CRUD pour l'entité user
 │   │
 │   ├── services/                        # Couche métier (logique de l’app)
 │   │   ├── __init__.py                      # Rend 'services' importable comme package
-│   │   ├── spatial_service.py               # Service métier pour gestion des données spatiales
-│   │   ├── facade.py                        # Façade : point d’entrée centralisé vers les modèles
-│   │   └── map_service.py                   # Service métier pour manipulation des cartes
+│   │   ├── facade.py                        # Façade : point d’entrée centralisé vers les modèles lié à un utilisateur
+│   │   ├── facade2.py                       # Façade : point d’entrée centralisé vers les modèles non lié à un utilisateur
 │   │
-│   ├── bases_files/                     # Partie front-end (React + Vite)
-│   │   ├── images/                          # Ressources visuelles (icônes, images…)
-│   │   │   ├── icons                        # Dossier des icônes
-│   │   │   └── images_page                  # Images utilisées dans les pages
-│   │   │
-│   │   ├── src/                         # Code source React (JSX + CSS)
-│   │   │   ├── app.css                      # Style global de l’application React
-│   │   │   ├── app.jsx                      # Composant racine React
-│   │   │   ├── index.css                    # Styles additionnels
-│   │   │   └── main.jsx                     # Point d’entrée React (montage de l’app)
-│   │   │
-│   │   ├── eslint.config.js             # Configuration ESLint (linter JS/React)
-│   │   ├── index.html                   # Fichier HTML racine injectant l’app React
-│   │   ├── package.json                 # Dépendances et scripts NPM pour le front-end
-│   │   └── vite.config.js               # Configuration du bundler Vite (React)
+├── frontend/                        # Dossier principal de l’application frontend
+│   ├── src/                            # Code source de l'application React (composants, routes, styles, etc.).
+│   │   ├── assets/                       # Contient les fichiers statiques utilisés par l'application (images, icônes, styles, etc.).
+│   │       ├── fonts                     # Pour les polices importés
+│   │   ├── components/                   # Composant de fonction React
+│   │   ├── pages/                        # Fichiers React pour chaque page utilisé
+│   │   ├── services/                     # 
+│   │   ├── styles/                       # Répertoire regroupant les fichiers de styles utilisés dans l'application.
+│   │   ├── app.jsx                       # Composant racine de l'application React.
+│   │   ├── main.jsx                      # Point d'entrée de l'application React, qui monte le composant App dans le DOM.
+│   ├── eslint.config.js/                              #
+│   ├── index.html                        # Fichier HTML principal dans lequel l’application React est injectée.
 │   │
-├── tests/
+├── tests/                               # Dossier principal des tests
 │   ├── unit/                            # Tests unitaires
-│   │   ├── test_user_model.py               # Test des méthodes User
-│   │   ├── test_character_model.py          # Test des méthodes Character
-│   │   └── etc...            
-│   ├── integration/                     # Tests d’intégration (API + DB)
-│   │   ├── test_users_api.py                # Vérifie /api/v1/users/*
-│   │   ├── test_regions_api.py              # Vérifie /api/v1/regions/*
-│   │   └── etc...
-│   └── postman/                         # Collection Postman + scripts Newman
-│       ├── PortfolioAPI.postman_collection.json
-│       └── PortfolioAPI.postman_environment.json
-│
+│   │   ├── __init__.py                  # Rend 'unit' importable comme package
+│   │   ├── test_api.py                  # Test des API
+│   │   ├── test_facade1.py              # Test de la première facade
+│   │   ├── test_facade2.py              # Test de la deuixème facade
+│   │   ├── test_model_statique.py       # Test des modèles non liés à l'utilisateur
+│   │   ├── test_model_dynamique.py      # Test des modèles liés à l'utilisateur
+│   │   └── test_routes.py               # tests supplémentaire des routes API
+│   │
+│   ├── postman/                         # Collection Postman
+│       └── script_postman.json          # Script postman pour tout les tests (requêtes) des différents routes
+│   │
+│   ├── __init__.py                      # Rend 'unit' importable comme package
+│   └── conftest.py                      # Centralise la configuration et les fixtures pour les tests pytest.
+│   │
 ├── Documentation/                       # Documentation technique pour le projet
 │
 ├── __init__.py                          # Rend la racine importable comme package Python
-├── run.py                               # Script principal pour démarrer Flask
-├── requirements.txt                     # Dépendances Python (Flask, SQLAlchemy, JWT…)
-├── run-tests.py                         # Script pour exécuter la suite de tests
+├── config.py                            # Définit les paramètres de configuration selon l'environnement (développement, production, test).
+├── journal_de_bord.md                   # Journal quotidien par jour des taches effectués et problème rencontré
 └── README.md                            # Documentation principale du projet
+├── requirements.txt                     # Dépendances Python (Flask, SQLAlchemy, JWT…)
+├── run.py                               # Script principal pour démarrer Flask
 ```
 # Collaborateurs
 Ce projet a été conçu et développé par Thérèse-Marie LEFOULON et Robin DAVID. 

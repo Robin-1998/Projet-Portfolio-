@@ -1,121 +1,185 @@
 /*------------------------- POLICE ----------------------------------*/
 @font-face {
   font-family: 'Anirb';
-  src: url('./assets/fonts/anirb__.ttf') format('truetype'); /* ajuster le chemin si besoin */
+  src: url('../assets/fonts/aniron.bold.ttf') format('truetype'); /* chemin police */
 }
 
-/* --------- HEADER --------- */
+@font-face {
+  font-family: 'kalamR';
+  src: url('../assets/fonts/Kalam-Regular.ttf') format('truetype'); /* chemin police */
+}
+
+
+/* ------------------------- APP LAYOUT ------------------------- */
+.app-layout {
+  display: flex; /* sidebar + contenu côte à côte */
+  flex: 1; /* prend tout l’espace restant */
+  min-height: calc(100vh - 113px); /* espace hors header/footer */
+}
+
+/* ------------------------- Barre Menu Navigation------------------------- */
+.menu-gauche {
+  width: 100px; /* largeur fixe */
+  background-color: #403221; /* fond brun foncé */
+  color: white; /* texte clair */
+  display: flex; /* disposition verticale */
+  flex-direction: column; /* empile les éléments */
+  align-items: center; /* centre horizontalement */
+  padding: 20px 0; /* espace intérieur vertical */
+  height: 100vh; /* prend toute la hauteur de la fenêtre */
+  position: fixed; /* reste collée à gauche lors du scroll */
+  top: 0;
+  left: 0;
+}
+
+.hamburger-menu {
+  display: flex;
+  flex-direction: column; /* empile les lignes verticalement */
+  justify-content: space-between; /* espace égal entre les lignes */
+  width: 30px;   /* largeur du bouton */
+  height: 20px;  /* hauteur totale du bouton */
+  cursor: pointer;
+  margin: 10px;  /* optionnel, espace autour */
+  margin-bottom: 50px;
+}
+
+.hamburger-menu span {
+  display: block;
+  height: 3px;          /* épaisseur des traits */
+  background-color: white; /* couleur des traits */
+  border-radius: 2px;      /* coins arrondis */
+}
+
+.icone_barre {
+  margin: 0;
+  padding: 10px;
+  display: flex;
+  flex-direction: column; /* aligne verticalement */
+  align-items: center;    /* centre les éléments */
+  gap: 30px;
+}
+
+.icone_barre li {
+  list-style: none;
+}
+
+.image_nav {
+  width: 70px; /* taille icône */
+  height: 70px;
+  border-radius: 50%; /* cercle parfait */
+  background-color: #ffffff; /* fond blanc */
+}
+
+/* ------------------------- HEADER ------------------------- */
 .header {
-  background-color: #BFAD8A;   /* fond beige doré */
-  padding: 0.3% 0.9%;          /* marges internes */
-  color: #403221;              /* texte brun foncé */
-  font-family: 'Anirb';   /* police perso */
-  display: flex;               /* met les deux côtés sur une ligne */
-  justify-content: space-between; /* sépare gauche et droite */
-  align-items: center;         /* aligne verticalement */
+  background-color: #BFAD8A; /* fond beige doré */
+  padding: 0.5rem 1rem; /* espace intérieur */
+  color: #403221; /* texte brun foncé */
+  display: flex; /* alignement horizontal */
+  justify-content: space-between; /* sépare gauche/droite */
+  align-items: center; /* centre verticalement */
+  margin-left: 100px; /* décalé à droite de la sidebar */
 }
 
-/* --------- CÔTÉ GAUCHE (logo + titre) --------- */
+.titre-site {
+  font-family: 'Anirb';
+}
+
 .left-side {
-  display: flex;               /* logo + titre sur la même ligne */
-  align-items: center;
-  gap: 2%;
+  display: flex; /* logo + titre sur la même ligne */
+  align-items: center; /* alignement vertical */
+  gap: 10px; /* espace entre logo et titre */
+}
+
+.left-side h1 {
+  margin: 0; /* supprime la marge */
+  font-size: 1.5rem; /* taille du titre */
+  white-space: nowrap; /* empêche retour ligne */
 }
 
 .logo {
-  width: 7%;
-  height: 7%;
-  border-radius: 50%;
-  object-fit: cover;
+  width: 60px; /* taille logo */
+  height: 60px;
+  border-radius: 50%; /* logo rond */
+  object-fit: cover; /* garde proportions */
 }
 
-/* --------- CÔTÉ DROIT (recherche + bouton login) --------- */
+/* ------------------------- CÔTÉ DROIT DU HEADER ------------------------- */
 .right-side {
-  display: flex;               /* barre de recherche + login côte à côte */
-  align-items: center;
-  gap: 50px;                   /* espace entre les deux */
-  margin: 2%;
+  display: flex; /* alignement horizontal */
+  align-items: center; /* centré verticalement */
+  gap: 1rem; /* espace entre éléments */
 }
 
-/* --------- BARRE DE RECHERCHE --------- */
 .search-bar {
-  display: flex;               /* barre + icône alignés */
-  align-items: center;
-  gap: 10%;
-  background-color: #f5f0e6;
-  border-radius: 20px;
-  padding: 6px 16px;
+  display: flex; /* alignement input + bouton */
+  align-items: center; /* centré verticalement */
+  gap: 8px; /* espace entre éléments */
+  background-color: #f5f0e6; /* fond clair */
+  border-radius: 20px; /* bords arrondis */
+  padding: 6px 14px; /* marge interne */
 }
 
 .search-bar input {
-  border: none;
-  background: transparent;
-  outline: none;
-  font-size: 90%;
-  color: #403221;
+  border: none; /* sans bordure */
+  background: transparent; /* fond transparent */
+  outline: none; /* supprime contour focus */
+  font-size: 0.9rem; /* taille police */
+  color: #403221; /* texte brun */
 }
 
 .search-bar button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 90%;
+  background: none; /* pas de fond */
+  border: none; /* pas de bordure */
+  cursor: pointer; /* curseur main */
+  font-size: 0.9rem; /* taille police */
 }
 
-/* --------- BOUTON LOGIN --------- */
 .login-bouton {
-  background-color: #403221;
-  color: #f5f0e6;
-  border: none;
-  border-radius: 20px;
-  padding: 8px 20px;
-  cursor: pointer;
-  font-size: 90%;
-  transition: background-color 0.3s ease;
-  margin-left: 40px;
+  background-color: #403221; /* fond brun foncé */
+  color: #f5f0e6; /* texte clair */
+  border: none; /* sans bordure */
+  border-radius: 20px; /* bords arrondis */
+  padding: 8px 20px; /* marges internes */
+  cursor: pointer; /* clic interactif */
+  font-size: 0.9rem; /* taille police */
+  transition: background-color 0.3s ease; /* effet au survol */
 }
 
 .login-bouton:hover {
-  background-color: #2c2417;
+  background-color: #2c2417; /* fonce au survol */
 }
 
-/* ------------ LISTE PUCE ------------ */
-li {
-    list-style: none;
+/* ------------------------- CONTENU PRINCIPAL ------------------------- */
+.contenu-principal {
+  flex: 1; /* prend tout l’espace dispo */
+  padding: 20px; /* marges internes */
+  background-color: #f8f5ef; /* fond clair */
+  color: #403221; /* texte brun */
+  margin-left: 100px;
+  margin-bottom: 34px;
 }
 
-/* ------------ BARRE NAVIGATION ------------ */
-.image_nav {
-    text-decoration: none;
-    background-color: white;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-}
-
-.contenair_nav {
-    background-color: brown;
-}
-
-.contenair_nav nav {
-    padding: 0;
-    margin: 0;
-}
-
-/* ------------ FOOTER ------------ */
+/* ------------------------- FOOTER ------------------------- */
 footer {
-    background-color: black;
-    padding: 1rem;
-    text-align: center;
-}
-
-a {
-  text-decoration: none;
-  color: white; /* ou une couleur spécifique comme #fff */
-  font-family: 'Anirb', sans-serif;
+  background-color: #BFAD8A; /* fond noir */
+  text-align: center; /* texte centré */
+  padding: 0.5rem; /* marges internes */
+  position: fixed; /* fixé en bas */
+  bottom: 0; /* collé au bas */
+  left: 100px; /* aligne avec la sidebar */
+  width: 100%;
 }
 
 footer nav ul {
-    display: flex;
-    justify-content: space-around;
+  display: flex; /* éléments en ligne */
+  justify-content: space-around; /* espace égal */
+  padding: 0; /* sans padding */
+  margin: 0; /* sans marge */
+  list-style: none; /* supprime les puces */
+}
+
+a {
+  text-decoration: none; /* supprime soulignement */
+  color: #2c2417; /* texte blanc */
 }

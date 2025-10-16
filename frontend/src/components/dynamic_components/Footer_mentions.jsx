@@ -1,6 +1,3 @@
-import { Link } from 'react-router-dom';
-import '../styles/layout.css'
-
 function MentionsLegales() {
   return (
     <div>

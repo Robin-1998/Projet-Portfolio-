@@ -148,7 +148,11 @@ Mise en place des bases de données locales dédiées pour Robin & Timi
 
 ## 16/10/2025
 
-- 
+- Apprentissage de Leaflet-react
+- Routes react maitrisé
+- Structuration des dossiers react car mauvaise compréhension des composants et des pages en react
+- Stylisation des pages login + Sources + Mentions légales + Accueil/map interactive
+
 ## 17/10/2025
 ## 20/10/2025
 ## 21/10/2025

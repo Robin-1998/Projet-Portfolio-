@@ -1,7 +1,7 @@
-import Header from './components/header';
+import Header from './components/static_components/header';
 import { Routes, Route } from 'react-router-dom';
-import BodyAllPage from './components/body_all_page';
-import Footer from './components/footer';
+import BodyAllPage from './components/static_components/body_all_page';
+import Footer from './components/static_components/footer';
 import routes from './routes/routes';
 import { BrowserRouter } from 'react-router-dom';
 import Login from './pages/Login';

@@ -1,8 +1,8 @@
-import Login from "../pages/LoginPage";
-import Body from "../components/layoutpage";
+import Login from "../pages/Login";
+import Home from "../pages/Home";
 
-const routes = [	
-	{ path: "/", element : <Body/>},
+const routes = [
+	{ path: "/", element : <Home/>},
 	{ path: "/login", element: <Login /> }
 ]
 

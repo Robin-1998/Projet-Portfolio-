@@ -1,8 +1,8 @@
 import React from 'react';
 
-function Login() {
+function FormulaireLogin() {
   return (
-	<Header />
+    <>
     <div>
       <form>
         <h2>Connexion Utilisateur</h2>
@@ -13,7 +13,8 @@ function Login() {
         {/* Champs de formulaire ici */}
       </form>
     </div>
+    </>
   );
 }
 
-export default Login
+export default FormulaireLogin

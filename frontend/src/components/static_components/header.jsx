@@ -1,6 +1,6 @@
-import logoArbre from '../assets/logo_arbre.png';
+import logoArbre from '../../assets/logo_arbre.png';
 import { Link } from 'react-router-dom';
-import '../styles/layout.css'
+import "../../styles/layout.css";
 
 function Header() {
     return (

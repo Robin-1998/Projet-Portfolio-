@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
-import carteImage from '../assets/logo_carte.png';
-import characterImage from '../assets/logo_personnage.png';
-import histoireImage from '../assets/logo_livre.png';
-import artImage from '../assets/logo_creation.png';
-import racesImage from '../assets/logo_races.png';
+import carteImage from '../../assets/logo_carte.png';
+import characterImage from '../../assets/logo_personnage.png';
+import histoireImage from '../../assets/logo_livre.png';
+import artImage from '../../assets/logo_creation.png';
+import racesImage from '../../assets/logo_races.png';
 
 function Navigation() {
   return (

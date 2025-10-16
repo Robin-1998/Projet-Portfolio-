@@ -5,11 +5,11 @@ import Footer from '../components/static_components/footer';
 import BodyPage from '../components/static_components/body_page';
 
 function Home() {
-    return (
-        <>
-            <BodyPage />
-        </>
-    );
+	return (
+		<>
+			<BodyPage />
+		</>
+	);
 }
 
 export default Home

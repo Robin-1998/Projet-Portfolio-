@@ -3,13 +3,13 @@ import BodyPage from '../components/static_components/body_page';
 import FormulaireLogin from '../components/dynamic_components/Formulaire_connexion';
 
 function Login() {
-    return (
-        <>
-            <BodyPage>
-                <FormulaireLogin />
-            </BodyPage>
-        </>
-    );
+	return (
+		<>
+			<BodyPage>
+				<FormulaireLogin />
+			</BodyPage>
+		</>
+	);
 }
 
 export default Login

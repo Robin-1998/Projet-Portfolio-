@@ -1,0 +1,200 @@
+/*------------------------- POLICE ----------------------------------*/
+@font-face {
+  font-family: 'Anirb';
+  src: url('../assets/fonts/aniron.bold.ttf') format('truetype'); /* chemin police */
+}
+
+@font-face {
+  font-family: 'kalamR';
+  src: url('../assets/fonts/Kalam-Regular.ttf') format('truetype'); /* chemin police */
+}
+
+/* ------------------------- Barre Menu Navigation------------------------- */
+.menu-gauche {
+  width: 100px; /* largeur fixe */
+  background-color: #403221; /* fond brun foncé */
+  color: white; /* texte clair */
+  display: flex; /* disposition verticale */
+  flex-direction: column; /* empile les éléments */
+  align-items: center; /* centre horizontalement */
+  padding: 20px 0; /* espace intérieur vertical */
+  height: 100vh; /* prend toute la hauteur de la fenêtre */
+  position: fixed; /* reste collée à gauche lors du scroll */
+  top: 0;
+  left: 0;
+}
+
+.hamburger-menu {
+  display: flex;
+  flex-direction: column; /* empile les lignes verticalement */
+  justify-content: space-between; /* espace égal entre les lignes */
+  width: 30px;   /* largeur du bouton */
+  height: 20px;  /* hauteur totale du bouton */
+  cursor: pointer;
+  margin: 10px;  /* optionnel, espace autour */
+  margin-bottom: 50px;
+}
+
+.hamburger-menu span {
+  display: block;
+  height: 3px;          /* épaisseur des traits */
+  background-color: white; /* couleur des traits */
+  border-radius: 2px;      /* coins arrondis */
+}
+
+.icone_barre {
+  margin: 0;
+  padding: 10px;
+  display: flex;
+  flex-direction: column; /* aligne verticalement */
+  align-items: center;    /* centre les éléments */
+  gap: 30px;
+}
+
+.icone_barre li {
+  list-style: none;
+}
+
+.image_nav {
+  width: 70px; /* taille icône */
+  height: 70px;
+  border-radius: 50%; /* cercle parfait */
+  background-color: #ffffff; /* fond blanc */
+}
+
+/* ------------------------- HEADER ------------------------- */
+.header {
+  background-color: #BFAD8A; /* fond beige doré */
+  padding: 0.5rem 1rem; /* espace intérieur */
+  color: #403221; /* texte brun foncé */
+  display: flex; /* alignement horizontal */
+  justify-content: space-between; /* sépare gauche/droite */
+  align-items: center; /* centre verticalement */
+  margin-left: 100px; /* décalé à droite de la sidebar */
+}
+
+.titre-site {
+  font-family: 'Anirb';
+}
+
+.left-side {
+  display: flex; /* logo + titre sur la même ligne */
+  align-items: center; /* alignement vertical */
+  gap: 10px; /* espace entre logo et titre */
+}
+
+.left-side h1 {
+  margin: 0; /* supprime la marge */
+  font-size: 1.5rem; /* taille du titre */
+  white-space: nowrap; /* empêche retour ligne */
+}
+
+.logo {
+  width: 60px; /* taille logo */
+  height: 60px;
+  border-radius: 50%; /* logo rond */
+  object-fit: cover; /* garde proportions */
+}
+
+/* ------------------------- CÔTÉ DROIT DU HEADER ------------------------- */
+.right-side {
+  display: flex; /* alignement horizontal */
+  align-items: center; /* centré verticalement */
+  gap: 1rem; /* espace entre éléments */
+}
+
+.search-bar {
+  display: flex; /* alignement input + bouton */
+  align-items: center; /* centré verticalement */
+  gap: 8px; /* espace entre éléments */
+  background-color: white; /* fond clair */
+  border-radius: 20px; /* bords arrondis */
+  padding: 6px 14px; /* marge interne */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.search-bar input {
+  border: none; /* sans bordure */
+  background: transparent; /* fond transparent */
+  outline: none; /* supprime contour focus */
+  font-size: 0.9rem; /* taille police */
+  color: #403221; /* texte brun */
+}
+
+.search-bar button {
+  background: none; /* pas de fond */
+  border: none; /* pas de bordure */
+  cursor: pointer; /* curseur main */
+  font-size: 0.9rem; /* taille police */
+}
+
+.login-bouton {
+  background-color: #403221; /* fond brun foncé */
+  color: #f5f0e6; /* texte clair */
+  border: none; /* sans bordure */
+  border-radius: 20px; /* bords arrondis */
+  padding: 8px 20px; /* marges internes */
+  cursor: pointer; /* clic interactif */
+  font-size: 0.9rem; /* taille police */
+  transition: background-color 0.3s ease; /* effet au survol */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.login-bouton:hover {
+  background-color: #2c2417; /* fonce au survol */
+}
+
+/* ------------------------- CONTENU PRINCIPAL ------------------------- */
+.contenu-principal {
+  padding: 40px; /* marges internes */
+  background-color: #f2eee3; /* fond clair */
+  color: #403221; /* texte brun */
+  margin-left: 100px;
+  margin-bottom: 41.6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.block-principal
+{
+    border-radius: 10px;
+    background: white;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 1);
+    margin: 10px 10px 10px 10px;
+    padding: 0.5rem 3rem 1rem 3rem ;
+    background-image: url('../assets/background_body.jpg');
+    background-size: 100% 100%;
+}
+
+h2 {
+    margin: 0px 0px 0px 0px;
+}
+
+p {
+    margin: 0px 0px 20px 0px;
+}
+
+/* ------------------------- FOOTER ------------------------- */
+footer {
+  background-color: #BFAD8A; /* fond noir */
+  text-align: relative; /* texte centré */
+  padding: 0.5rem; /* marges internes */
+  position: fixed; /* fixé en bas */
+  bottom: 0; /* collé au bas */
+  left: 100px; /* aligne avec la sidebar */
+  width: 100%;
+}
+
+footer nav ul {
+  display: flex; /* éléments en ligne */
+  justify-content: space-around; /* espace égal */
+  padding: 0; /* sans padding */
+  margin: 0; /* sans marge */
+  list-style: none; /* supprime les puces */
+}
+
+a {
+  text-decoration: none; /* supprime soulignement */
+  color: #2c2417;
+}

@@ -146,8 +146,9 @@ Mise en place des bases de données locales dédiées pour Robin & Timi
 - Continuation sur le footer / header / Navigation
 - Contenu des pages mentions légales et sources ajoutés
 
-## 15/10/2025
 ## 16/10/2025
+
+- 
 ## 17/10/2025
 ## 20/10/2025
 ## 21/10/2025

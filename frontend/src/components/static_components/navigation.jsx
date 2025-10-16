@@ -8,7 +8,6 @@ import racesImage from '../assets/logo_races.png';
 function Navigation() {
   return (
 	<nav className="menu-gauche">
-
 		<ul className='icone_barre'>
 			<div className="hamburger-menu">
 				<span></span>

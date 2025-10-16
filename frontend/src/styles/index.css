@@ -19,12 +19,14 @@ html, body {
   height: 100%; /* occupe toute la hauteur */
   background-color: #f5f0e6; /* fond clair */
   font-family: 'kalamR', sans-serif; /* police globale */
+  flex-direction: column;
 }
 
 #root {
   display: flex; /* structure principale en flex */
   flex-direction: column; /* empile les sections verticalement */
   min-height: 100vh; /* hauteur minimale plein écran */
+  flex: 1;
 }
 
 /* Le main prend tout l’espace dispo pour pousser le footer en bas */
@@ -32,4 +34,9 @@ main {
   flex: 1;
 }
 
-/*-------------------------------- Login --------------------------------------*/
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+}

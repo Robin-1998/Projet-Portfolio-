@@ -9,7 +9,7 @@ import importPlugin from "eslint-plugin-import";
 export default [
   js.configs.recommended,
   {
-    files: ["/*.js", "/*.jsx"],
+    files: ["**/*.js", "**/*.jsx"],
     ignores: ["dist", "node_modules"],
     languageOptions: {
       ecmaVersion: "latest",
@@ -26,23 +26,23 @@ export default [
       import: importPlugin,
     },
     rules: {
-      //  Base
+      // 🌿 Base
       "no-unused-vars": "warn",
       "no-console": "off",
 
-      //  React
+      // ⚛️ React
       "react/react-in-jsx-scope": "off", // inutile avec React 17+
       "react/prop-types": "off", // désactive PropTypes si tu utilises TypeScript ou non strictement
       "react/jsx-uses-react": "off",
 
-      //  Hooks
+      // 🪝 Hooks
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
 
-      //  Imports
+      // 🔗 Imports
       "import/order": ["warn", { groups: [["builtin", "external", "internal"]] }],
 
-      //  Accessibilité
+      // ♿ Accessibilité
       "jsx-a11y/alt-text": "warn",
     },
     settings: {

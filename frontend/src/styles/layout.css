@@ -1,25 +1,12 @@
 /*------------------------- POLICE ----------------------------------*/
 @font-face {
-  font-family: 'Anirb'; /* police personnalisée */
+  font-family: 'Anirb';
   src: url('../assets/fonts/aniron.bold.ttf') format('truetype'); /* chemin police */
 }
 
-.kalam-light {
-  font-family: "Kalam", cursive;
-  font-weight: 300;
-  font-style: normal;
-}
-
-.kalam-regular {
-  font-family: "Kalam", cursive;
-  font-weight: 400;
-  font-style: normal;
-}
-
-.kalam-bold {
-  font-family: "Kalam", cursive;
-  font-weight: 700;
-  font-style: normal;
+@font-face {
+  font-family: 'kalamR';
+  src: url('../assets/fonts/Kalam-Regular.ttf') format('truetype'); /* chemin police */
 }
 
 

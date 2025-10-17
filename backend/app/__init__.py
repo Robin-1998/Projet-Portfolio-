@@ -8,6 +8,7 @@ from flask_restx import Api
 from flask_migrate import Migrate
 from dotenv import load_dotenv  # 👈 on ajoute ceci
 from config import config
+from flask_cors import CORS
 
 # Permet d'importer depuis la racine du projet
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
@@ -37,6 +38,7 @@ def create_app(config_name=None):
     # Créer l'application Flask
     app = Flask(__name__)
     app.url_map.strict_slashes = False
+    CORS(app)
 
     # Charger la configuration selon l'environnement
     app.config.from_object(config[config_name])

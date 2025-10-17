@@ -9,29 +9,142 @@
   src: url('../assets/fonts/Kalam-Regular.ttf') format('truetype'); /* chemin police */
 }
 
+@font-face {
+  font-family: 'kalamL';
+  src: url('../assets/fonts/Kalam-Light.ttf') format('truetype'); /* chemin police */
+}
+
+@font-face {
+  font-family: 'kalamB';
+  src: url('../assets/fonts/Kalam-Bold.ttf') format('truetype'); /* chemin police */
+}
+
+/* ------------------------- STRUCTURE GÉNÉRALE ------------------------- */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #f5f0e6;
+  font-family: 'kalamR', sans-serif;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* --- Structure layout avec sidebar --- */
+.layout {
+  display: flex;
+  height: 100vh;
+  transition: all 0.3s ease;
+}
+
+/* --- Contenu principal : header + body + footer --- */
+.content-area {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-left: 100px; /* largeur sidebar fermée */
+  transition: margin-left 0.3s ease;
+}
+
+.layout.open .content-area {
+  margin-left: 200px; /* largeur sidebar ouverte */
+}
+
+/* ------------------------- CONTENU PRINCIPAL ------------------------- */
+.contenu-principal {
+  flex: 1; /* prend l'espace disponible */
+  background-color: #f2eee3; /* fond clair */
+  color: #403221; /* texte brun */
+  margin-bottom: 41.6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.block-principal {
+    border-radius: 10px;
+    background: white;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 1);
+    margin: 10px 10px 10px 10px;
+    padding: 0.5rem 3rem 1rem 3rem ;
+    background-image: url('../assets/background_body.jpg');
+    background-size: 100% 100%;
+}
+
+h2 {
+    margin: 0;
+}
+
+p {
+    margin: 0px 0px 20px 0px;
+}
+
 /* ------------------------- Barre Menu Navigation------------------------- */
+/* menu fermé */
+.icone_barre {
+  display: none;
+}
+
+/* menu ouvert */
+.icone_barre.visible {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.menu-gauche:not(.open) {
+  width: 100px; /* réduit la largeur */
+}
+
+.menu-gauche.open {
+  width: 200px; /* largeur normale */
+}
+
+/* pour éviter le décalage du contenu principal */
+.header, footer, .contenu-principal {
+  transition: margin-left 0.3s ease;
+}
+.menu-gauche:not(.open) ~ .header,
+.menu-gauche:not(.open) ~ .contenu-principal,
+.menu-gauche:not(.open) ~ footer {
+  margin-left: 0px;
+}
+
 .menu-gauche {
-  width: 100px; /* largeur fixe */
-  background-color: #403221; /* fond brun foncé */
-  color: white; /* texte clair */
-  display: flex; /* disposition verticale */
-  flex-direction: column; /* empile les éléments */
-  align-items: center; /* centre horizontalement */
-  padding: 20px 0; /* espace intérieur vertical */
-  height: 100vh; /* prend toute la hauteur de la fenêtre */
-  position: fixed; /* reste collée à gauche lors du scroll */
+  background-color: #403221;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+  height: 100vh;
+  position: fixed;
   top: 0;
   left: 0;
+  transition: width 0.3s ease;
+  overflow: hidden;
+  flex-shrink: 0;
+  z-index: 1000;
+  width: 100px; /* largeur par défaut fermé */
+}
+
+.menu-gauche.open {
+  width: 200px; /* largeur ouverte */
 }
 
 .hamburger-menu {
   display: flex;
-  flex-direction: column; /* empile les lignes verticalement */
-  justify-content: space-between; /* espace égal entre les lignes */
-  width: 30px;   /* largeur du bouton */
-  height: 20px;  /* hauteur totale du bouton */
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 20px;
   cursor: pointer;
-  margin: 10px;  /* optionnel, espace autour */
+  margin: 10px;
   margin-bottom: 50px;
 }
 
@@ -53,6 +166,7 @@
 
 .icone_barre li {
   list-style: none;
+  width: 100%;
 }
 
 .image_nav {
@@ -60,6 +174,46 @@
   height: 70px;
   border-radius: 50%; /* cercle parfait */
   background-color: #ffffff; /* fond blanc */
+  flex-shrink: 0; /* empêche l'icône de rétrécir */
+}
+
+/* Style pour les liens de navigation */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* espace entre l'icône et le texte */
+  text-decoration: none;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Texte à côté des icônes */
+.nav-text {
+  font-size: 1rem;
+  color: white;
+  white-space: nowrap; /* empêche le retour à la ligne */
+  opacity: 0;
+  animation: apparition 0.3s ease forwards;
+  animation-delay: 0.2s; /* apparaît après l'ouverture du menu */
+  font-family: 'KalamB';
+}
+
+@keyframes apparition {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 /* ------------------------- HEADER ------------------------- */
@@ -70,7 +224,6 @@
   display: flex; /* alignement horizontal */
   justify-content: space-between; /* sépare gauche/droite */
   align-items: center; /* centre verticalement */
-  margin-left: 100px; /* décalé à droite de la sidebar */
 }
 
 .titre-site {
@@ -144,46 +297,20 @@
   background-color: #2c2417; /* fonce au survol */
 }
 
-/* ------------------------- CONTENU PRINCIPAL ------------------------- */
-.contenu-principal {
-  padding: 40px; /* marges internes */
-  background-color: #f2eee3; /* fond clair */
-  color: #403221; /* texte brun */
-  margin-left: 100px;
-  margin-bottom: 41.6px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.block-principal
-{
-    border-radius: 10px;
-    background: white;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 1);
-    margin: 10px 10px 10px 10px;
-    padding: 0.5rem 3rem 1rem 3rem ;
-    background-image: url('../assets/background_body.jpg');
-    background-size: 100% 100%;
-}
-
-h2 {
-    margin: 0px 0px 0px 0px;
-}
-
-p {
-    margin: 0px 0px 20px 0px;
-}
-
 /* ------------------------- FOOTER ------------------------- */
 footer {
   background-color: #BFAD8A; /* fond noir */
-  text-align: relative; /* texte centré */
+  text-align: center; /* texte centré */
   padding: 0.5rem; /* marges internes */
   position: fixed; /* fixé en bas */
   bottom: 0; /* collé au bas */
   left: 100px; /* aligne avec la sidebar */
-  width: 100%;
+  right: 0;
+  transition: left 0.3s ease;
+}
+
+.layout.open footer {
+  left: 200px; /* aligne avec la sidebar ouverte */
 }
 
 footer nav ul {

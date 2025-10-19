@@ -1,4 +1,5 @@
 import React from 'react';
+import ornement from '../../assets/ornement.PNG';
 
 function FormulaireLogin() {
   return (
@@ -10,6 +11,7 @@ function FormulaireLogin() {
           <input type="email" placeholder="Email" className="input-field" />
           <input type="password" placeholder="Mot de passe" className="input-field" />
         </div>
+        <img className='ornement' src={ornement} alt="Ornement" />
         <button type="submit" className="btn">Se connecter</button>
       </form>
 

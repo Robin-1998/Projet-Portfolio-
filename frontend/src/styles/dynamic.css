@@ -1,3 +1,19 @@
+/*------------------------- POLICE ----------------------------------*/
+@font-face {
+  font-family: 'Anirb';
+  src: url('../assets/fonts/aniron.bold.ttf') format('truetype'); /* chemin police */
+}
+
+@font-face {
+  font-family: 'kalamR';
+  src: url('../assets/fonts/Kalam-Regular.ttf') format('truetype'); /* chemin police */
+}
+
+@font-face {
+  font-family: 'kalamL';
+  src: url('../assets/fonts/Kalam-Light.ttf') format('truetype'); /* chemin police */
+}
+
 /* --- Page login/register --- */
 .login-container {
   display: flex;
@@ -32,7 +48,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  margin-top: 45px;
+  margin-top: 20px;
 }
 
 .bouton-text2 {
@@ -43,20 +59,24 @@
 }
 
 .input-field {
-  padding: 10px;
+  padding: 7px;
   border: 1px solid #ccc;
-  border-radius: 15px;
+  border-radius: 50px;
+  font-family: 'kalamR';
 }
 
 .btn {
-  padding: 10px;
+  padding: 5px;
   background: #6b4f2c;
   color: white;
   border: none;
-  border-radius: 15px;
+  border-radius: 50px;
   cursor: pointer;
   font-weight: bold;
   margin-top: auto;
+  font-family: 'kalamL';
+  font-size: 1.1rem;
+  font-style: normal;
 }
 
 .btn:hover {
@@ -65,4 +85,11 @@
 
 .login-h2 {
 	text-align: center;
+}
+
+.ornement {
+  width: 10rem;
+  display: flex;
+  align-self: center;
+  margin-top: 0.9rem;
 }

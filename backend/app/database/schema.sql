@@ -154,6 +154,27 @@ CREATE TABLE map_region (
     shape_data GEOMETRY(POLYGON, 0) NOT NULL,
     place_id BIGINT REFERENCES places(id)
 );
+
+-- Création de l'ENUM pour les catégories de marqueurs
+CREATE TYPE marker_type AS ENUM (
+    'foret',
+    'montagne',
+    'forteresse',
+    'ville',
+    'capitale',
+    'eau',
+    'ruine',
+    'dark',
+    'mine',
+    'port',
+    'pont',
+    'plaine',
+    'chemin',
+    'monument',
+    'special',
+    'default'
+);
+
 DROP TABLE IF EXISTS map_marker CASCADE;
 CREATE TABLE map_marker (
     id BIGSERIAL PRIMARY KEY,
@@ -161,11 +182,16 @@ CREATE TABLE map_marker (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     name VARCHAR(100) NOT NULL UNIQUE,
     location GEOMETRY(POINT, 0) NOT NULL,
+    type marker_type NOT NULL DEFAULT 'default',
     place_id BIGINT REFERENCES places(id)
 );
+
 -- -----------------------------
 -- Table Entity Descriptions
 -- -----------------------------
+DROP TYPE IF EXISTS entity_type_enum;
+CREATE TYPE entity_type_enum AS ENUM ('character', 'place', 'race', 'history');
+
 DROP TABLE IF EXISTS entity_descriptions CASCADE;
 CREATE TABLE entity_descriptions (
     id BIGSERIAL PRIMARY KEY,
@@ -175,5 +201,6 @@ CREATE TABLE entity_descriptions (
     content TEXT NOT NULL,
     order_index INT,
     relation_type_id BIGINT REFERENCES relation_types(id),
-    entity_id BIGINT
+    entity_type entity_type_enum NOT NULL,
+    entity_id BIGINT NOT NULL
 );

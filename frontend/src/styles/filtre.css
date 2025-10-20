@@ -1,0 +1,22 @@
+.filter-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-icon {
+  width: 60px;
+  height: 60px;
+  border: 2px solid gray;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px;
+  background: #eee;
+}
+
+.filter-icon.selected {
+  border-color: blue;
+  background: #d0e8ff;
+}
+

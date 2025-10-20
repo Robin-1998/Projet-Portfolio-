@@ -1,0 +1,15 @@
+/* Container qui contient tout */
+container-vitrine {
+	display: flex;
+	flex-direction: column;
+}
+
+.character-grid {
+	display: flex;
+	justify-content: space-around;
+}
+
+.card {
+	border: 2px solid black;
+	width: 45%;
+} 

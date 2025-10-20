@@ -30,8 +30,8 @@ class PlaceMap(BaseModel):
     description = db.Column(db.Text, nullable=False)
     parent_id = db.Column(db.BigInteger, db.ForeignKey('places.id'))
 
-    map_regions = db.relationship('MapRegion', back_populates='place', cascade='all, delete-orphan')
-    map_markers = db.relationship('MapMarker', back_populates='place', cascade='all, delete-orphan')
+    map_regions = db.relationship('MapRegion', back_populates='place', cascade='all, delete-orphan', lazy='select')
+    map_markers = db.relationship('MapMarker', back_populates='place', cascade='all, delete-orphan', lazy='select')
 
     def __init__(self, title, type_place, description, parent_id):
         super().__init__()

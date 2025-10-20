@@ -1,5 +1,6 @@
 /* Conteneur de la carte - taille adaptée à la page */
-.map2-container {
+/* Curseur en croix sur la carte */
+.map2-conteneur {
   width: 100%;
   height: 100%;
   background-color: transparent;
@@ -8,19 +9,22 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* État de chargement */
+/* État de chargement carte*/
 .map2-loading {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 500px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-image: url('../assets/background_body.jpg');
+  background-size: 100% 100%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  width: 20rem;
+  height: 20rem;
   border-radius: 8px;
 }
 
 .map2-loading-content {
   text-align: center;
-  color: white;
+  color: #403221;
 }
 
 .map2-spinner {
@@ -34,12 +38,16 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* État d'erreur */
-.map2-error-container {
+.map2-error-conteneur {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -65,7 +73,7 @@
 }
 
 .map2-retry-button {
-  background-color: #4CAF50;
+  background-color: #403221;
   color: white;
   border: none;
   padding: 12px 30px;
@@ -76,7 +84,7 @@
 }
 
 .map2-retry-button:hover {
-  background-color: #45a049;
+  background-color: #53412b;
 }
 
 /* Popups */
@@ -99,8 +107,47 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .map2-container {
+  .map2-conteneur {
     height: calc(100vh - 150px);
     min-height: 400px;
   }
+}
+
+/* Wrapper pour la carte et les coordonnées */
+.map2-conteneur-carte {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Affichage des coordonnées cliquées */
+.map2-coords-display {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 15px;
+  border-radius: 8px;
+  z-index: 1000;
+  font-family: monospace;
+  font-size: 14px;
+  border: 2px solid #4CAF50;
+}
+
+.map2-coords-value {
+  color: #4CAF50;
+}
+
+/* Indication pour cliquer */
+.map2-coords-hint {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 152, 0, 0.9);
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  z-index: 1000;
+  font-size: 12px;
 }

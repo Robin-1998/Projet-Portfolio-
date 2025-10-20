@@ -13,5 +13,5 @@ export const mapAPI = {
     const response = await fetch(`${API_URL}/polygons`);
     if (!response.ok) throw new Error('Erreur chargement polygones');
     return response.json();
-  }
+  },
 };

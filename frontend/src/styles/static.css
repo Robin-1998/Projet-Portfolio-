@@ -20,7 +20,8 @@
 }
 
 /* ------------------------- STRUCTURE GÉNÉRALE ------------------------- */
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -66,21 +67,21 @@ html, body {
 }
 
 .block-principal {
-    border-radius: 10px;
-    background: white;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 1);
-    margin: 10px 10px 10px 10px;
-    padding: 0.5rem 3rem 1rem 3rem ;
-    background-image: url('../assets/background_body.jpg');
-    background-size: 100% 100%;
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 1);
+  margin: 10px 10px 10px 10px;
+  padding: 0.5rem 3rem 1rem 3rem;
+  background-image: url('../assets/background_body.jpg');
+  background-size: 100% 100%;
 }
 
 h2 {
-    margin: 0;
+  margin: 0;
 }
 
 p {
-    margin: 0px 0px 20px 0px;
+  margin: 0px 0px 20px 0px;
 }
 
 /* ------------------------- Barre Menu Navigation------------------------- */
@@ -106,7 +107,9 @@ p {
 }
 
 /* pour éviter le décalage du contenu principal */
-.header, footer, .contenu-principal {
+.header,
+footer,
+.contenu-principal {
   transition: margin-left 0.3s ease;
 }
 .menu-gauche:not(.open) ~ .header,
@@ -150,9 +153,9 @@ p {
 
 .hamburger-menu span {
   display: block;
-  height: 3px;          /* épaisseur des traits */
+  height: 3px; /* épaisseur des traits */
   background-color: white; /* couleur des traits */
-  border-radius: 2px;      /* coins arrondis */
+  border-radius: 2px; /* coins arrondis */
 }
 
 .icone_barre {
@@ -160,7 +163,7 @@ p {
   padding: 10px;
   display: flex;
   flex-direction: column; /* aligne verticalement */
-  align-items: center;    /* centre les éléments */
+  align-items: center; /* centre les éléments */
   gap: 30px;
 }
 
@@ -218,7 +221,7 @@ p {
 
 /* ------------------------- HEADER ------------------------- */
 .header {
-  background-color: #BFAD8A; /* fond beige doré */
+  background-color: #bfad8a; /* fond beige doré */
   padding: 0.5rem 1rem; /* espace intérieur */
   color: #403221; /* texte brun foncé */
   display: flex; /* alignement horizontal */
@@ -299,7 +302,7 @@ p {
 
 /* ------------------------- FOOTER ------------------------- */
 footer {
-  background-color: #BFAD8A; /* fond noir */
+  background-color: #bfad8a; /* fond noir */
   text-align: center; /* texte centré */
   padding: 0.5rem; /* marges internes */
   position: fixed; /* fixé en bas */
@@ -324,4 +327,12 @@ footer nav ul {
 a {
   text-decoration: none; /* supprime soulignement */
   color: #2c2417;
+}
+
+.contenu-principal.map-fullscreen {
+  display: block;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  min-height: calc(100vh - 160px);
 }

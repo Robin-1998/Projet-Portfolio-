@@ -1,22 +1,17 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './app.jsx'
-import './styles/static.css'
-import './styles/index.css'
-import './styles/dynamic.css'
-import './styles/map.css'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './app.jsx';
+import './styles/static.css';
+import './styles/index.css';
+import './styles/dynamic.css';
+import './styles/map.css';
+import './styles/Tooltip.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
-)
-
-/* ajout favicon */
-const link = document.createElement('link');
-link.rel = 'icon';
-link.href = favicon;
-document.head.appendChild(link);
+);
 
 /*
 React.StrictMode : active des alertes pour t’aider à écrire un meilleur code React (en mode dev seulement).

@@ -30,6 +30,7 @@ class Character(BaseModel):
             "era_death": self.era_death,
             "gender": self.gender,
             "profession": self.profession,
-            "description": self.description
+            "description": self.description,
+        #   "race": self.race.name if self.race else None
         }
 

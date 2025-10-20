@@ -21,7 +21,15 @@ class PortfolioFacade:
         if not race:
             raise ValueError(f"Race avec id {race_id} introuvable.")
         return race
+    """
+    def get_characters_by_race(self, race_id=None):
+        query = Character.query
 
+        if race_id is not None:
+            query = query.filter(Character.race_id == race_id)
+
+        return query.all()
+    """
 # -------------------------CHARACTERS------------------------------------------
 
     def get_all_characters(self):

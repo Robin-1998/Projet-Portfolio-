@@ -19,12 +19,16 @@ function Navigation({ menuOpen, setMenuOpen }) {
       <ul className={`icone_barre ${menuOpen ? 'visible' : ''}`}>
         <li>
           <Link to="/home_map" className="nav-item">
-            <img src={carteImage} alt="carte interactive" className="image_nav" />
+            <img
+              src={carteImage}
+              alt="carte interactive"
+              className="image_nav"
+            />
             {menuOpen && <span className="nav-text">Carte</span>}
           </Link>
         </li>
         <li>
-          <Link to="/personnages" className="nav-item">
+          <Link to="/characters" className="nav-item">
             <img src={characterImage} alt="personnages" className="image_nav" />
             {menuOpen && <span className="nav-text">Personnages</span>}
           </Link>
@@ -43,7 +47,11 @@ function Navigation({ menuOpen, setMenuOpen }) {
         </li>
         <li>
           <Link to="/art" className="nav-item">
-            <img src={artImage} alt="création artistique" className="image_nav" />
+            <img
+              src={artImage}
+              alt="création artistique"
+              className="image_nav"
+            />
             {menuOpen && <span className="nav-text">Gallerie d'Art</span>}
           </Link>
         </li>

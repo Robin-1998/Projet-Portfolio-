@@ -4,7 +4,27 @@ from geoalchemy2.shape import to_shape
 from backend.app import db
 from sqlalchemy.orm import validates
 from geoalchemy2.elements import WKTElement
+from sqlalchemy import Enum
+import enum
 
+# Définir l'ENUM Python pour correspondre à votre ENUM PostgreSQL
+class MarkerTypeEnum(enum.Enum):
+    foret = 'forêt'
+    montagne = 'montagne'
+    forteresse = 'forteresse'
+    ville = 'ville'
+    capitale = 'capitale'
+    eau = 'eau'
+    ruine = 'ruine'
+    dark = 'dark'
+    mine = 'mine'
+    port = 'port'
+    pont = 'pont'
+    plaine = 'plaine'
+    chemin = 'chemin'
+    monument = 'monument'
+    special = 'special'
+    default = 'default'
 
 class MapMarker(BaseModel):
     """
@@ -15,14 +35,21 @@ class MapMarker(BaseModel):
 
     name = db.Column(db.String(100), nullable=False)
     location = db.Column(Geometry('POINT', srid=0), nullable=False)
-    place_id = db.Column(db.BigInteger, db.ForeignKey('places.id'))
 
+    type = db.Column(
+        Enum(MarkerTypeEnum, name='marker_type', native_enum=True),
+        nullable=False,
+        default=MarkerTypeEnum.default
+    )
+
+    place_id = db.Column(db.BigInteger, db.ForeignKey('places.id'))
     place = db.relationship('PlaceMap', back_populates='map_markers')
 
-    def __init__(self, name, location, place_id):
+    def __init__(self, name, location, type, place_id):
         super().__init__()
         self.name = name
         self.location = location
+        self.type = type
         self.place_id = place_id
 
     @validates("name")
@@ -50,6 +77,7 @@ class MapMarker(BaseModel):
             "id": self.id,
             "name": self.name,
             "place_id": self.place_id,
+            "type": self.type.value if self.type else 'default',
             "geometry": {
                 "type": "Point",
                 "coordinates": [geom.x, geom.y]

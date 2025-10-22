@@ -1,0 +1,14 @@
+.bloc-info {
+	background-image: url('../assets/background_body.jpg');
+	background-size: 100% 100%;
+	padding-top: 2rem;
+	padding-bottom: 2rem;
+	padding-left: 4rem;
+	padding-right: 4rem ;
+}
+
+.image_info {
+	width: 300px;
+	height: 300px;
+	object-fit: contain;
+}

@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom/client';
 import App from './app.jsx';
 import './styles/static.css';
 import './styles/index.css';
-import './styles/dynamic.css';
+import './styles/login.css';
 import './styles/map.css';
 import './styles/Tooltip.css';
+import './styles/detail_place.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

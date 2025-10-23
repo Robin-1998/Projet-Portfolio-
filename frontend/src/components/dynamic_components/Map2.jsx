@@ -9,6 +9,8 @@ import {
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import { CATEGORY_ICONS } from './Bulle_map.jsx';
+import DetailPlace from './Detail_place.jsx';
 
 // Chemin pour l'image de la carte
 const terre_du_milieu = '/public/terre_du_milieu.jpg';
@@ -23,23 +25,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl:
     'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
-
-// Fonction générique pour créer une icône
-const createCategoryIcon = (emoji, colorClass) => {
-  return L.divIcon({
-    className: `custom-marker-${colorClass}`,
-    html: `
-      <div class="marker-icon marker-${colorClass}">
-        <span class="marker-emoji">${emoji}</span>
-      </div>
-    `,
-    iconSize: [28, 28],
-    iconAnchor: [14, 14],
-    popupAnchor: [0, -14]
-  });
-};
-
-
 
 // ========== COMPOSANT POUR DÉTECTER LES CLICS AVEC COORDONNEES  ==========
 /*
@@ -72,7 +57,12 @@ const Map2 = () => {
   const [polygons, setPolygons] = useState([]); // Liste des polygones
   const [loading, setLoading] = useState(true); // État de chargement
   const [error, setError] = useState(null); // Gestion des erreurs
+  const [iconSize, setIconSize] = useState(30); //
   // const [clickedCoords, setClickedCoords] = useState(null); // Pour réactives CoordinatesFinder uniquement pour gérer les click
+
+  const [selectedPlace, setSelectedPlace] = useState(null);
+  const [detailedInfo, setDetailedInfo] = useState(null);
+  const [loadingDetails, setLoadingDetails] = useState(false);
 
   const MAP_WIDTH = 5658; // Largeur en pixels de la carte
   const MAP_HEIGHT = 3633; // Hauteur en pixels de la carte
@@ -86,7 +76,51 @@ const Map2 = () => {
     return [MAP_HEIGHT - y, x]; // Convertit des coordonnées pixels en coordonnées Leaflet
   };
 
-   // Fonction pour charger les données depuis l’API backend
+  // Fonction pour charger les détails d'un lieu
+  const loadPlaceDetails = async (placeId, placeName, placeDescription, placeDetails, placeType) => {
+    setLoadingDetails(true);
+    try {
+      console.log(`Appel API: http://localhost:5000/api/v1/map/places/${placeId}/details`);
+      const response = await fetch(`http://localhost:5000/api/v1/map/places/${placeId}/details`);
+
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log('Résultat API:', result);
+
+      if (result.success) {
+        setDetailedInfo({
+          name: placeName,
+          description: placeDescription,
+          details: placeDetails,
+          type: placeType,
+          ...result.data // image_url, detailed_sections, etc.
+        });
+      }
+    } catch (error) {
+      console.error('Erreur lors du chargement des détails:', error);
+      // Affiche quand même les infos de base
+      setDetailedInfo({
+        name: placeName,
+        description: placeDescription,
+        details: placeDetails,
+        type: placeType,
+        detailed_sections: [],
+        error: 'Impossible de charger les détails complets'
+      });
+    } finally {
+      setLoadingDetails(false);
+    }
+  };
+
+  // Fonction pour fermer la modal
+  const closeDetailedView = () => {
+    setDetailedInfo(null);
+  };
+
+  // Fonction pour charger les données depuis l’API backend
   const chargerDonneesCarte = async () => {
     try {
       setLoading(true); // Active le mode chargement
@@ -98,7 +132,7 @@ const Map2 = () => {
         throw new Error(`Erreur HTTP: ${response.status}`); // Gère les erreurs HTTP
       }
 
-      const result = await response.json(); // Parse la réponse JSON
+      const result = await response.json(); // extrait la réponse JSON
 
       if (result.success) {
         const mapData = result.data;
@@ -112,6 +146,9 @@ const Map2 = () => {
             marker.geometry.coordinates[1]
           ),
           placeId: marker.place_id,
+          type: marker.type || "default",
+          description: marker.description || "Aucune description disponible",
+          details: marker.details || {},
         }));
 
         // Transformation des régions (liste de points)
@@ -122,6 +159,8 @@ const Map2 = () => {
             pixelToLeaflet(coord[0], coord[1])
           ),
           placeId: region.place_id,
+          description: region.description || "Aucune description disponible",
+          details: region.details || {},
         }));
 
         setMarkers(transformedMarkers); // Met à jour les marqueurs
@@ -165,19 +204,42 @@ const Map2 = () => {
     );
   }
 
-  console.log('🗺️ Rendu de la carte, image:', terre_du_milieu);
+  // adapte la taille des icônes en focntion du zoom
+  function ZoomAdaptiveIcons({ setIconSize }) {
+    const map = useMapEvents({
+      zoom: () => {
+        const zoom = map.getZoom();
+        const newSize = computeIconSize(zoom);
+        setIconSize(newSize);
+      },
+      load: () => {
+        const zoom = map.getZoom();
+        const newSize = computeIconSize(zoom);
+        setIconSize(newSize);
+      },
+    });
+
+    return null;
+  }
+
+  // Fonction pour calculer la taille adaptavie des ico,e
+  function computeIconSize(zoom) {
+    const minSize = 30;      // taille minimale
+    const maxSize = 96;      // taille maximale
+    const baseSize = 30;     // taille de référence
+    const factor = 8;        // sensibilité du zoom
+
+    // Formule : taille proportionnelle au zoom
+    let size = baseSize + (zoom + 3) * factor; // +3 pour compenser le zoom négatif initial
+
+    // Clamp pour rester entre min et max
+    size = Math.max(minSize, Math.min(maxSize, size));
+
+    return size;
+  }
 
   return (
-    <div
-      className="map2-conteneur-carte"
-      style={{
-        width: '100%',
-        height: '100%',
-        position: 'relative',
-        margin: 0,
-        padding: 0,
-      }}
-    >
+    <div className="map2-conteneur-carte">
       {/* ========== AFFICHAGE DES COORDONNÉES ========== */}
       {/*
       {clickedCoords ? (
@@ -197,7 +259,7 @@ const Map2 = () => {
         zoom={-3}
         crs={L.CRS.Simple}
         className="map2-conteneur"
-        minZoom={-4}
+        minZoom={-2.7}
         maxZoom={0}
         zoomControl={true}
         dragging={true}
@@ -209,6 +271,10 @@ const Map2 = () => {
         maxBounds={bounds}
         maxBoundsViscosity={1.0}
       >
+        <ZoomAdaptiveIcons
+         setIconSize={setIconSize}
+        />
+
         <ImageOverlay
           url={terre_du_milieu}
           bounds={bounds}
@@ -223,37 +289,95 @@ const Map2 = () => {
         />
         */}
 
+        {/* Affichage des Régions */}
         {polygons.map((polygon) => (
           <Polygon
             key={polygon.id}
             positions={polygon.positions}
             pathOptions={{
+              className: 'polygon-style',
               color: 'black',
               fillColor: '#403221',
               fillOpacity: 0.1,
-              weight: 1,
+              weight: 0,
             }}
           >
             <Popup>
               <div className="map2-popup">
                 <h3 className="map2-popup-title">{polygon.name}</h3>
-                <p className="map2-popup-info">Place ID: {polygon.placeId}</p>
+                <p className="map2-popup-description">{polygon.description}</p>
+
+                {/* Bouton pour voir les détails */}
+                <button
+                  className="map2-popup-details-btn"
+                  onClick={() => loadPlaceDetails(
+                    polygon.placeId,
+                    polygon.name,
+                    polygon.description,
+                    polygon.details,
+                    'région'
+                  )}
+                >
+                  📖 Voir les détails
+                </button>
               </div>
             </Popup>
           </Polygon>
         ))}
 
-        {markers.map((marker) => (
-          <Marker key={marker.id} position={marker.position}>
-            <Popup>
-              <div className="map2-popup">
-                <h3 className="map2-popup-title">{marker.name}</h3>
-                <p className="map2-popup-info">Place ID: {marker.placeId}</p>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
+        {/* Affichage des Marqueurs */}
+        {markers.map((marker) => {
+          const iconType = marker.type || "default";
+          const icon = CATEGORY_ICONS[iconType]?.(iconSize) || CATEGORY_ICONS.default(iconSize);
+
+          return (
+            <Marker key={marker.id} position={marker.position} icon={icon}>
+              <Popup>
+                <div className="map2-popup">
+                  <h3 className="map2-popup-title">{marker.name}</h3>
+                  <p className="map2-popup-description">{marker.description}</p>
+
+                  {marker.details && Object.keys(marker.details).length > 0 && (
+                    <div className="map2-popup-details">
+                      {Object.entries(marker.details).map(([key, value]) => (
+                        <p key={key}>
+                          <strong>{key}:</strong> {value}
+                        </p>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Bouton pour voir les détails */}
+                  <button
+                    className="map2-popup-details-btn"
+                    onClick={() => {
+                      console.log('Place ID:', marker.placeId); // ← Ajoute ce log
+                      loadPlaceDetails(
+                        marker.placeId,
+                        marker.name,
+                        marker.description,
+                        marker.details,
+                        marker.type
+                      );
+                    }}
+                    disabled={loadingDetails}
+                  >
+                    {loadingDetails ? '⏳ Chargement...' : '📖 Voir les détails'}
+                  </button>
+                </div>
+              </Popup>
+            </Marker>
+          );
+        })}
       </MapContainer>
+
+      {/* Modal de détails */}
+      {detailedInfo && (
+        <DetailPlace
+          place={detailedInfo}
+          onClose={closeDetailedView}
+        />
+      )}
     </div>
   );
 };

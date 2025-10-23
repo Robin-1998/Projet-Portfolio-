@@ -1,22 +1,22 @@
 /*------------------------- POLICE ----------------------------------*/
 @font-face {
   font-family: 'Anirb';
-  src: url('../assets/fonts/aniron.bold.ttf') format('truetype'); /* chemin police */
+  src: url('../assets/fonts/aniron.bold.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'kalamR';
-  src: url('../assets/fonts/Kalam-Regular.ttf') format('truetype'); /* chemin police */
+  src: url('../assets/fonts/Kalam-Regular.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'kalamL';
-  src: url('../assets/fonts/Kalam-Light.ttf') format('truetype'); /* chemin police */
+  src: url('../assets/fonts/Kalam-Light.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'kalamB';
-  src: url('../assets/fonts/Kalam-Bold.ttf') format('truetype'); /* chemin police */
+  src: url('../assets/fonts/Kalam-Bold.ttf') format('truetype');
 }
 
 /* ------------------------- STRUCTURE GÉNÉRALE ------------------------- */
@@ -27,6 +27,7 @@ body {
   height: 100%;
   background-color: #f5f0e6;
   font-family: 'kalamR', sans-serif;
+  background-color: #f2eee3; /* fond clair */
 }
 
 #root {
@@ -57,13 +58,11 @@ body {
 
 /* ------------------------- CONTENU PRINCIPAL ------------------------- */
 .contenu-principal {
-  flex: 1; /* prend l'espace disponible */
   background-color: #f2eee3; /* fond clair */
   color: #403221; /* texte brun */
-  margin-bottom: 41.6px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  padding: 2rem;
+  padding-bottom: 4rem;
+  height: auto;
 }
 
 .block-principal {
@@ -125,7 +124,7 @@ footer,
   flex-direction: column;
   align-items: center;
   padding: 20px 0;
-  height: 100vh;
+  height: 100%;
   position: fixed;
   top: 0;
   left: 0;
@@ -334,5 +333,5 @@ a {
   padding: 0;
   margin: 0;
   width: 100%;
-  min-height: calc(100vh - 160px);
+  min-height: calc(100vh - 120px);
 }

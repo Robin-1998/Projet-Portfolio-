@@ -154,8 +154,31 @@ Mise en place des bases de données locales dédiées pour Robin & Timi
 - Stylisation des pages login + Sources + Mentions légales + Accueil/map interactive
 
 ## 17/10/2025
+
+- Commencement des pages character + histoire + races
+- Elaboration de la carte interactive avec leaflet + react
+
 ## 20/10/2025
+
+- Connexion avec la DB pour les pages character + histoire + races
+- Ajout des contenus brut supplémentaire dans la base de donnée
+- Connexion avec la DB pour la carte interactive avec mise en place des marqueurs + polygone
+- Images stocker en local pour le moment pour éviter de perdre du temps
+
 ## 21/10/2025
+
+- Finalisation des cardes pour les différentes races qui seront à réutiliser pour les personnages / histoires
+- Stylisation des marqueurs sur la map interactive
+- Commencement du login connexion back/front
+- Les filtres des personnages ne seront pas utilisés (trop complexe et trop de temps)
+
 ## 22/10/2025
+
+- Commencement des informations pour chaque race avec la bonne interrogation en db + image stocker
+- Commencement des pages pour les créations artistiques
+- Ajout de la table entity description sur les places
+- Réussite des appels de la DB de place sur les marqueurs de lieu et de région
+- Connexion à la db pour le login à continuer
+
 ## 23/10/2025
 ## 24/10/2025

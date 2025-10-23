@@ -20,7 +20,23 @@ class PlaceMap(BaseModel):
     title = db.Column(db.String(200), nullable=False)
     type_place = db.Column(
         db.Enum(
-            'Région', 'Ville', 'Village', 'Forteresse', 'Mer', 'Lac/Marais', 'Rivière',
+            'region',
+            'foret',
+            'montagne',
+            'forteresse',
+            'ville',
+            'capitale',
+            'eau',
+            'ruine',
+            'dark',
+            'mine',
+            'port',
+            'pont',
+            'plaine',
+            'chemin',
+            'monument',
+            'special',
+            'default',
             name="place_enum",
             native_enum=False,
             create_type=False

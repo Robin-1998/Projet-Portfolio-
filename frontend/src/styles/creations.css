@@ -1,0 +1,25 @@
+.Blocks_creations {
+	display: flex;
+  height: auto;
+  background: black;
+}
+
+.block_creations_left {
+	display: flex;
+	flex-direction: column;
+  background-image: url('../assets/background_body.jpg');
+  background-size: 100% 100%;
+	padding : 1rem;
+  max-width: 20%;
+  margin-right: 20px;;
+}
+
+.block_creations_right {
+	background-color: yellow;
+}
+
+
+
+section p {
+	text-decoration: underline;
+}

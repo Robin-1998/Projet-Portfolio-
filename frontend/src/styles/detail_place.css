@@ -1,0 +1,356 @@
+/* =====================================================
+   MODAL - OVERLAY ET CONTENU (Style parchemin)
+   ===================================================== */
+
+.modal-overlay {
+  position: fixed;                              /* Fixe l'overlay sur toute la fenêtre */
+  top: 0;                                       /* Collé en haut */
+  left: 0;                                      /* Collé à gauche */
+  right: 0;                                     /* Collé à droite */
+  bottom: 0;                                    /* Collé en bas */
+  background-color: rgba(0, 0, 0, 0.85);       /* Fond noir semi-transparent (85% opacité) */
+  display: flex;                                /* Flexbox pour centrer le contenu */
+  justify-content: center;                      /* Centre horizontalement */
+  align-items: center;                          /* Centre verticalement */
+  z-index: 10000;                              /* Au-dessus de tout le reste */
+  padding: 20px;                               /* Espace autour de la modal */
+  animation: fadeIn 0.3s ease;                 /* Animation d'apparition en fondu */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;                                 /* Commence invisible */
+  }
+  to {
+    opacity: 1;                                 /* Finit visible */
+  }
+}
+
+.modal-content {
+  background-image: url('../assets/background_body.jpg'); /* Fond parchemin comme tes cartes */
+  background-size: 100% 100%;                  /* Étire le fond pour couvrir toute la zone */
+  border: 3px solid black;                     /* Bordure noire épaisse */
+  border-radius: 12px;                         /* Coins arrondis */
+  max-width: 900px;                            /* Largeur maximale de la modal */
+  max-height: 90vh;                            /* Hauteur max = 90% de la hauteur de l'écran */
+  width: 100%;                                 /* Prend toute la largeur disponible */
+  overflow-y: auto;                            /* Scroll vertical si le contenu dépasse */
+  position: relative;                          /* Pour positionner le bouton de fermeture */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8); /* Ombre portée pour effet de profondeur */
+  animation: slideUp 0.3s ease;                /* Animation de montée */
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);               /* Commence 50px plus bas */
+    opacity: 0;                                /* Commence invisible */
+  }
+  to {
+    transform: translateY(0);                  /* Finit à sa position normale */
+    opacity: 1;                                /* Finit visible */
+  }
+}
+
+/* =====================================================
+   BOUTON FERMER
+   ===================================================== */
+
+.modal-close {
+  position: sticky;                            /* Reste visible même quand on scroll */
+  top: 10px;                                   /* 10px du haut */
+  right: 10px;                                 /* 10px de la droite */
+  float: right;                                /* Aligné à droite */
+  background: #8b4513;                         /* Couleur marron (bois) */
+  color: white;                                /* Texte blanc */
+  border: 2px solid black;                     /* Bordure noire */
+  border-radius: 50%;                          /* Forme ronde (cercle) */
+  width: 40px;                                 /* Largeur 40px */
+  height: 40px;                                /* Hauteur 40px (carré = cercle) */
+  font-size: 24px;                             /* Taille du X */
+  cursor: pointer;                             /* Curseur main au survol */
+  z-index: 1;                                  /* Au-dessus du contenu */
+  transition: all 0.3s;                        /* Transitions douces sur tous les changements */
+  display: flex;                               /* Flexbox pour centrer le X */
+  align-items: center;                         /* Centre verticalement le X */
+  justify-content: center;                     /* Centre horizontalement le X */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);   /* Ombre pour relief */
+}
+
+.modal-close:hover {
+  background: #a0522d;                         /* Marron plus clair au survol */
+  transform: rotate(90deg) scale(1.1);         /* Rotation de 90° + agrandissement au survol */
+}
+
+/* =====================================================
+   HEADER
+   ===================================================== */
+
+.modal-header {
+  padding: 30px 30px 20px;                     /* Espace intérieur (haut/côtés bas) */
+  border-bottom: 3px solid black;              /* Ligne de séparation noire en bas */
+  background-color: rgba(245, 241, 232, 0.9);  /* Fond beige semi-transparent */
+}
+
+.modal-header h2 {
+  margin: 0;                                   /* Supprime les marges par défaut */
+  margin-top: 0px;                             /* Pas d'espace en haut */
+  text-align: center;                          /* Texte centré */
+  color: #2c1810;                              /* Couleur marron foncé */
+  font-size: 32px;                             /* Grande taille pour le titre */
+  font-family: 'Cinzel', 'Georgia', serif;     /* Police médiévale */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Ombre légère sur le texte */
+}
+
+/* =====================================================
+   IMAGE PRINCIPALE
+   ===================================================== */
+
+.modal-image-container {
+  width: 100%;                                 /* Prend toute la largeur */
+  max-height: 500px;                           /* Hauteur max de 500px */
+  overflow: hidden;                            /* Cache ce qui dépasse */
+  position: relative;                          /* Pour positionnement interne */
+  display: flex;                               /* Flexbox pour centrer l'image */
+  justify-content: center;                     /* Centre horizontalement */
+  align-items: center;                         /* Centre verticalement */
+  background-color: rgba(0, 0, 0, 0.1);        /* Fond légèrement gris */
+  border-bottom: 2px solid black;              /* Ligne de séparation en bas */
+}
+
+.modal-main-image {
+  width: 100%;                                 /* Prend toute la largeur du conteneur */
+  max-width: 800px;                            /* Largeur max de 800px */
+  height: auto;                                /* Hauteur automatique (garde les proportions) */
+  object-fit: contain;                         /* L'image entière est visible, pas de rognage */
+  display: block;                              /* Comportement de bloc (pas d'espace en dessous) */
+  border-radius: 8px;                          /* Coins arrondis */
+  margin: 20px;                                /* Espace autour de l'image */
+}
+
+/* =====================================================
+   CORPS DE LA MODAL
+   ===================================================== */
+
+.modal-body {
+  padding: 30px;                               /* Espace intérieur de 30px */
+}
+
+.modal-section {
+  margin-bottom: 30px;                         /* Espace de 30px entre les sections */
+}
+
+.modal-main-description {
+  font-size: 17px;                             /* Taille de texte confortable */
+  line-height: 1.8;                            /* Espacement entre les lignes (180%) */
+  color: #2c1810;                              /* Couleur marron foncé */
+  text-align: justify;                         /* Texte justifié (aligné des deux côtés) */
+  padding: 20px;                               /* Espace intérieur */
+  background-color: rgba(255, 255, 255, 0.7);  /* Fond blanc semi-transparent (70%) */
+  border: 2px solid black;                     /* Bordure noire */
+  border-radius: 8px;                          /* Coins arrondis */
+  margin-block-start: 0;                       /* Supprime la marge en haut */
+  margin-block-end: 0;                         /* Supprime la marge en bas */
+}
+
+/* =====================================================
+   GRILLE DE DÉTAILS (Style cartes)
+   ===================================================== */
+
+.modal-details-grid {
+  display: flex;                               /* Flexbox pour disposer les cartes */
+  flex-wrap: wrap;                             /* Les cartes passent à la ligne si besoin */
+  justify-content: center;                     /* Centre les cartes horizontalement */
+  gap: 20px;                                   /* Espace de 20px entre les cartes */
+  padding: 25px;                               /* Espace intérieur */
+  background-color: rgba(139, 69, 19, 0.1);    /* Fond marron très léger (10% opacité) */
+  border: 2px solid black;                     /* Bordure noire */
+  border-radius: 8px;                          /* Coins arrondis */
+}
+
+.modal-detail-item {
+  border: 2px solid black;                     /* Bordure noire comme tes cartes */
+  width: 200px;                                /* Largeur fixe de 200px */
+  padding: 15px;                               /* Espace intérieur */
+  display: flex;                               /* Flexbox pour organiser le contenu */
+  flex-direction: column;                      /* Disposition verticale */
+  align-items: center;                         /* Centre horizontalement */
+  text-align: center;                          /* Texte centré */
+  background-image: url('../assets/background_body.jpg'); /* Fond parchemin */
+  background-size: 100% 100%;                  /* Étire le fond */
+  border-radius: 8px;                          /* Coins arrondis */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);    /* Ombre pour effet de relief */
+  transition: transform 0.3s;                  /* Animation de transformation douce */
+}
+
+.modal-detail-item:hover {
+  transform: translateY(-5px);                 /* Monte de 5px au survol */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);   /* Ombre plus marquée au survol */
+}
+
+.modal-detail-item strong {
+  color: #8b4513;                              /* Couleur marron pour le label */
+  display: block;                              /* Comportement de bloc (prend toute la largeur) */
+  margin-bottom: 8px;                          /* Espace en dessous */
+  font-size: 14px;                             /* Taille de texte */
+  text-transform: uppercase;                   /* Texte en majuscules */
+  letter-spacing: 0.5px;                       /* Espacement entre les lettres */
+  margin-block-start: 0;                       /* Supprime la marge en haut */
+  margin-block-end: 0;                         /* Supprime la marge en bas */
+}
+
+.modal-detail-item span {
+  color: #2c1810;                              /* Couleur marron foncé pour la valeur */
+  font-size: 16px;                             /* Taille légèrement plus grande */
+  font-weight: bold;                           /* Texte en gras */
+}
+
+/* =====================================================
+   SECTIONS DÉTAILLÉES
+   ===================================================== */
+
+.modal-sections {
+  border-top: 3px solid black;                 /* Ligne de séparation en haut */
+  padding-top: 30px;                           /* Espace en haut */
+  margin-top: 20px;                            /* Marge en haut */
+}
+
+.modal-section h3 {
+  color: #8b4513;                              /* Couleur marron */
+  font-size: 24px;                             /* Taille de titre */
+  margin-top: 7px;                             /* Petit espace en haut */
+  margin-bottom: 15px;                         /* Espace en bas */
+  font-family: 'Cinzel', 'Georgia', serif;     /* Police médiévale */
+  padding-bottom: 10px;                        /* Espace intérieur en bas */
+  border-bottom: 2px solid black;              /* Ligne de séparation en bas */
+  text-align: center;                          /* Texte centré */
+}
+
+.modal-section-image {
+  width: 100%;                                 /* Prend toute la largeur disponible */
+  max-width: 600px;                            /* Largeur max de 600px */
+  height: auto;                                /* Hauteur automatique (garde proportions) */
+  object-fit: contain;                         /* L'image entière est visible */
+  border-radius: 8px;                          /* Coins arrondis */
+  margin: 15px auto;                           /* Espace vertical 15px, centré horizontalement */
+  display: block;                              /* Comportement de bloc */
+  border: 2px solid black;                     /* Bordure noire */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);   /* Ombre pour relief */
+}
+
+.modal-section p {
+  line-height: 1.8;                            /* Espacement entre lignes (180%) */
+  color: #2c1810;                              /* Couleur marron foncé */
+  text-align: justify;                         /* Texte justifié */
+  font-size: 16px;                             /* Taille de texte */
+  white-space: pre-line;                       /* Préserve les sauts de ligne du texte SQL */
+  padding: 15px;                               /* Espace intérieur */
+  background-color: rgba(255, 255, 255, 0.6);  /* Fond blanc semi-transparent (60%) */
+  border-radius: 8px;                          /* Coins arrondis */
+  border: 1px solid rgba(0, 0, 0, 0.1);        /* Bordure très légère */
+  margin-block-start: 0;                       /* Supprime marge en haut */
+  margin-block-end: 0;                         /* Supprime marge en bas */
+}
+
+/* =====================================================
+   SCROLLBAR PERSONNALISÉE
+   ===================================================== */
+
+.modal-content::-webkit-scrollbar {
+  width: 12px;                                 /* Largeur de la barre de scroll */
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: rgba(139, 69, 19, 0.2);          /* Fond de la piste (marron clair) */
+  border-radius: 6px;                          /* Coins arrondis */
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: #8b4513;                         /* Couleur de la poignée (marron) */
+  border-radius: 6px;                          /* Coins arrondis */
+  border: 2px solid rgba(139, 69, 19, 0.2);    /* Bordure pour effet 3D */
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: #6d4c41;                         /* Marron plus foncé au survol */
+}
+
+/* =====================================================
+   EFFET HOVER SUR LES PARAGRAPHES (comme tes cartes)
+   ===================================================== */
+
+.modal-section p:hover {
+  background-color: rgba(255, 255, 255, 0.85); /* Fond plus opaque au survol (85%) */
+  cursor: url(../assets/logo_oeil.png) 10 14, pointer; /* Curseur œil personnalisé au survol */
+}
+
+/* =====================================================
+   BOUTON "VOIR DÉTAILS" DANS LE POPUP LEAFLET
+   ===================================================== */
+
+.map2-popup-details-btn {
+  width: 100%;                                 /* Prend toute la largeur du popup */
+  margin-top: 12px;                            /* Espace au-dessus du bouton */
+  padding: 10px 16px;                          /* Espace intérieur (vertical horizontal) */
+  background-image: url('../assets/background_body.jpg'); /* Fond parchemin */
+  background-size: 100% 100%;                  /* Étire le fond */
+  color: #2c1810;                              /* Texte marron foncé */
+  border: 2px solid black;                     /* Bordure noire */
+  border-radius: 8px;                          /* Coins arrondis */
+  cursor: pointer;                             /* Curseur main au survol */
+  font-size: 14px;                             /* Taille de texte */
+  font-weight: bold;                           /* Texte en gras */
+  transition: all 0.3s;                        /* Transitions douces sur tous changements */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);    /* Ombre légère */
+}
+
+.map2-popup-details-btn:hover:not(:disabled) {
+  transform: translateY(-2px);                 /* Monte de 2px au survol */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);    /* Ombre plus marquée au survol */
+  background-color: rgba(160, 82, 45, 0.2);    /* Teinte marron légère au survol */
+}
+
+.map2-popup-details-btn:disabled {
+  opacity: 0.6;                                /* Semi-transparent quand désactivé */
+  cursor: not-allowed;                         /* Curseur interdit */
+  transform: none;                             /* Pas d'animation au survol */
+}
+
+/* =====================================================
+   RESPONSIVE (Adaptation mobile/tablette)
+   ===================================================== */
+
+@media (max-width: 768px) {                    /* Si l'écran fait moins de 768px de large */
+  .modal-overlay {
+    padding: 10px;                             /* Moins d'espace autour sur mobile */
+  }
+
+  .modal-content {
+    max-height: 95vh;                          /* Prend plus de hauteur sur mobile (95%) */
+  }
+
+  .modal-header h2 {
+    font-size: 24px;                           /* Titre plus petit sur mobile */
+  }
+
+  .modal-body {
+    padding: 20px;                             /* Moins d'espace intérieur sur mobile */
+  }
+
+  .modal-details-grid {
+    gap: 15px;                                 /* Moins d'espace entre cartes sur mobile */
+  }
+
+  .modal-detail-item {
+    width: 100%;                               /* Les cartes prennent toute la largeur */
+    max-width: 250px;                          /* Largeur max de 250px sur mobile */
+  }
+
+  .modal-section h3 {
+    font-size: 20px;                           /* Titres plus petits sur mobile */
+  }
+
+  .modal-main-image,
+  .modal-section-image {
+    max-width: 100%;                           /* Images prennent toute la largeur sur mobile */
+  }
+}

@@ -20,19 +20,69 @@ ON CONFLICT (name) DO NOTHING;
 -- -----------------------------
 -- Inserts Places
 -- -----------------------------
--- Régions
+-- ==================== RÉGIONS ====================
 INSERT INTO places (title, type_place, description, parent_id)
 VALUES
-('Gondor', 'Région', 'Région du Gondor', NULL),
-('Rohan', 'Région', 'Région du Rohan', NULL)
+('Gondor', 'region', 'Royaume des Hommes du Sud, gardien contre Mordor', NULL),
+('Rohan', 'region', 'Royaume des Cavaliers du Rohan', NULL),
+('Mordor', 'region', 'Terre sombre de Sauron', NULL),
+('Eriador', 'region', 'Région de l''Ouest, incluant la Comté', NULL),
+('Rhovanion', 'region', 'Terres Sauvages de l''Est', NULL)
 ON CONFLICT (title) DO NOTHING;
 
--- Sous-places
+-- ==================== LIEUX - GONDOR ====================
 INSERT INTO places (title, type_place, description, parent_id)
 VALUES
-('Minas Tirith', 'Ville', 'Capitale du Gondor', (SELECT id FROM places WHERE title='Gondor')),
-('Osgiliath', 'Village', 'Cité fortifiée en ruine attaquée par les orques', (SELECT id FROM places WHERE title='Gondor')),
-('Forêt de Fangorn', 'Rivière', 'Ancienne et mystérieuse forêt peuplée d’Ents', (SELECT id FROM places WHERE title='Rohan'))
+('Minas Tirith', 'capitale', 'Capitale du Gondor, la Cité Blanche', (SELECT id FROM places WHERE title='Gondor')),
+('Osgiliath', 'ruine', 'Ancienne capitale en ruines sur l''Anduin', (SELECT id FROM places WHERE title='Gondor')),
+('Champ de Pelennor', 'plaine', 'Grande plaine devant Minas Tirith, site de bataille', (SELECT id FROM places WHERE title='Gondor')),
+('Minas Morgul', 'forteresse', 'Cité maudite, autrefois Minas Ithil', (SELECT id FROM places WHERE title='Gondor'))
+ON CONFLICT (title) DO NOTHING;
+
+-- ==================== LIEUX - ROHAN ====================
+INSERT INTO places (title, type_place, description, parent_id)
+VALUES
+('Edoras', 'capitale', 'Capitale du Rohan, siège du Roi Théoden', (SELECT id FROM places WHERE title='Rohan')),
+('Isengard', 'forteresse', 'Forteresse de Saroumane avec la tour d''Orthanc', (SELECT id FROM places WHERE title='Rohan')),
+('Fangorn', 'foret', 'Ancienne forêt des Ents', (SELECT id FROM places WHERE title='Rohan')),
+('Gouffre de Helm', 'forteresse', 'Forteresse imprenable dans les montagnes', (SELECT id FROM places WHERE title='Rohan')),
+('Passage des Morts', 'chemin', 'Chemin hanté menant à travers les montagnes', (SELECT id FROM places WHERE title='Rohan'))
+ON CONFLICT (title) DO NOTHING;
+
+-- ==================== LIEUX - MORDOR ====================
+INSERT INTO places (title, type_place, description, parent_id)
+VALUES
+('Montagne du Destin (Orodruin)', 'montagne', 'Volcan où l''Anneau Unique fut forgé', (SELECT id FROM places WHERE title='Mordor')),
+('Barad-dûr', 'dark', 'Tour Sombre, forteresse de Sauron', (SELECT id FROM places WHERE title='Mordor')),
+('Cirith Ungol', 'forteresse', 'Passage gardé par l''araignée Arachne', (SELECT id FROM places WHERE title='Mordor'))
+ON CONFLICT (title) DO NOTHING;
+
+-- ==================== LIEUX - ERIADOR ====================
+INSERT INTO places (title, type_place, description, parent_id)
+VALUES
+('La Comté', 'capitale', 'Terre paisible des Hobbits', (SELECT id FROM places WHERE title='Eriador')),
+('Hobbitebourg', 'ville', 'Principal village de la Comté', (SELECT id FROM places WHERE title='Eriador')),
+('Cul-de-Sac', 'ville', 'Demeure de Bilbon et Frodon Sacquet', (SELECT id FROM places WHERE title='Eriador')),
+('Bree', 'ville', 'Village où Hommes et Hobbits cohabitent', (SELECT id FROM places WHERE title='Eriador')),
+('Fondcombe', 'ville', 'Rivendell, refuge elfique d''Elrond', (SELECT id FROM places WHERE title='Eriador')),
+('Havre Gris', 'port', 'Port elfique vers les Terres Immortelles', (SELECT id FROM places WHERE title='Eriador')),
+('Amon Sûl', 'ruine', 'Ruines de la Tour de Garde (Mont Venteux)', (SELECT id FROM places WHERE title='Eriador')),
+('Fourré aux Trolls', 'foret', 'Lieu où Bilbon rencontra les trolls', (SELECT id FROM places WHERE title='Eriador')),
+('Moria', 'mine', 'Ancienne cité naine de Khazad-dûm', (SELECT id FROM places WHERE title='Eriador')),
+('Col de Caradhras', 'montagne', 'Col périlleux dans les Monts Brumeux', (SELECT id FROM places WHERE title='Eriador'))
+ON CONFLICT (title) DO NOTHING;
+
+-- ==================== LIEUX - RHOVANION ====================
+INSERT INTO places (title, type_place, description, parent_id)
+VALUES
+('Erebor (Montagne Solitaire)', 'forteresse', 'Royaume sous la Montagne, reconquis par Thorin', (SELECT id FROM places WHERE title='Rhovanion')),
+('Forêt Noire', 'foret', 'Forêt sombre et dangereuse, ancien Vertbois le Grand', (SELECT id FROM places WHERE title='Rhovanion')),
+('Lothlórien', 'foret', 'Royaume elfique de Galadriel et Celeborn', (SELECT id FROM places WHERE title='Rhovanion')),
+('Caras Galadhon', 'ville', 'Cité des arbres au cœur de la Lothlórien', (SELECT id FROM places WHERE title='Rhovanion')),
+('Champs aux Iris', 'plaine', 'Plaine où périt Isildur', (SELECT id FROM places WHERE title='Rhovanion')),
+('Emyn Muil', 'montagne', 'Collines rocheuses et labyrinthiques', (SELECT id FROM places WHERE title='Rhovanion')),
+('Statues des Rois d''Argonath', 'monument', 'Piliers des Rois, gardiens de l''Anduin', (SELECT id FROM places WHERE title='Rhovanion')),
+('Marais des Morts', 'eau', 'Marécages hantés par les morts de batailles anciennes', (SELECT id FROM places WHERE title='Rhovanion'))
 ON CONFLICT (title) DO NOTHING;
 
 -- -----------------------------
@@ -77,7 +127,7 @@ VALUES
 ON CONFLICT (name, start_year, place_id) DO NOTHING;
 
 -- -----------------------------
--- Inserts Map
+-- Inserts Map Geometry
 -- -----------------------------
 -- ==================== RÉGIONS ====================
 
@@ -214,7 +264,7 @@ ON CONFLICT (name) DO NOTHING;
 
 INSERT INTO map_marker (name, location, type, place_id)
 VALUES
-('foret Noire', ST_GeomFromGeoJSON('{"type":"Point","coordinates":[3632,1375]}'), 'foret'::marker_type, (SELECT id FROM places WHERE title='foret Noire'))
+('Foret Noire', ST_GeomFromGeoJSON('{"type":"Point","coordinates":[3632,1375]}'), 'foret'::marker_type, (SELECT id FROM places WHERE title='foret Noire'))
 ON CONFLICT (name) DO NOTHING;
 
 INSERT INTO map_marker (name, location, type, place_id)
@@ -267,6 +317,7 @@ INSERT INTO map_marker (name, location, type, place_id)
 VALUES
 ('Passage des Morts', ST_GeomFromGeoJSON('{"type":"Point","coordinates":[2688,2447]}'), 'chemin'::marker_type, (SELECT id FROM places WHERE title='Passage des Morts'))
 ON CONFLICT (name) DO NOTHING;
+
 
 -- -----------------------------
 -- Inserts image_post

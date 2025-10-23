@@ -38,7 +38,15 @@ def create_app(config_name=None):
     # Créer l'application Flask
     app = Flask(__name__)
     app.url_map.strict_slashes = False
-    CORS(app)
+    CORS(app, resources={
+        r"/api/*": {
+            "origins": ["http://localhost:5173", "http://127.0.0.1:5173"],
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"],
+            "expose_headers": ["Content-Type", "Authorization"],
+            "supports_credentials": True
+        }
+    })
 
     # Charger la configuration selon l'environnement
     app.config.from_object(config[config_name])
@@ -60,6 +68,8 @@ def create_app(config_name=None):
     from backend.app.api.V1.api_image_post import api as image_post_ns
     from backend.app.api.V1.api_search import api as search_ns
     from backend.app.api.V1.api_map_data import api as map_ns
+    from backend.app.models.entity_description import EntityDescription
+    from backend.app.models.relation_type import RelationType
 
     # Initialiser Flask-RESTX
     api = Api(

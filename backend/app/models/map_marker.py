@@ -9,7 +9,7 @@ import enum
 
 # Définir l'ENUM Python pour correspondre à votre ENUM PostgreSQL
 class MarkerTypeEnum(enum.Enum):
-    foret = 'forêt'
+    foret = 'foret'
     montagne = 'montagne'
     forteresse = 'forteresse'
     ville = 'ville'

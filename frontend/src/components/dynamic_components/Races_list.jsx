@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import getImagePath from '../../services/getImage'
+import { Link } from 'react-router-dom';
 // Import de la bibliothèque axios pour faire les requêtes HTTP
 import '../../styles/liste.css';
 
@@ -27,14 +29,19 @@ function RacesList() {
 
   return (
 	<div className='container-vitrine'>
-		<div className="head-filter">
-			<h1>Les Espèces</h1>
-		</div>
+		<h1>Les Espèces</h1>
 		<div className="character-grid">
 			{Races.map(char => (
 				<div key={char.id} className="card">
-				<h2>{char.name}</h2>
-				<p>{char.description}</p>
+					<Link to={`/races/${char.id}`}>
+						<img src={getImagePath(char.name, 'races')} alt={char.name} className="image_card" />
+					</ Link>
+					<h2>{char.name}</h2>
+					<div className='paragraphe_center'>
+					<div className='paragraphe_hide'>
+						<p>{char.description}</p>
+					</div>
+					</div>
 				</div>
 			))}
 		</div>

@@ -46,7 +46,7 @@ function Navigation({ menuOpen, setMenuOpen }) {
           </Link>
         </li>
         <li>
-          <Link to="/art" className="nav-item">
+          <Link to="/creations" className="nav-item">
             <img
               src={artImage}
               alt="création artistique"

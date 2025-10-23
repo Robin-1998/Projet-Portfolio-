@@ -46,7 +46,25 @@ CREATE TABLE reviews (
 -- Enum Place
 -- -----------------------------
 DROP TYPE IF EXISTS place_enum;
-CREATE TYPE place_enum AS ENUM ('Région','Ville','Village','Forteresse','Mer','Lac/Marais','Rivière');
+CREATE TYPE place_enum AS ENUM (
+    'region',
+    'foret',
+    'montagne',
+    'forteresse',
+    'ville',
+    'capitale',
+    'eau',
+    'ruine',
+    'dark',
+    'mine',
+    'port',
+    'pont',
+    'plaine',
+    'chemin',
+    'monument',
+    'special',
+    'default'
+);
 -- -----------------------------
 -- Table Places
 -- -----------------------------
@@ -58,6 +76,7 @@ CREATE TABLE places (
     title VARCHAR(200) NOT NULL UNIQUE,
     type_place place_enum NOT NULL,
     description TEXT NOT NULL,
+    image_url VARCHAR(500),
     parent_id BIGINT REFERENCES places(id)
 );
 -- -----------------------------
@@ -199,6 +218,7 @@ CREATE TABLE entity_descriptions (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     title VARCHAR(100) NOT NULL UNIQUE,
     content TEXT NOT NULL,
+    image_url VARCHAR(500),
     order_index INT,
     relation_type_id BIGINT REFERENCES relation_types(id),
     entity_type entity_type_enum NOT NULL,

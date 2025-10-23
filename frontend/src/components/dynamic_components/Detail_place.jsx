@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const DetailedPlaceModal = ({ place, onClose }) => {
+const DetailPlace = ({ place, onClose }) => {
   if (!place) return null;
 
   return (
@@ -52,4 +52,4 @@ const DetailedPlaceModal = ({ place, onClose }) => {
   );
 };
 
-export default DetailedPlaceModal;
+export default DetailPlace;

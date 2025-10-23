@@ -105,19 +105,13 @@
   color: #666;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .map2-conteneur {
-    height: calc(100vh - 150px);
-    min-height: 400px;
-  }
-}
-
 /* Wrapper pour la carte et les coordonnées */
 .map2-conteneur-carte {
   position: relative;
   width: 100%;
   height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 /* Affichage des coordonnées cliquées */
@@ -150,4 +144,8 @@
   border-radius: 8px;
   z-index: 1000;
   font-size: 12px;
+}
+
+.polygon-style {
+  filter: blur(2px);
 }

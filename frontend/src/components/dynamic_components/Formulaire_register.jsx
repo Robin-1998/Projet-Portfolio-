@@ -1,0 +1,82 @@
+import React, { useState } from 'react';
+import axios from 'axios';
+
+function FormulaireRegister() {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleRegisterSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/v1/users/', {
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
+        password: password,
+      });
+
+      setMessage('Compte créé avec succès ! Vous pouvez maintenant vous connecter.');
+      // Tu peux aussi vider le formulaire si tu veux
+      setFirstName('');
+      setLastName('');
+      setEmail('');
+      setPassword('');
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.error) {
+        setMessage(error.response.data.error);
+      } else {
+        setMessage('Erreur lors de la création du compte');
+      }
+    }
+  };
+
+  return (
+    <form className="form-box2" onSubmit={handleRegisterSubmit}>
+      <h2 className="login-h2">Créer un Hobbit</h2>
+      <div className="bouton-text2">
+        <input
+          type="text"
+          placeholder="Nom"
+          className="input-field"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Prénom"
+          className="input-field"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          required
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          className="input-field"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Mot de passe"
+          className="input-field"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+      </div>
+      <button type="submit" className="btn">
+        Créer le compte
+      </button>
+      {message && <p>{message}</p>}
+    </form>
+  );
+}
+
+export default FormulaireRegister;

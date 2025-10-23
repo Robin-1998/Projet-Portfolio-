@@ -7,6 +7,8 @@ from backend.app.models.map_region import MapRegion
 from backend.app.models.map_marker import MapMarker
 from sqlalchemy.orm import joinedload
 from geoalchemy2.shape import to_shape
+from backend.app.models.entity_description import EntityDescription
+from backend.app.models.relation_type import RelationType
 
 from backend.app import db
 
@@ -204,17 +206,143 @@ class PortfolioFacade:
         return place_dict
 
 
-# -- Get marker des Place ou région
+    # -- Get marker des Place ou région
     @staticmethod
     def get_map_data():
         """
         Version légère pour l'initialisation de la carte
-        Retourne juste les markers et regions sans détails
+        Retourne markers et regions avec leurs descriptions depuis PlaceMap
         """
-        markers = db.session.query(MapMarker).all()
-        regions = db.session.query(MapRegion).all()
+        from sqlalchemy.orm import joinedload
+        from geoalchemy2.shape import to_shape
+
+        # Récupérer les markers avec eager loading de la relation place
+        markers = db.session.query(MapMarker).options(
+            joinedload(MapMarker.place)
+        ).all()
+
+        # Récupérer les regions avec eager loading de la relation place
+        regions = db.session.query(MapRegion).options(
+            joinedload(MapRegion.place)
+        ).all()
+
+        markers_data = []
+        for marker in markers:
+            geom = to_shape(marker.location)
+
+            # Gérer le cas où place peut être None
+            place = marker.place if marker.place else None
+
+            markers_data.append({
+                "id": marker.id,
+                "name": place.title if place else f"Marker {marker.id}",
+                "description": place.description if place else "Aucune description disponible",
+                "type": marker.type.value if marker.type else "default",
+                "place_id": marker.place_id,
+                "geometry": {
+                    "coordinates": [geom.x, geom.y]
+                },
+                "details": {}
+            })
+
+        regions_data = []
+        for region in regions:
+            geom = to_shape(region.shape_data)
+
+            # Gérer le cas où place peut être None
+            place = region.place if region.place else None
+
+            regions_data.append({
+                "id": region.id,
+                "name": place.title if place else f"Region {region.id}",
+                "description": place.description if place else "Aucune description disponible",
+                "place_id": region.place_id,
+                "geometry": {
+                    "coordinates": list(geom.exterior.coords)
+                },
+                "details": {}
+            })
 
         return {
-            "markers": [marker.to_dict() for marker in markers],
-            "regions": [region.to_dict() for region in regions]
+            "markers": markers_data,
+            "regions": regions_data
+        }
+
+# ------------------------- PLACE DETAILED INFO ------------------------------------------
+    @staticmethod
+    def get_place_detailed_info(place_id):
+        """
+        Récupère les informations détaillées d'un lieu incluant :
+        - Les infos de base depuis PlaceMap
+        - Les sections détaillées depuis EntityDescription
+
+        Args:
+            place_id: ID du Place
+
+        Returns:
+            Dict avec structure :
+            {
+                "id": 42,
+                "title": "Forteresse de Kar-Dun",
+                "type_place": "forteresse",
+                "description": "...",
+                "image_url": "/images/...",
+                "details": {
+                    "population": 2000,
+                    "climate": "Montagnard",
+                    ...
+                },
+                "detailed_sections": [
+                    {
+                        "id": 1,
+                        "title": "Architecture",
+                        "content": "...",
+                        "image_url": "/images/...",
+                        "order_index": 1,
+                        "relation_type": "Construit par"
+                    },
+                    ...
+                ]
+            }
+        """
+        # On récupère le lieu de base
+        place = db.session.query(PlaceMap).filter_by(id=place_id).first()
+
+        if not place:
+            return None
+
+        # On récupère les descriptions détaillées lié à ce lieu
+        descriptions = db.session.query(EntityDescription).outerjoin(
+            RelationType, EntityDescription.relation_type_id == RelationType.id
+        ).filter(
+            EntityDescription.entity_type == 'place',
+            EntityDescription.entity_id == place_id
+        ).order_by(EntityDescription.order_index).all()
+
+        # On formate les sections détaillées
+        detailed_sections = []
+        for desc in descriptions:
+            detailed_sections.append({
+                'id': desc.id,
+                'title': desc.title,
+                'content': desc.content,
+                'image_url': desc.image_url if hasattr(desc, 'image_url') else None,
+                'order_index': desc.order_index,
+                'relation_type': desc.relation_type.name if desc.relation_type else None
+            })
+
+        # on renvoi l'objet
+        return {
+            'id': place.id,
+            'title': place.title,
+            'type_place': place.type_place,
+            'description': place.description,
+            'image_url': getattr(place, 'image_url', None),
+            'details': {
+                'population': getattr(place, 'population', None),
+                'climate': getattr(place, 'climate', None),
+                'founded_year': getattr(place, 'founded_year', None),
+                'notable_features': getattr(place, 'notable_features', None)
+            },
+            'detailed_sections': detailed_sections
         }

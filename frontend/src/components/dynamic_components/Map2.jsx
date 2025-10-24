@@ -198,7 +198,7 @@ const Map2 = () => {
           <p className="map2-error-text">❌ Erreur: {error}</p>
         </div>
         <button onClick={chargerDonneesCarte} className="map2-retry-button">
-          🔄 Réessayer
+          Réessayer
         </button>
       </div>
     );
@@ -270,6 +270,7 @@ const Map2 = () => {
         keyboard={false}
         maxBounds={bounds}
         maxBoundsViscosity={1.0}
+        attributionControl={false}
       >
         <ZoomAdaptiveIcons
          setIconSize={setIconSize}
@@ -318,7 +319,7 @@ const Map2 = () => {
                     'région'
                   )}
                 >
-                  📖 Voir les détails
+                  Voir les détails
                 </button>
               </div>
             </Popup>
@@ -362,7 +363,7 @@ const Map2 = () => {
                     }}
                     disabled={loadingDetails}
                   >
-                    {loadingDetails ? '⏳ Chargement...' : '📖 Voir les détails'}
+                    {loadingDetails ? 'Chargement...' : 'Voir les détails'}
                   </button>
                 </div>
               </Popup>

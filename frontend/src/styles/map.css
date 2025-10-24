@@ -1,25 +1,188 @@
-/* Conteneur de la carte - taille adaptée à la page */
-/* Curseur en croix sur la carte */
+/* ==================== CONTENEUR DE LA CARTE ==================== */
+/* Wrapper pour la carte et les coordonnées */
+.map2-conteneur-carte {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Conteneur Leaflet - prend toute la place disponible */
 .map2-conteneur {
   width: 100%;
   height: 100%;
+  min-height: 100%;
   background-color: transparent;
-  border-radius: 8px;
+  border-radius: 0;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: none;
+  z-index: 1 !important;
+  position: relative;
 }
 
-/* État de chargement carte*/
+/* ==================== CENTRAGE ET DIMENSIONNEMENT DE LA CARTE ==================== */
+.contenu-principal.map-fullscreen {
+  padding: 0 !important;
+  margin: 0 !important;
+  padding-top: 80px !important;
+  height: calc(100vh - 80px - 45px);
+  min-height: calc(100vh - 80px - 45px);
+  overflow: hidden;
+}
+
+/* ==================== Z-INDEX HIERARCHY ==================== */
+/* La carte reste en arrière-plan */
+.leaflet-container {
+  z-index: 1 !important;
+  position: relative;
+}
+
+/* Les contrôles de zoom Leaflet */
+.leaflet-control-zoom,
+.leaflet-control {
+  z-index: 800 !important;
+}
+
+/* Les popups au-dessus des contrôles mais sous le header/footer */
+.leaflet-popup-pane {
+  z-index: 900 !important;
+}
+
+/* ==================== RESPONSIVE MOBILE ==================== */
+@media (max-width: 768px) {
+  .contenu-principal.map-fullscreen {
+    padding-top: 65px !important;
+    height: calc(100vh - 65px - 40px);
+    height: calc(100dvh - 65px - 40px);
+    min-height: calc(100dvh - 65px - 40px);
+    margin-left: 0 !important;
+  }
+
+  /* Cacher la sidebar sur mobile quand la carte est affichée */
+  .layout.map-active .menu-gauche {
+    transform: translateX(-100%);
+  }
+
+  /* Le footer doit prendre toute la largeur */
+  .layout.map-active footer {
+    left: 0 !important;
+  }
+
+  .map2-conteneur-carte {
+    height: 100%;
+  }
+}
+
+/* ==================== RESPONSIVE TABLETTE ==================== */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .contenu-principal.map-fullscreen {
+    padding-top: 75px !important;
+    height: calc(100vh - 75px - 42px);
+    min-height: calc(100vh - 75px - 42px);
+  }
+}
+
+/* ==================== RESPONSIVE TRÈS PETIT MOBILE ==================== */
+@media (max-width: 480px) {
+  .contenu-principal.map-fullscreen {
+    padding-top: 60px !important;
+    height: calc(100vh - 60px - 35px);
+    min-height: calc(100vh - 60px - 35px);
+  }
+
+  .map2-coords-display,
+  .map2-coords-hint {
+    top: 5px;
+    right: 5px;
+    font-size: 10px;
+    padding: 5px;
+  }
+
+  /* Contrôles de zoom Leaflet plus petits */
+  .leaflet-control-zoom {
+    transform: scale(0.9);
+    margin: 5px !important;
+  }
+
+  /* Popups plus adaptées au mobile */
+  .leaflet-popup-content-wrapper {
+    border-radius: 8px;
+    max-width: calc(100vw - 40px);
+  }
+
+  .leaflet-popup-content {
+    margin: 10px;
+    min-width: 200px;
+  }
+
+  .map2-popup-details-btn {
+    min-height: 44px;
+    font-size: 14px;
+  }
+}
+
+/* ==================== MODE PAYSAGE MOBILE ==================== */
+@media (max-height: 500px) and (orientation: landscape) {
+  .contenu-principal.map-fullscreen {
+    padding-top: 50px !important;
+    height: calc(100vh - 50px - 30px);
+    min-height: calc(100vh - 50px - 30px);
+  }
+
+  .map2-loading,
+  .map2-error-conteneur {
+    height: auto;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .map2-coords-display,
+  .map2-coords-hint {
+    top: 5px;
+    right: 5px;
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+}
+
+/* ==================== DESKTOP ==================== */
+@media (min-width: 1025px) {
+  .map2-conteneur {
+    border-radius: 0;
+  }
+}
+
+/* ==================== FIXES IOS SAFARI ==================== */
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 768px) {
+    .contenu-principal.map-fullscreen {
+      height: -webkit-fill-available;
+      min-height: -webkit-fill-available;
+    }
+  }
+}
+
+/* ==================== ÉTATS DE CHARGEMENT ==================== */
 .map2-loading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   justify-content: center;
   align-items: center;
   background-image: url('../assets/background_body.jpg');
-  background-size: 100% 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 9999;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  width: 20rem;
-  height: 20rem;
+  width: min(20rem, 90vw);
+  height: min(20rem, 90vw);
   border-radius: 8px;
+  padding: 1rem;
 }
 
 .map2-loading-content {
@@ -31,8 +194,8 @@
   border: 4px solid rgba(255, 255, 255, 0.3);
   border-top: 4px solid white;
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  width: clamp(30px, 10vw, 50px);
+  height: clamp(30px, 10vw, 50px);
   animation: spin 1s linear infinite;
   margin: 0 auto 20px;
 }
@@ -46,106 +209,176 @@
   }
 }
 
-/* État d'erreur */
+/* ==================== ÉTAT D'ERREUR ==================== */
 .map2-error-conteneur {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 500px;
-  background-color: #fff3f3;
+  width: min(20rem, 90vw);
+  height: auto;
+  min-height: min(20rem, 90vw);
+  background-image: url('../assets/background_body.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   border-radius: 8px;
-  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  padding: clamp(1rem, 5vw, 2rem);
 }
 
 .map2-error-box {
-  background-color: white;
-  padding: 30px;
+  padding: clamp(1rem, 5vw, 2rem);
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
+  max-width: 100%;
 }
 
 .map2-error-text {
   color: #d32f2f;
-  font-size: 18px;
+  font-size: clamp(14px, 4vw, 18px);
   margin: 0;
+  word-wrap: break-word;
 }
 
 .map2-retry-button {
   background-color: #403221;
   color: white;
   border: none;
-  padding: 12px 30px;
-  font-size: 16px;
+  padding: clamp(8px, 2vw, 12px) clamp(20px, 5vw, 30px);
+  font-size: clamp(14px, 3vw, 16px);
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s;
+  width: auto;
+  max-width: 100%;
 }
 
 .map2-retry-button:hover {
   background-color: #53412b;
 }
 
-/* Popups */
-.map2-popup {
-  padding: 10px;
-}
-
-.map2-popup-title {
-  margin: 0 0 10px 0;
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
-}
-
-.map2-popup-info {
-  margin: 5px 0;
-  font-size: 14px;
-  color: #666;
-}
-
-/* Wrapper pour la carte et les coordonnées */
-.map2-conteneur-carte {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-/* Affichage des coordonnées cliquées */
+/* ==================== COORDONNÉES (DEBUG) ==================== */
 .map2-coords-display {
   position: absolute;
   top: 10px;
   right: 10px;
   background: rgba(0, 0, 0, 0.9);
   color: white;
-  padding: 15px;
+  padding: clamp(8px, 2vw, 15px);
   border-radius: 8px;
   z-index: 1000;
   font-family: monospace;
-  font-size: 14px;
+  font-size: clamp(10px, 2.5vw, 14px);
   border: 2px solid #4CAF50;
+  max-width: calc(100% - 20px);
+  word-break: break-all;
 }
 
 .map2-coords-value {
   color: #4CAF50;
 }
 
-/* Indication pour cliquer */
 .map2-coords-hint {
   position: absolute;
   top: 10px;
   right: 10px;
   background: rgba(255, 152, 0, 0.9);
   color: white;
-  padding: 10px;
+  padding: clamp(6px, 2vw, 10px);
   border-radius: 8px;
   z-index: 1000;
-  font-size: 12px;
+  font-size: clamp(10px, 2.5vw, 12px);
+  max-width: calc(100% - 20px);
 }
 
+/* ==================== POLYGONES ==================== */
 .polygon-style {
   filter: blur(2px);
+}
+
+/* ==================== POPUPS LEAFLET ==================== */
+.map2-popup {
+  max-width: 90vw;
+  width: auto;
+}
+
+.map2-popup-title {
+  font-size: clamp(16px, 4vw, 20px);
+  margin: 0 0 0.5rem 0;
+  word-wrap: break-word;
+  font-family: 'kalamB', sans-serif;
+}
+
+.map2-popup-description {
+  font-size: clamp(12px, 3vw, 14px);
+  margin: 0.5rem 0;
+  word-wrap: break-word;
+  font-family: 'kalamR', sans-serif;
+}
+
+.map2-popup-details {
+  margin: 0.5rem 0;
+  font-size: clamp(11px, 2.5vw, 13px);
+  font-family: 'kalamL', sans-serif;
+}
+
+.map2-popup-details-btn {
+  background-color: #403221;
+  color: white;
+  border: none;
+  padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 20px);
+  font-size: clamp(12px, 3vw, 14px);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%;
+  margin-top: 0.5rem;
+  font-family: 'kalamB', sans-serif;
+}
+
+.map2-popup-details-btn:hover:not(:disabled) {
+  background-color: #53412b;
+}
+
+.map2-popup-details-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ==================== TABLETTES ==================== */
+@media (min-width: 481px) and (max-width: 1024px) {
+  .map2-loading,
+  .map2-error-conteneur {
+    width: min(24rem, 80vw);
+    height: auto;
+    min-height: min(24rem, 50vh);
+  }
+
+  .leaflet-control-zoom {
+    transform: scale(1);
+  }
+}
+
+/* ==================== ÉCRANS TACTILES ==================== */
+@media (hover: none) and (pointer: coarse) {
+  .map2-retry-button,
+  .map2-popup-details-btn {
+    min-height: 44px;
+    padding: 12px 20px;
+  }
+
+  .leaflet-marker-icon {
+    cursor: pointer;
+  }
+
+  .leaflet-popup-content {
+    min-width: 250px;
+  }
 }

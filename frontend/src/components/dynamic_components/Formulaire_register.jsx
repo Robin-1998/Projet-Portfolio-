@@ -19,7 +19,7 @@ function FormulaireRegister() {
         password: password,
       });
 
-      setMessage('Compte créé avec succès ! Vous pouvez maintenant vous connecter.');
+      setMessage('Hobbit créé avec succès ! Vous pouvez maintenant vous connecter.');
       // Tu peux aussi vider le formulaire si tu veux
       setFirstName('');
       setLastName('');

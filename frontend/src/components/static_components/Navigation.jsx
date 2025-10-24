@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import carteImage from '../../assets/logo_carte.png';
 import characterImage from '../../assets/logo_personnage.png';
 import histoireImage from '../../assets/logo_livre.png';
@@ -6,53 +7,134 @@ import artImage from '../../assets/logo_creation.png';
 import racesImage from '../../assets/logo_races.png';
 
 function Navigation({ menuOpen, setMenuOpen }) {
+  const location = useLocation();
+
+  // Fermer le menu automatiquement sur mobile après navigation
+  useEffect(() => {
+    if (window.innerWidth <= 768 && menuOpen === 'full') {
+      setMenuOpen('icons');
+    }
+  }, [location]);
+
+  // Fermer le menu si on clique en dehors (sur mobile)
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (window.innerWidth <= 768 && menuOpen === 'full') {
+        const nav = document.querySelector('.menu-gauche');
+        if (nav && !nav.contains(e.target)) {
+          setMenuOpen('icons');
+        }
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [menuOpen, setMenuOpen]);
+
+  // Gérer le cycle des 3 modes
+  const toggleMenu = (e) => {
+    e.stopPropagation();
+    if (menuOpen === 'closed') {
+      setMenuOpen('icons');
+    } else if (menuOpen === 'icons') {
+      setMenuOpen('full');
+    } else {
+      setMenuOpen('closed');
+    }
+  };
+
   return (
-    <nav className={`menu-gauche ${menuOpen ? 'open' : ''}`}>
+    <nav
+      className={`menu-gauche ${menuOpen === 'icons' ? 'icons-only' : ''} ${menuOpen === 'full' ? 'open' : ''} ${menuOpen === 'closed' ? 'closed' : ''}`}
+    >
       {/* Bouton hamburger */}
-      <div className="hamburger-menu" onClick={() => setMenuOpen(!menuOpen)}>
+      <div
+        className="hamburger-menu"
+        onClick={toggleMenu}
+        aria-label={
+          menuOpen === 'closed'
+            ? 'Ouvrir le menu'
+            : menuOpen === 'icons'
+            ? 'Afficher les descriptions'
+            : 'Fermer le menu'
+        }
+        aria-expanded={menuOpen !== 'closed'}
+      >
         <span></span>
         <span></span>
         <span></span>
       </div>
 
       {/* Icônes + texte */}
-      <ul className={`icone_barre ${menuOpen ? 'visible' : ''}`}>
+      <ul className={`icone_barre ${menuOpen !== 'closed' ? 'visible' : ''}`}>
         <li>
-          <Link to="/home_map" className="nav-item">
+          <Link
+            to="/home_map"
+            className="nav-item"
+            aria-label="Carte interactive"
+          >
             <img
               src={carteImage}
               alt="carte interactive"
               className="image_nav"
             />
-            {menuOpen && <span className="nav-text">Carte</span>}
+            {menuOpen === 'full' && <span className="nav-text">Carte</span>}
           </Link>
         </li>
         <li>
-          <Link to="/characters" className="nav-item">
-            <img src={characterImage} alt="personnages" className="image_nav" />
-            {menuOpen && <span className="nav-text">Personnages</span>}
+          <Link
+            to="/characters"
+            className="nav-item"
+            aria-label="Personnages"
+          >
+            <img
+              src={characterImage}
+              alt="personnages"
+              className="image_nav"
+            />
+            {menuOpen === 'full' && <span className="nav-text">Personnages</span>}
           </Link>
         </li>
         <li>
-          <Link to="/races" className="nav-item">
-            <img src={racesImage} alt="races" className="image_nav" />
-            {menuOpen && <span className="nav-text">Races</span>}
+          <Link
+            to="/races"
+            className="nav-item"
+            aria-label="Races"
+          >
+            <img
+              src={racesImage}
+              alt="races"
+              className="image_nav"
+            />
+            {menuOpen === 'full' && <span className="nav-text">Races</span>}
           </Link>
         </li>
         <li>
-          <Link to="/histoires" className="nav-item">
-            <img src={histoireImage} alt="histoires" className="image_nav" />
-            {menuOpen && <span className="nav-text">Histoires</span>}
+          <Link
+            to="/histoires"
+            className="nav-item"
+            aria-label="Histoires"
+          >
+            <img
+              src={histoireImage}
+              alt="histoires"
+              className="image_nav"
+            />
+            {menuOpen === 'full' && <span className="nav-text">Histoires</span>}
           </Link>
         </li>
         <li>
-          <Link to="/creations" className="nav-item">
+          <Link
+            to="/creations"
+            className="nav-item"
+            aria-label="Galerie d'Art"
+          >
             <img
               src={artImage}
               alt="création artistique"
               className="image_nav"
             />
-            {menuOpen && <span className="nav-text">Gallerie d'Art</span>}
+            {menuOpen === 'full' && <span className="nav-text">Galerie d'Art</span>}
           </Link>
         </li>
       </ul>

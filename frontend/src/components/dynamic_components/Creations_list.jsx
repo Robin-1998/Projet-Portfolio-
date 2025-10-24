@@ -1,10 +1,102 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import '../../styles/creations.css';
 
-function CreationsList (){
-	return (
+function CreationsList() {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [file, setFile] = useState(null);
+  const [base64Image, setBase64Image] = useState('');
+  const [mimeType, setMimeType] = useState('');
+  const [message, setMessage] = useState('');
+  const [images, setImages] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // 👇 CHANGEMENT ICI : 'token' au lieu de 'access_token'
+    const token = localStorage.getItem('token');
+    setIsAuthenticated(!!token);
+
+    // Récupérer les images (accessible à tous)
+    axios.get('http://127.0.0.1:5000/api/v1/images')
+      .then(res => setImages(res.data))
+      .catch(err => {
+        console.error("Erreur en récupérant les images", err);
+        setImages([]);
+      });
+  }, []);
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (!selectedFile) return;
+
+    setMimeType(selectedFile.type);
+    setFile(selectedFile);
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64String = reader.result.split(',')[1];
+      setBase64Image(base64String);
+    };
+    reader.readAsDataURL(selectedFile);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setMessage('Vous devez être connecté pour poster une image');
+      return;
+    }
+
+    // Condition qui oblige qu'il y est un titre, une image (avec l'extension .jpg / .PNG)
+    if (!title || !base64Image || !mimeType) {
+      setMessage('Titre et image sont obligatoires');
+      return;
+    }
+
+    try {
+      const payload = {
+        title,
+        description,
+        image_data: base64Image,
+        image_mime_type: mimeType,
+      };
+
+      const response = await axios.post('http://127.0.0.1:5000/api/v1/images', payload, {
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+      });
+
+      setMessage('Image postée avec succès !');
+      setTitle('');
+      setDescription('');
+      setFile(null);
+      setBase64Image('');
+      setMimeType('');
+
+      // Recharger les images
+      const res = await axios.get('http://127.0.0.1:5000/api/v1/images');
+      setImages(res.data);
+
+    } catch (error) {
+      if (error.response?.status === 401) {
+        setMessage('Session expirée. Veuillez vous reconnecter.');
+        navigate('/login');
+      } else {
+        setMessage(`Erreur lors de l'envoi : ${error.response?.data?.error || error.message}`);
+      }
+    }
+  };
+
+  return (
     <article className='Blocks_creations'>
       <div className="block_creations_left">
-        <h2>Créations artistiques</h2>
         <p>Bienvenue dans la section dédié aux créations artistiques.
           <br/>Pour pouvoir poster vos créations artistiques, vous devez être inscrit et connecté.</p>
         <section>
@@ -17,12 +109,68 @@ function CreationsList (){
             <li>Aucun commentaires à caractère sexuel, raciste, homophobe, religieux ou politique ne sera toléré — tout manquement entraînera la suppression du compte.</li>
           </ol>
         </section>
+        <section className='block_post_image'>
+          <h3>Poster une image :</h3>
+          {isAuthenticated ? (
+            <form onSubmit={handleSubmit} className='post_conected'>
+              <label>
+                <input
+                  placeholder="Titre de l'image"
+                  type="text"
+                  value={title}
+                  onChange={e => setTitle(e.target.value)}
+                  required
+                  className='input_creations'
+                />
+              </label>
+
+            <label>
+              <input
+                  placeholder="Description de l'image"
+                value={description}
+                onChange={e => setDescription(e.target.value)}
+                className='input_creations'
+              />
+            </label>
+
+            <label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                required
+              />
+            </label>
+          
+            <button type="submit" className='button_creation'>Envoyer</button>
+
+            {message && <p>{message}</p>}
+            </form>
+          ) : (
+            <div className='post_disconected'>
+              <button onClick={() => navigate('/login')} className='button_creation'>Se connecter</button>
+              <p>Vous devez être connecté pour poster une image.</p>
+            </div>
+          )}
+        </section>
       </div>
-      <div className="block_creations_right">
-        <p>HAHAHAHAHA</p>
+      <div className='block_creations_right'>
+      <h2>Gallerie d'images</h2>
+      {images.map(img => (
+        <div key={img.id} className='block_img_p'>
+          <img 
+            src={img.image_data} 
+            alt={img.title}
+            className='image_gallerie_art'
+          />
+          <p><strong>{img.title}</strong></p>
+        </div>
+      ))}
       </div>
     </article>
   );
 }
 
-export default CreationsList
+export default CreationsList;
+
+

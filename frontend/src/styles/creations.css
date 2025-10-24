@@ -1,7 +1,6 @@
 .Blocks_creations {
 	display: flex;
   height: auto;
-  background: black;
 }
 
 .block_creations_left {
@@ -9,17 +8,137 @@
 	flex-direction: column;
   background-image: url('../assets/background_body.jpg');
   background-size: 100% 100%;
-	padding : 1rem;
+	padding : 2rem;
   max-width: 20%;
-  margin-right: 20px;;
+  margin-right: 20px;
+
 }
 
 .block_creations_right {
-	background-color: yellow;
+  background-image: url('../assets/background_body.jpg');
+  background-size: 100% 100%;
+  padding: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap : 20px;
 }
-
-
 
 section p {
 	text-decoration: underline;
+}
+
+.button_creation {
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+	background-color: #403221;
+	color: #f5f0e6;
+	font-size: 0.9rem;
+	cursor: pointer;
+	max-width: 150px;
+  border-radius: 20px;
+  padding: 10px 30px;
+}
+
+.button_creation_align {
+	display: flex;
+	justify-content: center;
+}
+
+.image_gallerie_art {
+	width: 250px;
+	height: 250px;
+	object-fit: contain;
+	margin: 10px;
+  background-color: white;
+  border-radius: 5%;
+}
+
+.post_conected {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.post_disconected {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.block_post_image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.block_img_p h2 {
+  text-align: center;
+  background-color: #f2eee3;
+  border-radius: 5%;
+}
+
+
+form {
+ padding:10px;
+ max-width:250px;
+ }
+
+ label {
+ margin-top:10px;
+ display:block;
+ }
+label.inline {
+ display:inline;
+ margin-right:50px;
+ }
+
+.input_creations {
+  background-color: #f2eee3;
+  min-width: 250px;
+  padding: 7px;
+  border: 1px solid #ccc;
+  border-radius: 50px;
+  font-family: 'kalamR';
+}
+
+h3 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+.button_connect {
+  background-color: #403221;
+  color: #f5f0e6;
+  border-radius: 20px;
+  padding: 8px 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.post_disconected p, .post_disconected {
+  margin-top: 15px;
+}
+
+
+.block_creations_right h2 {
+  flex-basis: 100%;  /* force le titre à occuper toute la ligne */
+  text-align: center;
+  font-size: 40px;
+}
+
+.block_img_p {
+  background-color: #f2eee3;
+  text-align: center;
+  border-radius: 5%;
+}
+
+input[type="file"]::file-selector-button {
+  background-color: #bfad8a;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  border-radius: 5%;
 }

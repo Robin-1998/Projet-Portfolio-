@@ -181,4 +181,15 @@ Mise en place des bases de données locales dédiées pour Robin & Timi
 - Connexion à la db pour le login à continuer
 
 ## 23/10/2025
+
+- Commencement de la mise en place des envoie d'image par un utilisateur (non fonctionnel)
+- Intégration de la base de donnée dans une place avec ajout d'une image
+- Mise en place du pop-up descriptif sur les marqueurs de la map
+- Login quasiment finaliser mais manque de cas d'erreur
+
 ## 24/10/2025
+
+- Envoie d'une image par un utilisateur connecté réussi
+- Page styilisé de l'image post presque finalisé
+- Début du responsive
+- Finalisation du style detail place

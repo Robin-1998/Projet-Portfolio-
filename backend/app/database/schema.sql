@@ -90,7 +90,8 @@ CREATE TABLE races (
     name VARCHAR(50) NOT NULL UNIQUE,
     weakness VARCHAR(255) NOT NULL,
     strength VARCHAR(255) NOT NULL,
-    description TEXT NOT NULL
+    description TEXT NOT NULL,
+	citation VARCHAR(400)
 );
 -- -----------------------------
 -- Table Relation Types
@@ -110,6 +111,7 @@ CREATE TABLE history (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     name VARCHAR(150) NOT NULL UNIQUE,
     description TEXT NOT NULL,
+	citation VARCHAR(400),
     start_year SMALLINT,
     end_year SMALLINT,
     era VARCHAR(25),
@@ -126,13 +128,14 @@ CREATE TABLE characters (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     name VARCHAR(100) NOT NULL UNIQUE,
-    birth_date SMALLINT NOT NULL,
+    birth_date SMALLINT,
     death_date SMALLINT,
     era_birth VARCHAR(25) NOT NULL,
     era_death VARCHAR(25),
     gender VARCHAR(10) NOT NULL,
     profession VARCHAR(100) NOT NULL,
     description TEXT NOT NULL,
+	citation VARCHAR(400),
     race_id BIGINT REFERENCES races(id)
 );
 -- -----------------------------
@@ -223,4 +226,15 @@ CREATE TABLE entity_descriptions (
     relation_type_id BIGINT REFERENCES relation_types(id),
     entity_type entity_type_enum NOT NULL,
     entity_id BIGINT NOT NULL
+);
+
+CREATE TABLE descriptions (
+    id BIGSERIAL PRIMARY KEY,
+    entity_type VARCHAR(50) NOT NULL CHECK (entity_type IN ('character', 'place', 'race', 'history')),
+    entity_id BIGINT NOT NULL,
+    title VARCHAR(100),
+    content TEXT NOT NULL,
+    order_index INT,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

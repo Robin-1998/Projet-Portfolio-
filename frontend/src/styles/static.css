@@ -127,14 +127,14 @@ p {
   margin: 0 0 20px 0;
 }
 
-/* ------------------------- Barre Menu Navigation (4 MODES) ------------------------- */
+/* ------------------------- Barre Menu Navigation (2 MODES) ------------------------- */
 .menu-gauche {
   background-color: #403221;
   color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px 0;
+  padding: 10px 0; /* ✅ Réduit de 20px à 10px */
   height: 100vh;
   position: fixed;
   top: 0;
@@ -162,7 +162,7 @@ p {
   width: 30px;
   height: 20px;
   cursor: pointer;
-  margin: 10px;
+  margin-top: 10px;
   margin-bottom: 50px;
   transition: transform 0.3s ease;
 }
@@ -195,7 +195,7 @@ p {
 /* Liste des icônes */
 .icone_barre {
   margin: 0;
-  padding: 10px;
+  padding: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -205,12 +205,14 @@ p {
 
 .icone_barre li {
   width: 100%;
+  padding: 0;
+  margin: 0;
 }
 
 /* Icônes de navigation */
 .image_nav {
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   background-color: #ffffff;
   flex-shrink: 0;
@@ -228,7 +230,7 @@ p {
   gap: 15px;
   text-decoration: none;
   color: white;
-  padding: 10px;
+  padding: 5px; /* ✅ Réduit de 10px à 5px */
   border-radius: 10px;
   transition: background-color 0.3s ease;
   width: 100%;
@@ -475,12 +477,12 @@ footer nav ul {
   .menu-gauche.closed,
   .menu-gauche.icons-only {
     width: 60px;
-    padding: 20px 0;
+    padding: 10px 0; /* ✅ Réduit aussi sur mobile */
   }
 
   .menu-gauche.open {
     width: 180px;
-    padding: 20px 0;
+    padding: 10px 0; /* ✅ Réduit aussi sur mobile */
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
   }
 
@@ -535,8 +537,8 @@ footer nav ul {
   }
 
   .image_nav {
-    width: 50px;
-    height: 50px;
+    width: 45px; /* ✅ Réduit de 50px à 45px sur mobile */
+    height: 45px;
   }
 
   .contenu-principal {

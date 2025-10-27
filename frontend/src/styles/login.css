@@ -29,11 +29,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 120px;
-  padding: 50px;
+  gap: 100px;
   background: #f2eee3;
   font-family: 'RingR', serif;
   height: 100%;
+  width: 100%;
 }
 
 .form-box1,
@@ -47,8 +47,8 @@
   background-image: url('../assets/background_body.jpg');
   background-size: 100% 100%;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  width: 20rem;
-  height: 20rem;
+  width: 100rem;
+  height: 25rem;
 }
 
 .form-box2 {

@@ -2,8 +2,7 @@
 .map2-conteneur-carte {
   position: relative;
   width: 100%;
-  height: calc(100vh - 80px - 45px);
-  max-height: calc(100vh - 80px - 45px);
+  height: 100%;
   margin: 0;
   padding: 0;
   overflow: hidden;
@@ -12,32 +11,55 @@
 .map2-conteneur {
   width: 100%;
   height: 100%;
-  max-height: 100%;
+  min-height: 100%;
   background-color: transparent;
   border-radius: 0;
   overflow: hidden;
   box-shadow: none;
-  z-index: 1;
+  z-index: 1 !important;
   position: relative;
 }
 
-.map2-conteneur * {
-  max-height: 100%;
+/* ==================== CENTRAGE ET DIMENSIONNEMENT DE LA CARTE ==================== */
+.contenu-principal.map-fullscreen {
+  padding: 0 !important;
+  margin: 0 !important;
+  padding-top: 80px !important;
+  height: calc(100vh - 80px - 45px);
+  min-height: calc(100vh - 80px - 45px);
+  overflow: hidden;
 }
 
-/* ==================== LEAFLET CONTAINER ==================== */
+/* ==================== Z-INDEX HIERARCHY (CRUCIAL!) ==================== */
 .leaflet-container {
   z-index: 1 !important;
   position: relative;
-  width: 100%;
-  height: 100%;
-  max-height: 100%;
 }
 
-.leaflet-pane,
-.leaflet-map-pane {
-  height: 100%;
-  max-height: 100%;
+/* Image de fond - ne doit pas bloquer les clics */
+.leaflet-overlay-pane {
+  z-index: 400 !important;
+  pointer-events: none !important;
+}
+
+.leaflet-image-layer {
+  pointer-events: none !important;
+}
+
+/* Marqueurs - doivent être cliquables */
+.leaflet-marker-pane {
+  z-index: 600 !important;
+  pointer-events: auto !important;
+}
+
+.leaflet-marker-icon {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+}
+
+.custom-sticker-icon {
+  cursor: pointer !important;
+  pointer-events: auto !important;
 }
 
 /* Contrôles de zoom */
@@ -46,9 +68,31 @@
   z-index: 800 !important;
 }
 
-/* Popups */
+/* Popups - AU-DESSUS de tout sauf du header/footer */
 .leaflet-popup-pane {
   z-index: 900 !important;
+  pointer-events: none !important; /* Le pane ne bloque pas */
+}
+
+.leaflet-popup {
+  z-index: 901 !important;
+  pointer-events: auto !important; /* La popup elle-même est cliquable */
+}
+
+.leaflet-popup-content-wrapper {
+  pointer-events: auto !important;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  pointer-events: auto !important;
+}
+
+.leaflet-popup-tip-container {
+  pointer-events: auto !important;
 }
 
 /* ==================== ÉTATS DE CHARGEMENT ==================== */
@@ -183,12 +227,16 @@
 /* ==================== POLYGONES ==================== */
 .polygon-style {
   filter: blur(2px);
+  cursor: pointer !important;
+  pointer-events: auto !important;
 }
 
 /* ==================== POPUPS LEAFLET ==================== */
 .map2-popup {
   max-width: 90vw;
   width: auto;
+  padding: 15px;
+  min-width: 200px;
 }
 
 .map2-popup-title {
@@ -196,6 +244,7 @@
   margin: 0 0 0.5rem 0;
   word-wrap: break-word;
   font-family: 'kalamB', sans-serif;
+  color: #333;
 }
 
 .map2-popup-description {
@@ -203,12 +252,18 @@
   margin: 0.5rem 0;
   word-wrap: break-word;
   font-family: 'kalamR', sans-serif;
+  color: #666;
+  line-height: 1.4;
 }
 
 .map2-popup-details {
   margin: 0.5rem 0;
   font-size: clamp(11px, 2.5vw, 13px);
   font-family: 'kalamL', sans-serif;
+}
+
+.map2-popup-details p {
+  margin: 5px 0;
 }
 
 .map2-popup-details-btn {
@@ -232,21 +287,38 @@
 .map2-popup-details-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  background-color: #999;
 }
 
 /* ==================== RESPONSIVE MOBILE ==================== */
 @media (max-width: 768px) {
-  .map2-conteneur-carte {
+  .contenu-principal.map-fullscreen {
+    padding-top: 65px !important;
     height: calc(100vh - 65px - 40px);
-    max-height: calc(100vh - 65px - 40px);
+    height: calc(100dvh - 65px - 40px);
+    min-height: calc(100dvh - 65px - 40px);
+    margin-left: 0 !important;
+  }
+
+  .layout.map-active .menu-gauche {
+    transform: translateX(-100%);
+  }
+
+  .layout.map-active footer {
+    left: 0 !important;
+  }
+
+  .map2-conteneur-carte {
+    height: 100%;
   }
 }
 
 /* ==================== RESPONSIVE TABLETTE ==================== */
 @media (min-width: 769px) and (max-width: 1024px) {
-  .map2-conteneur-carte {
+  .contenu-principal.map-fullscreen {
+    padding-top: 75px !important;
     height: calc(100vh - 75px - 42px);
-    max-height: calc(100vh - 75px - 42px);
+    min-height: calc(100vh - 75px - 42px);
   }
 
   .map2-loading,
@@ -262,9 +334,10 @@
 
 /* ==================== RESPONSIVE PETIT MOBILE ==================== */
 @media (max-width: 480px) {
-  .map2-conteneur-carte {
+  .contenu-principal.map-fullscreen {
+    padding-top: 60px !important;
     height: calc(100vh - 60px - 35px);
-    max-height: calc(100vh - 60px - 35px);
+    min-height: calc(100vh - 60px - 35px);
   }
 
   .map2-coords-display,
@@ -298,9 +371,10 @@
 
 /* ==================== MODE PAYSAGE MOBILE ==================== */
 @media (max-height: 500px) and (orientation: landscape) {
-  .map2-conteneur-carte {
+  .contenu-principal.map-fullscreen {
+    padding-top: 50px !important;
     height: calc(100vh - 50px - 30px);
-    max-height: calc(100vh - 50px - 30px);
+    min-height: calc(100vh - 50px - 30px);
   }
 
   .map2-loading,
@@ -316,6 +390,13 @@
     right: 5px;
     padding: 4px 8px;
     font-size: 10px;
+  }
+}
+
+/* ==================== DESKTOP ==================== */
+@media (min-width: 1025px) {
+  .map2-conteneur {
+    border-radius: 0;
   }
 }
 
@@ -339,7 +420,7 @@
 /* ==================== FIXES IOS SAFARI ==================== */
 @supports (-webkit-touch-callout: none) {
   @media (max-width: 768px) {
-    .map2-conteneur-carte {
+    .contenu-principal.map-fullscreen {
       height: -webkit-fill-available;
       min-height: -webkit-fill-available;
     }

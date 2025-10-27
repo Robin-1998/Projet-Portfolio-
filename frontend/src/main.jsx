@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './app.jsx';
 import './styles/static.css';
-import './styles/index.css';
 import './styles/login.css';
 import './styles/map.css';
 import './styles/Tooltip.css';

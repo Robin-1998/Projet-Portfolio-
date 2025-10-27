@@ -14,7 +14,7 @@ function Navigation({ menuOpen, setMenuOpen }) {
     if (window.innerWidth <= 768 && menuOpen === 'full') {
       setMenuOpen('icons');
     }
-  }, [location]);
+  }, [location, menuOpen, setMenuOpen]);
 
   // Fermer le menu si on clique en dehors (sur mobile)
   useEffect(() => {
@@ -31,34 +31,22 @@ function Navigation({ menuOpen, setMenuOpen }) {
     return () => document.removeEventListener('click', handleClickOutside);
   }, [menuOpen, setMenuOpen]);
 
-  // Gérer le cycle des 3 modes
+  // Toggle entre 2 modes : icons <-> full
   const toggleMenu = (e) => {
     e.stopPropagation();
-    if (menuOpen === 'closed') {
-      setMenuOpen('icons');
-    } else if (menuOpen === 'icons') {
-      setMenuOpen('full');
-    } else {
-      setMenuOpen('closed');
-    }
+    setMenuOpen(menuOpen === 'icons' ? 'full' : 'icons');
   };
 
   return (
     <nav
-      className={`menu-gauche ${menuOpen === 'icons' ? 'icons-only' : ''} ${menuOpen === 'full' ? 'open' : ''} ${menuOpen === 'closed' ? 'closed' : ''}`}
+      className={`menu-gauche ${menuOpen === 'icons' ? 'icons-only' : 'open'}`}
     >
       {/* Bouton hamburger */}
       <div
         className="hamburger-menu"
         onClick={toggleMenu}
-        aria-label={
-          menuOpen === 'closed'
-            ? 'Ouvrir le menu'
-            : menuOpen === 'icons'
-            ? 'Afficher les descriptions'
-            : 'Fermer le menu'
-        }
-        aria-expanded={menuOpen !== 'closed'}
+        aria-label={menuOpen === 'icons' ? 'Afficher les descriptions' : 'Masquer les descriptions'}
+        aria-expanded={menuOpen === 'full'}
       >
         <span></span>
         <span></span>
@@ -66,7 +54,7 @@ function Navigation({ menuOpen, setMenuOpen }) {
       </div>
 
       {/* Icônes + texte */}
-      <ul className={`icone_barre ${menuOpen !== 'closed' ? 'visible' : ''}`}>
+      <ul className="icone_barre">
         <li>
           <Link
             to="/home_map"

@@ -3,13 +3,12 @@
   dans le dossier "public"
 */
 const getImagePath = (name, folder) => {
-  const fileName = name.toLowerCase() + '.png';
-  // retourne une chaîne de caractères qui représente le chemin relatif à
-  // la racine du site
-  return `/${folder}/${fileName}`; 
-  // Chemin relatif à la racine du site car public avec vite est 
-  // servi automatiquement à la racine du site quand le serveur est démarré
+  const fileName = name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // enlève accents
+    .replace(/\s+/g, "_") // remplace espaces par _
+    .toLowerCase() + ".png";
+
+  return `/${folder}/${fileName}`;
 };
-
 export default getImagePath;
-

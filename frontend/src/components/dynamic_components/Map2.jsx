@@ -26,39 +26,12 @@ L.Icon.Default.mergeOptions({
     'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-// ========== COMPOSANT POUR DÉTECTER LES CLICS AVEC COORDONNEES  ==========
-/*
-const CoordinatesFinder = ({ mapHeight, onCoordinatesUpdate }) => {
-  console.log('CoordinatesFinder monté');
-
-  useMapEvents({
-    click: (e) => {
-      console.log('Event complet:', e);
-
-      const { lat, lng } = e.latlng;
-      const pixelX = Math.round(lng);
-      const pixelY = Math.round(mapHeight - lat);
-
-      console.log('Coordonnées en pixels:', { x: pixelX, y: pixelY });
-      console.log('Coordonnées Leaflet:', { lat, lng });
-
-      onCoordinatesUpdate({ x: pixelX, y: pixelY, lat, lng });
-
-      alert(`Coordonnées: X=${pixelX}, Y=${pixelY}`);
-    },
-  });
-
-  return null;
-};
-*/
-
 const Map2 = () => {
   const [markers, setMarkers] = useState([]); // Liste des marqueurs
   const [polygons, setPolygons] = useState([]); // Liste des polygones
   const [loading, setLoading] = useState(true); // État de chargement
   const [error, setError] = useState(null); // Gestion des erreurs
-  const [iconSize, setIconSize] = useState(30); //
-  // const [clickedCoords, setClickedCoords] = useState(null); // Pour réactives CoordinatesFinder uniquement pour gérer les click
+  const [iconSize, setIconSize] = useState(30);
 
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [detailedInfo, setDetailedInfo] = useState(null);
@@ -70,7 +43,7 @@ const Map2 = () => {
   const bounds = [
     [0, 0],
     [MAP_HEIGHT, MAP_WIDTH],
-  ]; // Définition des limites de l’image (pour l’affichage CRS.Simple)
+  ]; // Définition des limites de l'image (pour l'affichage CRS.Simple)
 
   const pixelToLeaflet = (x, y) => {
     return [MAP_HEIGHT - y, x]; // Convertit des coordonnées pixels en coordonnées Leaflet
@@ -80,7 +53,6 @@ const Map2 = () => {
   const loadPlaceDetails = async (placeId, placeName, placeDescription, placeDetails, placeType) => {
     setLoadingDetails(true);
     try {
-      console.log(`Appel API: http://localhost:5000/api/v1/map/places/${placeId}/details`);
       const response = await fetch(`http://localhost:5000/api/v1/map/places/${placeId}/details`);
 
       if (!response.ok) {
@@ -88,7 +60,6 @@ const Map2 = () => {
       }
 
       const result = await response.json();
-      console.log('Résultat API:', result);
 
       if (result.success) {
         setDetailedInfo({
@@ -120,7 +91,7 @@ const Map2 = () => {
     setDetailedInfo(null);
   };
 
-  // Fonction pour charger les données depuis l’API backend
+  // Fonction pour charger les données depuis l'API backend
   const chargerDonneesCarte = async () => {
     try {
       setLoading(true); // Active le mode chargement
@@ -165,12 +136,13 @@ const Map2 = () => {
 
         setMarkers(transformedMarkers); // Met à jour les marqueurs
         setPolygons(transformedPolygons); // Met à jour les polygones
+
       } else {
         throw new Error('Échec du chargement des données'); // Erreur personnalisée si échec du backend
       }
     } catch (error) {
-      console.error('Erreur lors du chargement:', error); // Log de l’erreur
-      setError(error.message); // Stocke l’erreur dans l’état
+      console.error('Erreur lors du chargement:', error); // Log de l'erreur
+      setError(error.message); // Stocke l'erreur dans l'état
     } finally {
       setLoading(false); // Désactive le mode chargement
     }
@@ -204,7 +176,7 @@ const Map2 = () => {
     );
   }
 
-  // adapte la taille des icônes en focntion du zoom
+  // Adapte la taille des icônes en fonction du zoom
   function ZoomAdaptiveIcons({ setIconSize }) {
     const map = useMapEvents({
       zoom: () => {
@@ -222,7 +194,7 @@ const Map2 = () => {
     return null;
   }
 
-  // Fonction pour calculer la taille adaptavie des ico,e
+  // Fonction pour calculer la taille adaptive des icônes
   function computeIconSize(zoom) {
     const minSize = 30;      // taille minimale
     const maxSize = 96;      // taille maximale
@@ -240,20 +212,6 @@ const Map2 = () => {
 
   return (
     <div className="map2-conteneur-carte">
-      {/* ========== AFFICHAGE DES COORDONNÉES ========== */}
-      {/*
-      {clickedCoords ? (
-        <div className="map2-coords-display">
-          <strong>Coordonnées : </strong>
-          <span className="map2-coords-value">
-            X: {clickedCoords.x} | Y: {clickedCoords.y}
-          </span>
-        </div>
-      ) : (
-        <div className="map2-coords-hint">Cliquez sur la carte</div>
-      )}
-      */}
-
       <MapContainer
         center={[MAP_HEIGHT / 2, MAP_WIDTH / 2]}
         zoom={-3}
@@ -272,23 +230,13 @@ const Map2 = () => {
         maxBoundsViscosity={1.0}
         attributionControl={false}
       >
-        <ZoomAdaptiveIcons
-         setIconSize={setIconSize}
-        />
+        <ZoomAdaptiveIcons setIconSize={setIconSize} />
 
         <ImageOverlay
           url={terre_du_milieu}
           bounds={bounds}
           interactive={false}
         />
-
-        {/* ========== DÉTECTION DES CLICS ========== */}
-        {/*
-        <CoordinatesFinder
-          mapHeight={MAP_HEIGHT}
-          onCoordinatesUpdate={setClickedCoords}
-        />
-        */}
 
         {/* Affichage des Régions */}
         {polygons.map((polygon) => (
@@ -311,13 +259,16 @@ const Map2 = () => {
                 {/* Bouton pour voir les détails */}
                 <button
                   className="map2-popup-details-btn"
-                  onClick={() => loadPlaceDetails(
-                    polygon.placeId,
-                    polygon.name,
-                    polygon.description,
-                    polygon.details,
-                    'région'
-                  )}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    loadPlaceDetails(
+                      polygon.placeId,
+                      polygon.name,
+                      polygon.description,
+                      polygon.details,
+                      'région'
+                    );
+                  }}
                 >
                   Voir les détails
                 </button>
@@ -332,7 +283,11 @@ const Map2 = () => {
           const icon = CATEGORY_ICONS[iconType]?.(iconSize) || CATEGORY_ICONS.default(iconSize);
 
           return (
-            <Marker key={marker.id} position={marker.position} icon={icon}>
+            <Marker
+              key={marker.id}
+              position={marker.position}
+              icon={icon}
+            >
               <Popup>
                 <div className="map2-popup">
                   <h3 className="map2-popup-title">{marker.name}</h3>
@@ -351,8 +306,8 @@ const Map2 = () => {
                   {/* Bouton pour voir les détails */}
                   <button
                     className="map2-popup-details-btn"
-                    onClick={() => {
-                      console.log('Place ID:', marker.placeId); // ← Ajoute ce log
+                    onClick={(e) => {
+                      e.stopPropagation();
                       loadPlaceDetails(
                         marker.placeId,
                         marker.name,

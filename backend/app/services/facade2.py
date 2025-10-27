@@ -9,10 +9,21 @@ from sqlalchemy.orm import joinedload
 from geoalchemy2.shape import to_shape
 from backend.app.models.entity_description import EntityDescription
 from backend.app.models.relation_type import RelationType
+from backend.app.models.description import Description
 
 from backend.app import db
 
 class PortfolioFacade:
+
+# -------------------------DESCRIPTION----------------------------------------
+    def get_descriptions(self, entity_type, entity_id):
+        """Récupère toutes les descriptions pour une entité donnée."""
+        return (
+            Description.query
+            .filter_by(entity_type=entity_type, entity_id=entity_id)
+            .order_by(Description.order_index)
+            .all()
+        )
 # -------------------------RACES-----------------------------------------------
 
     def get_all_races(self):

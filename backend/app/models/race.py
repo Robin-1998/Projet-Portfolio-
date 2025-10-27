@@ -11,6 +11,7 @@ class Race(BaseModel):
     weakness = db.Column(db.String(255), nullable=False)
     strength = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(255), nullable=False)
+    citation = db.Column(db.String(400))
 
     characters = db.relationship('Character', back_populates='race', lazy='dynamic')
 
@@ -21,5 +22,6 @@ class Race(BaseModel):
             "name": self.name,
             "weakness": self.weakness,
             "strength": self.strength,
-            "description": self.description
+            "description": self.description,
+            'citation': self.citation
         }

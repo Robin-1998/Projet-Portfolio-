@@ -8,7 +8,7 @@ class Character(BaseModel):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    birth_date = db.Column(db.Integer, nullable=False)
+    birth_date = db.Column(db.Integer, nullable=True)
     death_date = db.Column(db.Integer, nullable=True)
     era_birth = db.Column(db.String(25), nullable=False)
     era_death = db.Column(db.String(25), nullable=True)

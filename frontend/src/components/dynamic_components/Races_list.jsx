@@ -39,7 +39,7 @@ function RacesList() {
 					<h2>{char.name}</h2>
 					<div className='paragraphe_center'>
 					<div className='paragraphe_hide'>
-						<p>{char.description}</p>
+						<p>{char.citation}</p>
 					</div>
 					</div>
 				</div>

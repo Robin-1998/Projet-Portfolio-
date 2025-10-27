@@ -12,6 +12,8 @@ class History(BaseModel):
     start_year = db.Column(db.Integer, nullable=True)
     end_year = db.Column(db.Integer, nullable=True)
     era = db.Column(db.String(25), nullable=True)
+    citation = db.Column(db.String(400))
+
 
     def to_dict(self):
         return {
@@ -20,5 +22,6 @@ class History(BaseModel):
             "description": self.description,
             "start_year": self.start_year,
             "end_year": self.end_year,
-            "era": self.era
+            "era": self.era,
+            "citation": self.citation
         }

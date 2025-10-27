@@ -4,6 +4,7 @@ import Mentions from "../pages/Mentions";
 import Sources from "../pages/Sources";
 import Characters from "../pages/Characters";
 import History from "../pages/History";
+import HistoryZoom from "../pages/History_zoom";
 import Races from "../pages/Races";
 import RaceZoom from "../pages/Race_zoom";
 import Creations from "../pages/Creations";
@@ -18,7 +19,8 @@ const routes = [
   { path: "/histoires", element: <History />},
   { path: "/races", element: <Races />},
   { path: "/races/:id", element: <RaceZoom /> },
-	{ path: "/creations", element: <Creations /> }
+	{ path: "/creations", element: <Creations /> },
+	{ path: "/histoires/:id", element: <HistoryZoom /> }
 ]
 
 export default routes;

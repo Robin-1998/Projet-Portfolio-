@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import getImagePath from '../../services/getImage';
-import '../../styles/page_information.css';
+import '../../styles/detail_RPH.css';
 
 function HistoryZoom() {
   const { id } = useParams();

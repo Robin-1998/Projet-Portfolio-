@@ -25,19 +25,17 @@ function RaceDetail() {
   if (!race) return <p className="error-message">Race non trouvée</p>;
 
   return (
-    <div className="detail-page-container">
-      <div className="bloc-info">
-        <div className='bloc_info_zoom_left'>
-          <h2>{race.name}</h2>
-          <p className="citation">"{race.citation}"</p>
-          <p>{race.description}</p>
-          <p className='para_justify'></p>
-        </div>
-        <div className='bloc_info_zoom_right'>
-          <img src={getImagePath(race.name, 'races')} alt={race.name} className="image_info"/>
-          <p><b>Points forts :</b> {race.strength}</p>
-          <p><b>Faiblesses :</b> {race.weakness}</p>
-        </div>
+    <div className="bloc-info">
+      <div className='bloc_info_zoom_left'>
+        <h2>{race.name}</h2>
+        <p className="citation">"{race.citation}"</p>
+        <p>{race.description}</p>
+        <p className='para_justify'></p>
+      </div>
+      <div className='bloc_info_zoom_right'>
+        <img src={getImagePath(race.name, 'races')} alt={race.name} className="image_info"/>
+        <p><b>Points forts :</b> {race.strength}</p>
+        <p><b>Faiblesses :</b> {race.weakness}</p>
       </div>
     </div>
   );

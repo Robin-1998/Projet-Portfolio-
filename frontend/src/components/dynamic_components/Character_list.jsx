@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../../styles/liste.css';
+import '../../styles/pero-race-liste.css';
 
 function CharactersListe() {
   const [characters, setCharacters] = useState([]);
@@ -56,7 +56,7 @@ function CharactersListe() {
             <p>{char.profession}</p>
             <p>{char.citation}</p>
 
-            {/* Descriptions - maintenant simplifié ✅ */}
+            {/* Descriptions */}
             {descriptions[char.id]?.map(d => (
               <div key={d.id}>
                 {d.title && <h3>{d.title}</h3>}

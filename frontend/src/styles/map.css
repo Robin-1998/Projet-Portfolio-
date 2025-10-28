@@ -227,7 +227,7 @@
 /* ==================== POLYGONES ==================== */
 .polygon-style {
   filter: blur(2px);
-  cursor: pointer !important;
+  cursor: url('/loupe.png') 8 8, pointer !important;
   pointer-events: auto !important;
 }
 
@@ -267,8 +267,7 @@
 }
 
 .map2-popup-details-btn {
-  background-color: #403221;
-  color: #ffffff;
+  color: #403221;
   border: none;
   padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 20px);
   font-size: clamp(12px, 3vw, 14px);

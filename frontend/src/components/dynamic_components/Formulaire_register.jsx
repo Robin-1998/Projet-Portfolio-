@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import '../../styles/login.css';
 
 function FormulaireRegister() {
   const [firstName, setFirstName] = useState('');

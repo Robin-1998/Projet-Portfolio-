@@ -4,7 +4,7 @@ import Header from './Header';
 import Footer from './Footer';
 
 function BodyPage({ children, mainClassName }) {
-  const [menuOpen, setMenuOpen] = useState('closed'); // Changez 'hidden' en 'closed'
+  const [menuOpen, setMenuOpen] = useState('icons');
 
   return (
     <div className={`layout ${menuOpen}`}>

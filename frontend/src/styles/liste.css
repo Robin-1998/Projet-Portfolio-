@@ -1,13 +1,14 @@
 /* Container qui contient tout */
-.container-vitrine {
+.container-hisoire {
   width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
 }
 
-.container-vitrine h1{
-  margin-top: 0px;
+.titre-histoire {
+  margin-top: 3rem;
   text-align: center;
+  font-family: 'RingR';
 }
 
 .character-grid {

@@ -1,6 +1,7 @@
 .tooltip-container {
   position: relative;
   display: inline-block;
+
 }
 
 .tooltip-text {
@@ -17,7 +18,7 @@
   opacity: 0;
   transition: opacity 0.3s ease;
   white-space: nowrap;
-  z-index: 9999;
+  z-index: 10001 !important;
   pointer-events: none;
   font-size: 14px;
 }

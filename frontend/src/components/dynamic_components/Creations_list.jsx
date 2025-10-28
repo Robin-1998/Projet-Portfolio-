@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import '../../styles/creations.css';
 
 function CreationsList() {
@@ -15,7 +15,6 @@ function CreationsList() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 👇 CHANGEMENT ICI : 'token' au lieu de 'access_token'
     const token = localStorage.getItem('token');
     setIsAuthenticated(!!token);
 
@@ -52,7 +51,6 @@ function CreationsList() {
       return;
     }
 
-    // Condition qui oblige qu'il y est un titre, une image (avec l'extension .jpg / .PNG)
     if (!title || !base64Image || !mimeType) {
       setMessage('Titre et image sont obligatoires');
       return;
@@ -67,7 +65,7 @@ function CreationsList() {
       };
 
       const response = await axios.post('http://127.0.0.1:5000/api/v1/images', payload, {
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
@@ -95,82 +93,87 @@ function CreationsList() {
   };
 
   return (
-    <article className='Blocks_creations'>
-      <div className="block_creations_left">
-        <p>Bienvenue dans la section dédié aux créations artistiques.
-          <br/>Pour pouvoir poster vos créations artistiques, vous devez être inscrit et connecté.</p>
-        <section>
-          <p>
-            Merci de respecter les règles suivantes :
-          </p>
-          <ol>
-            <li>Pas de photo en dehors de l'univers de tolkien.</li>
-            <li>Uniquement des créations artistiques (pas de photos tirées des films ou des livres).</li>
-            <li>Aucun commentaires à caractère sexuel, raciste, homophobe, religieux ou politique ne sera toléré — tout manquement entraînera la suppression du compte.</li>
-          </ol>
-        </section>
-        <section className='block_post_image'>
-          <h3>Poster une image :</h3>
-          {isAuthenticated ? (
-            <form onSubmit={handleSubmit} className='post_conected'>
+    <div className="contenu-principal">
+      <article className='Blocks_creations'>
+        <div className="block_creations_left">
+          <p>Bienvenue dans la section dédié aux créations artistiques.
+            <br/>Pour pouvoir poster vos créations artistiques, vous devez être inscrit et connecté.</p>
+          <section>
+            <p>
+              Merci de respecter les règles suivantes :
+            </p>
+            <ol>
+              <li>Pas de photo en dehors de l'univers de tolkien.</li>
+              <li>Uniquement des créations artistiques (pas de photos tirées des films ou des livres).</li>
+              <li>Aucun commentaires à caractère sexuel, raciste, homophobe, religieux ou politique ne sera toléré — tout manquement entraînera la suppression du compte.</li>
+            </ol>
+          </section>
+          <section className='block_post_image'>
+            <h3>Poster une image :</h3>
+            {isAuthenticated ? (
+              <form onSubmit={handleSubmit} className='post_conected'>
+                <label>
+                  <input
+                    placeholder="Titre de l'image"
+                    type="text"
+                    value={title}
+                    onChange={e => setTitle(e.target.value)}
+                    required
+                    className='input_creations'
+                  />
+                </label>
+
               <label>
                 <input
-                  placeholder="Titre de l'image"
-                  type="text"
-                  value={title}
-                  onChange={e => setTitle(e.target.value)}
-                  required
+                    placeholder="Description de l'image"
+                  value={description}
+                  onChange={e => setDescription(e.target.value)}
                   className='input_creations'
                 />
               </label>
 
-            <label>
-              <input
-                  placeholder="Description de l'image"
-                value={description}
-                onChange={e => setDescription(e.target.value)}
-                className='input_creations'
-              />
-            </label>
+              <label className="file-label">
+                Choisir une image
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  required
+                />
+              </label>
 
-            <label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                required
-              />
-            </label>
-          
-            <button type="submit" className='button_creation'>Envoyer</button>
+              <button type="submit" className='button_creation'>Envoyer</button>
 
-            {message && <p>{message}</p>}
-            </form>
-          ) : (
-            <div className='post_disconected'>
-              <button onClick={() => navigate('/login')} className='button_creation'>Se connecter</button>
-              <p>Vous devez être connecté pour poster une image.</p>
-            </div>
-          )}
-        </section>
-      </div>
-      <div className='block_creations_right'>
-      <h2>Gallerie d'images</h2>
-      {images.map(img => (
-        <div key={img.id} className='block_img_p'>
-          <img 
-            src={img.image_data} 
-            alt={img.title}
-            className='image_gallerie_art'
-          />
-          <p><strong>{img.title}</strong></p>
+              {message && <p>{message}</p>}
+              </form>
+            ) : (
+              <div className='post_disconected'>
+                <button onClick={() => navigate('/login')} className='button_creation'>Se connecter</button>
+                <p>Vous devez être connecté pour poster une image.</p>
+              </div>
+            )}
+          </section>
         </div>
-      ))}
-      </div>
-    </article>
+        <div className='block_creations_right'>
+        <h2>Gallerie d'images</h2>
+        {images.map(img => (
+          <Link
+            to={`/creations/${img.id}`}
+            key={img.id}
+            className='block_img_p'
+          >
+            <img
+              src={img.image_data}
+              alt={img.title}
+              className='image_gallerie_art'
+            />
+            <p><strong>{img.title}</strong></p>
+          </Link>
+        ))}
+        </div>
+      </article>
+    </div>
   );
 }
 
 export default CreationsList;
-
-

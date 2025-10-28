@@ -35,6 +35,7 @@ function Header({ menuOpen }) {
         <h1 className="titre-site">Le Seigneur des Anneaux</h1>
       </div>
 
+      {/*
       <div className="right-side">
         <div className="search-bar">
           <input
@@ -43,6 +44,7 @@ function Header({ menuOpen }) {
           />
           <button>🔍</button>
         </div>
+        */}
       {/* 🔹 Si connecté → bouton Déconnexion, sinon → lien vers /login */}
       {isLoggedIn ? (
       <button className="login-bouton" onClick={handleLogout}>
@@ -53,7 +55,7 @@ function Header({ menuOpen }) {
         <button className="login-bouton">Connexion</button>
       </Link>
       )}
-      </div>
+      {/*</div>*/}
     </header>
   );
 }

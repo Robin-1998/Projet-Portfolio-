@@ -12,7 +12,6 @@ const DetailPlace = ({ place, onClose }) => {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <button className="modal-close" onClick={onClose}>✕</button>
-        
         <div className="modal-body">
           {/* Flex container : description à gauche, image à droite */}
           <div className="modal-body-flex">

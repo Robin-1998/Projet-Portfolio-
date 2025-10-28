@@ -1,36 +1,9 @@
-/*------------------------- POLICE ----------------------------------*/
-@font-face {
-  font-family: 'Anirb';
-  src: url('../assets/fonts/aniron.bold.ttf') format('truetype'); /* chemin police */
-}
-
-@font-face {
-  font-family: 'kalamR';
-  src: url('../assets/fonts/Kalam-Regular.ttf') format('truetype'); /* chemin police */
-}
-
-@font-face {
-  font-family: 'kalamL';
-  src: url('../assets/fonts/Kalam-Light.ttf') format('truetype'); /* chemin police */
-}
-
-@font-face {
-  font-family: 'RingM';
-  src: url('../assets/fonts/RINGM___.TTF') format('truetype');
-}
-
-@font-face {
-  font-family: 'RingR';
-  src: url('../assets/fonts/RingbearerMedium.ttf') format('truetype');
-}
-
 /* --- Page login/register --- */
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 120px;
-  padding: 50px;
+  gap: 100px;
   background: #f2eee3;
   font-family: 'RingR', serif;
   height: 100%;
@@ -48,7 +21,7 @@
   background-size: 100% 100%;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   width: 20rem;
-  height: 20rem;
+  height: 22rem;
 }
 
 .form-box2 {

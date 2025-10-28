@@ -28,24 +28,24 @@ function RacesList() {
   if (loading) return <p>Chargement des différentes Races...</p>;
 
   return (
-	<div className='container-vitrine'>
-		<h1>Les Espèces</h1>
-		<div className="character-grid">
-			{Races.map(char => (
-				<div key={char.id} className="card">
-					<Link to={`/races/${char.id}`}>
-						<img src={getImagePath(char.name, 'races')} alt={char.name} className="image_card" />
-					</ Link>
-					<h2>{char.name}</h2>
-					<div className='paragraphe_center'>
-					<div className='paragraphe_hide'>
-						<p>{char.citation}</p>
-					</div>
-					</div>
-				</div>
-			))}
-		</div>
-	</ div>
+    <div className='container-histoire'>
+      <h1 className='titre-histoire'>Les Espèces</h1>
+      <div className="character-grid">
+        {Races.map(char => (
+          <div key={char.id} className="card">
+            <Link to={`/races/${char.id}`}>
+              <img src={getImagePath(char.name, 'races')} alt={char.name} className="image_card" />
+            </ Link>
+            <h2>{char.name}</h2>
+            <div className='paragraphe_center'>
+            <div className='paragraphe_hide'>
+              <p>{char.citation}</p>
+            </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </ div>
   );
 }
 

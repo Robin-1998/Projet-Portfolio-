@@ -13,6 +13,8 @@
   padding-right: 4rem ;
   display: flex;
   justify-content: space-between;
+  margin-top: 55px;
+  margin-right: 20px;
 }
 
 .bloc_info_zoom_left {

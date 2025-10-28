@@ -30,15 +30,15 @@ function HistoryList() {
   if (loading) return <p>Chargement des évènements de l'histoire...</p>;
 
   return (
-  <div className='container-vitrine'>
-      <h1>Histoires</h1>
+  <div className='container-histoire'>
+      <h1 className='titre-histoire'>Histoires</h1>
     <div className="character-grid">
       {History.map(char => (
         <div key={char.id} className="card">
           <Link to={`/histoires/${char.id}`}>
-            <img 
-              src={getImagePath(char.name, 'history')} 
-              alt={char.name} 
+            <img
+              src={getImagePath(char.name, 'history')}
+              alt={char.name}
               className="image_card"
               onError={() => console.log("❌ Image introuvable :", getImagePath(char.name, 'history'))}
             />

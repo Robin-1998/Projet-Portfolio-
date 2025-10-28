@@ -11,7 +11,7 @@ function CharactersListe() {
   const fetchDescriptions = async (characterId) => {
     try {
       const res = await axios.get(`http://127.0.0.1:5000/api/v1/descriptions/character/${characterId}`);
-      return res.data;
+      return res.data.data || []; // un data en plus car rajout d'un tableau en plus à cause de région
     } catch (err) {
       console.error(`Erreur lors de la récupération des descriptions pour character ${characterId}:`, err);
       return [];
@@ -45,9 +45,9 @@ function CharactersListe() {
   if (loading) return <p>Chargement des personnages...</p>;
 
   return (
-    <div className='container-vitrine'>
+    <div className='container-histoire'>
       <div className="head-filter">
-        <h1>Personnages</h1>
+        <h1 className='titre-histoire'>Personnages</h1>
       </div>
       <div className="character-grid">
         {characters.map(char => (
@@ -56,8 +56,8 @@ function CharactersListe() {
             <p>{char.profession}</p>
             <p>{char.citation}</p>
 
-            {/* Descriptions */}
-            {descriptions[char.id] && descriptions[char.id].map(d => (
+            {/* Descriptions - maintenant simplifié ✅ */}
+            {descriptions[char.id]?.map(d => (
               <div key={d.id}>
                 {d.title && <h3>{d.title}</h3>}
                 <p>{d.content}</p>

@@ -3,7 +3,7 @@ import axios from 'axios';
 import getImagePath from '../../services/getImage'
 import { Link } from 'react-router-dom';
 // Import de la bibliothèque axios pour faire les requêtes HTTP
-import '../../styles/liste.css';
+import '../../styles/pero-race-liste.css';
 
 function RacesList() {
   const [Races, setRaces] = useState([]);

@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../../styles/perso-race-liste.css';
-import { Link } from 'react-router-dom';
-import getImagePath from '../../services/getImage';
+import '../../styles/liste.css';
 
 function CharactersListe() {
   const [characters, setCharacters] = useState([]);

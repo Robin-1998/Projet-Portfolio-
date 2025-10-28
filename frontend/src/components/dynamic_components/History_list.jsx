@@ -3,7 +3,7 @@ import axios from 'axios';
 import getImagePath from '../../services/getImage';
 import { Link } from 'react-router-dom';
 // Import de la bibliothèque axios pour faire les requêtes HTTP
-import '../../styles/liste.css';
+import '../../styles/histoire-liste.css';
 
 function HistoryList() {
   const [History, setHistory] = useState([]);
@@ -14,8 +14,6 @@ function HistoryList() {
   useEffect(() => {
     axios.get('http://127.0.0.1:5000/api/v1/histories')
       .then(res => {
-            console.log(res.data); // 👀 regarde ce qui s’affiche ici
-
         setHistory(res.data);
         setLoading(false);
       })
@@ -30,22 +28,22 @@ function HistoryList() {
   if (loading) return <p>Chargement des évènements de l'histoire...</p>;
 
   return (
-  <div className='container-histoire'>
-      <h1 className='titre-histoire'>Histoires</h1>
-    <div className="character-grid">
+  <div className='container-histoire2'>
+      <h1 className='titre-histoire2'>Histoires</h1>
+    <div className="character-grid2">
       {History.map(char => (
-        <div key={char.id} className="card">
+        <div key={char.id} className="card2">
           <Link to={`/histoires/${char.id}`}>
             <img
               src={getImagePath(char.name, 'history')}
               alt={char.name}
-              className="image_card"
+              className="image_card2"
               onError={() => console.log("❌ Image introuvable :", getImagePath(char.name, 'history'))}
             />
           </Link>
         <h2>{char.name}</h2>
-          <div className='paragraphe_center'>
-            <div className='paragraphe_hide'>
+          <div className='paragraphe_center2'>
+            <div className='paragraphe_hide2'>
               <p>{char.citation}</p>
             </div>
           </div>

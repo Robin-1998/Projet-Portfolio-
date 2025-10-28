@@ -12,3 +12,4 @@ Shapely
 flask-Migrate
 pytest
 pytest-mock
+flask_cors

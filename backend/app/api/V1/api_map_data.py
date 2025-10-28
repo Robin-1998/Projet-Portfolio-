@@ -101,3 +101,29 @@ class MapData(Resource):
             "success": True,
             "data": map_data
         }, 200
+
+#--------------------- PLACES - Détails enrichis ------------------------
+
+@api.route('/places/<int:place_id>/details')
+class PlaceDetailedInfo(Resource):
+    def get(self, place_id):
+        """
+        GET /api/map/places/<place_id>/details
+        Récupère les informations détaillées d'un lieu avec :
+        - Infos de base (title, description, type_place)
+        - Image principale du lieu
+        - Sections détaillées depuis entity_descriptions
+        - Détails additionnels
+        """
+        detailed_data = facade.get_place_detailed_info(place_id)
+
+        if not detailed_data:
+            return {
+                "success": False,
+                "error": "Lieu non trouvé ou aucune information détaillée disponible"
+            }, 404
+
+        return {
+            "success": True,
+            "data": detailed_data
+        }, 200

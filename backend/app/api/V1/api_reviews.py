@@ -66,24 +66,36 @@ class ReviewList(Resource):
 
 
 # -------------------- Opérations sur une review spécifique --------------------
-@api.route('/<int:review_id>')
-class ReviewResource(Resource):
-    @jwt_required()
-    def get(self, review_id):
-        """Récupère une review spécifique"""
+@api.route('/image/<int:image_id>')
+class ReviewByImage(Resource):
+    def get(self, image_id):
+        """Récupère tous les commentaires d'une image (PUBLIC)"""
         try:
-            review = facade.get_review(review_id)
-            return {
-                'id': review.id,
-                'comment': review.comment,
-                'user_id': review.user_id,
-                'image_post_id': review.image_post_id
-            }, 200
+            reviews = facade.get_reviews_by_image(image_id)
+            if not reviews:
+                return {"message": "Aucune review trouvée pour cette image"}, 404
 
-        except ValueError as e:
-            return {'error': str(e)}, 404
+            # Récupérer les infos utilisateur pour chaque review
+            reviews_list = []
+            for r in reviews:
+                # Récupérer le nom de l'utilisateur
+                author_name = 'Utilisateur'
+                if hasattr(r, 'user') and r.user:
+                    author_name = r.user.first_name or r.user.email or 'Utilisateur'
+
+                reviews_list.append({
+                    "id": r.id,
+                    "comment": r.comment,
+                    "user_id": r.user_id,
+                    "author": author_name,
+                    "image_post_id": r.image_post_id,
+                    "created_at": r.created_at.isoformat() if hasattr(r, 'created_at') else None
+                })
+
+            return {"reviews": reviews_list}, 200
+
         except Exception as e:
-            return {'error': f"Erreur serveur: {str(e)}"}, 500
+            return {"error": str(e)}, 500
 
     @jwt_required()
     def put(self, review_id):

@@ -20,7 +20,23 @@ class PlaceMap(BaseModel):
     title = db.Column(db.String(200), nullable=False)
     type_place = db.Column(
         db.Enum(
-            'Région', 'Ville', 'Village', 'Forteresse', 'Mer', 'Lac/Marais', 'Rivière',
+            'region',
+            'foret',
+            'montagne',
+            'forteresse',
+            'ville',
+            'capitale',
+            'eau',
+            'ruine',
+            'dark',
+            'mine',
+            'port',
+            'pont',
+            'plaine',
+            'chemin',
+            'monument',
+            'special',
+            'default',
             name="place_enum",
             native_enum=False,
             create_type=False
@@ -29,16 +45,18 @@ class PlaceMap(BaseModel):
     )
     description = db.Column(db.Text, nullable=False)
     parent_id = db.Column(db.BigInteger, db.ForeignKey('places.id'))
+    image_url = db.Column(db.String(500), nullable=True)
 
-    map_regions = db.relationship('MapRegion', back_populates='place', cascade='all, delete-orphan')
-    map_markers = db.relationship('MapMarker', back_populates='place', cascade='all, delete-orphan')
+    map_regions = db.relationship('MapRegion', back_populates='place', cascade='all, delete-orphan', lazy='select')
+    map_markers = db.relationship('MapMarker', back_populates='place', cascade='all, delete-orphan', lazy='select')
 
-    def __init__(self, title, type_place, description, parent_id):
+    def __init__(self, title, type_place, description, parent_id, image_url):
         super().__init__()
         self.title = title
         self.type_place = type_place
         self.description = description
         self.parent_id = parent_id
+        self.image_url = image_url
 
     @validates("title", "description")
     def validate_non_empty(self, key, value):
@@ -61,6 +79,7 @@ class PlaceMap(BaseModel):
             "title": self.title,
             "type_place": self.type_place,
             "description": self.description,
+            "image_url": self.image_url,
             "parent_id": self.parent_id
         }
 

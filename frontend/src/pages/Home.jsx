@@ -1,15 +1,14 @@
-import { Link } from 'react-router-dom';
-import Navigation from '../components/static_components/navigation';
-import Header from '../components/static_components/header';
-import Footer from '../components/static_components/footer';
-import BodyPage from '../components/static_components/body_page';
+import BodyPage from '../components/static_components/Body_page';
 
 function Home() {
-	return (
-		<>
-			<BodyPage />
-		</>
-	);
+  return (
+    <BodyPage>
+      <div className="block-principal">
+        <h2>Bienvenue</h2>
+        <p>Voici le contenu principal de la page d'accueil</p>
+      </div>
+    </BodyPage>
+  );
 }
 
-export default Home
+export default Home;

@@ -7,10 +7,28 @@ from backend.app.models.map_region import MapRegion
 from backend.app.models.map_marker import MapMarker
 from sqlalchemy.orm import joinedload
 from geoalchemy2.shape import to_shape
+from backend.app.models.relation_type import RelationType
+from backend.app.models.description import Description
+from sqlalchemy import func
 
 from backend.app import db
 
 class PortfolioFacade:
+
+# -------------------------DESCRIPTION----------------------------------------
+
+    def get_descriptions(self, entity_type, entity_id):
+        """Récupère toutes les descriptions pour une entité donnée (insensible à la casse)."""
+        return (
+            Description.query
+            .filter(
+                func.lower(Description.entity_type) == entity_type.lower(),
+                Description.entity_id == entity_id
+            )
+            .order_by(Description.order_index)
+            .all()
+        )
+
 # -------------------------RACES-----------------------------------------------
 
     def get_all_races(self):
@@ -21,7 +39,15 @@ class PortfolioFacade:
         if not race:
             raise ValueError(f"Race avec id {race_id} introuvable.")
         return race
+    """
+    def get_characters_by_race(self, race_id=None):
+        query = Character.query
 
+        if race_id is not None:
+            query = query.filter(Character.race_id == race_id)
+
+        return query.all()
+    """
 # -------------------------CHARACTERS------------------------------------------
 
     def get_all_characters(self):
@@ -196,17 +222,103 @@ class PortfolioFacade:
         return place_dict
 
 
-# -- Get marker des Place ou région
+    # -- Get marker des Place ou région
     @staticmethod
     def get_map_data():
         """
         Version légère pour l'initialisation de la carte
-        Retourne juste les markers et regions sans détails
+        Retourne markers et regions avec leurs descriptions depuis PlaceMap
         """
-        markers = db.session.query(MapMarker).all()
-        regions = db.session.query(MapRegion).all()
+        from sqlalchemy.orm import joinedload
+        from geoalchemy2.shape import to_shape
+
+        # Récupérer les markers avec eager loading de la relation place
+        markers = db.session.query(MapMarker).options(
+            joinedload(MapMarker.place)
+        ).all()
+
+        # Récupérer les regions avec eager loading de la relation place
+        regions = db.session.query(MapRegion).options(
+            joinedload(MapRegion.place)
+        ).all()
+
+        markers_data = []
+        for marker in markers:
+            geom = to_shape(marker.location)
+
+            # Gérer le cas où place peut être None
+            place = marker.place if marker.place else None
+
+            markers_data.append({
+                "id": marker.id,
+                "name": place.title if place else f"Marker {marker.id}",
+                "description": place.description if place else "Aucune description disponible",
+                "type": marker.type.value if marker.type else "default",
+                "place_id": marker.place_id,
+                "geometry": {
+                    "coordinates": [geom.x, geom.y]
+                },
+                "details": {}
+            })
+
+        regions_data = []
+        for region in regions:
+            geom = to_shape(region.shape_data)
+
+            # Gérer le cas où place peut être None
+            place = region.place if region.place else None
+
+            regions_data.append({
+                "id": region.id,
+                "name": place.title if place else f"Region {region.id}",
+                "description": place.description if place else "Aucune description disponible",
+                "place_id": region.place_id,
+                "geometry": {
+                    "coordinates": list(geom.exterior.coords)
+                },
+                "details": {}
+            })
 
         return {
-            "markers": [marker.to_dict() for marker in markers],
-            "regions": [region.to_dict() for region in regions]
+            "markers": markers_data,
+            "regions": regions_data
+        }
+
+# ------------------------- PLACE DETAILED INFO ------------------------------------------
+    @staticmethod
+    def get_place_detailed_info(place_id):
+        # Récupération du lieu de base
+        place = db.session.query(PlaceMap).filter_by(id=place_id).first()
+        if not place:
+            return None
+
+        # Récupération des descriptions liées à ce lieu
+        descriptions = db.session.query(Description).filter_by(
+            entity_type='place',
+            entity_id=place_id
+        ).order_by(Description.order_index).all()
+
+        detailed_sections = [
+            {
+                'id': desc.id,
+                'title': desc.title,
+                'content': desc.content,
+                'order_index': desc.order_index
+            }
+            for desc in descriptions
+        ]
+
+        return {
+            'id': place.id,
+            'name': place.title,
+            'type_place': place.type_place,
+            'description': place.description,
+            'image_url': getattr(place, 'image_url', None),
+            'details': {
+                'population': getattr(place, 'population', None),
+                'climate': getattr(place, 'climate', None),
+                'founded_year': getattr(place, 'founded_year', None),
+                'notable_features': getattr(place, 'notable_features', None)
+            },
+            'detailed_sections': detailed_sections
         }

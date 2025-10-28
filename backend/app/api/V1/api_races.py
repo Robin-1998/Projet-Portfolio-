@@ -1,5 +1,4 @@
 from flask_restx import Namespace, Resource
-from flask_jwt_extended import jwt_required
 from backend.app.services.facade2 import PortfolioFacade
 
 facade = PortfolioFacade()

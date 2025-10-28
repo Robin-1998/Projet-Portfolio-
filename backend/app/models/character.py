@@ -8,13 +8,15 @@ class Character(BaseModel):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    birth_date = db.Column(db.Integer, nullable=False)
+    birth_date = db.Column(db.Integer, nullable=True)
     death_date = db.Column(db.Integer, nullable=True)
     era_birth = db.Column(db.String(25), nullable=False)
     era_death = db.Column(db.String(25), nullable=True)
     gender = db.Column(db.String(10), nullable=True)
     profession = db.Column(db.String(100), nullable=True)
     description = db.Column(db.Text, nullable=True)
+    citation = db.Column(db.String(400))
+
 
     race_id = db.Column(db.BigInteger, db.ForeignKey('races.id'))
 
@@ -30,6 +32,8 @@ class Character(BaseModel):
             "era_death": self.era_death,
             "gender": self.gender,
             "profession": self.profession,
-            "description": self.description
+            "description": self.description,
+            "citation": self.citation
+        #   "race": self.race.name if self.race else None
         }
 

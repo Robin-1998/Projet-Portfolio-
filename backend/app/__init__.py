@@ -8,6 +8,7 @@ from flask_restx import Api
 from flask_migrate import Migrate
 from dotenv import load_dotenv  # 👈 on ajoute ceci
 from config import config
+from flask_cors import CORS
 
 # Permet d'importer depuis la racine du projet
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
@@ -37,6 +38,15 @@ def create_app(config_name=None):
     # Créer l'application Flask
     app = Flask(__name__)
     app.url_map.strict_slashes = False
+    CORS(app, resources={
+        r"/api/*": {
+            "origins": ["http://localhost:5173", "http://127.0.0.1:5173"],
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"],
+            "expose_headers": ["Content-Type", "Authorization"],
+            "supports_credentials": True
+        }
+    })
 
     # Charger la configuration selon l'environnement
     app.config.from_object(config[config_name])
@@ -58,6 +68,8 @@ def create_app(config_name=None):
     from backend.app.api.V1.api_image_post import api as image_post_ns
     from backend.app.api.V1.api_search import api as search_ns
     from backend.app.api.V1.api_map_data import api as map_ns
+    from backend.app.api.V1.api_description import api as description_ns
+    from backend.app.models.relation_type import RelationType
 
     # Initialiser Flask-RESTX
     api = Api(
@@ -79,5 +91,6 @@ def create_app(config_name=None):
     api.add_namespace(search_ns, path="/api/v1/search")
     api.add_namespace(image_post_ns, path="/api/v1/images")
     api.add_namespace(map_ns, path="/api/v1/map")
+    api.add_namespace(description_ns, path="/api/v1/descriptions")
 
     return app

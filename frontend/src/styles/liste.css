@@ -1,0 +1,73 @@
+/* Container qui contient tout */
+.container-hisoire {
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.titre-histoire {
+  margin-top: 3rem;
+  text-align: center;
+  font-family: 'RingR';
+}
+
+.character-grid {
+	display: flex;
+	flex-wrap: wrap;
+  justify-content: center;
+  gap: 60px;
+}
+
+.character-grid h2 {
+	margin-top: 7px;
+}
+
+.card {
+	border: 2px solid black;
+	width: 210px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background-image: url('../assets/background_body.jpg');
+  background-size: 100% 100%;
+}
+
+.card p {
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+.image_card {
+  width: 150px;        /* largeur fixe */
+  height: 150px;       /* hauteur fixe */
+  object-fit: contain; /* ne coupe rien */
+  border-radius: 8px;  /* optionnel : pour arrondir un peu les bords */
+  display: block;      /* évite les petits espaces blancs */
+  border-radius: 8px;
+  align-items: center;
+}
+
+.paragraphe_center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.paragraphe_hide {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  line-clamp: 2 !important;
+  overflow: hidden !important;
+}
+
+.paragraphe_hide:hover {
+  -webkit-line-clamp: unset !important;
+  line-clamp: unset !important;
+	cursor : url(../assets/logo_oeil.png) 10 14, pointer
+}

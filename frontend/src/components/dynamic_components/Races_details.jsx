@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import getImagePath from '../../services/getImage';
-import '../../styles/page_information.css';
+import '../../styles/detail_RPH.css';
 
 function RaceDetail() {
   const { id } = useParams();
@@ -34,7 +34,7 @@ function RaceDetail() {
 		</div>
 		<div className='bloc_info_zoom_right'>
 			<img src={getImagePath(race.name, 'races')} alt={race.name} className="image_info"/>
-			<p><b>Point forts :</b> {race.strength}</p>			
+			<p><b>Point forts :</b> {race.strength}</p>
 			<p><b>Faiblesses :</b> {race.weakness}</p>
 		</div>
     </div>

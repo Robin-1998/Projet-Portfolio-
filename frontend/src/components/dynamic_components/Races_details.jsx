@@ -34,7 +34,7 @@ function RaceDetail() {
 		</div>
 		<div className='bloc_info_zoom_right'>
 			<img src={getImagePath(race.name, 'races')} alt={race.name} className="image_info"/>
-			<p><b>Point forts :</b> {race.strength}</p>			
+			<p><b>Point forts :</b> {race.strength}</p>
 			<p><b>Faiblesses :</b> {race.weakness}</p>
 		</div>
     </div>

@@ -232,8 +232,18 @@ INSERT INTO descriptions (entity_type, entity_id, title, content, order_index)
 VALUES
 ('character', 1, 'Apparence', 'Grand, cheveux argentés', 1),
 ('character', 1, 'Histoire', 'Né dans les montagnes du Nord', 2),
-('character', 2, 'Histoire', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 1),
-('race', 2, 'Origine', 'Peuple ancien du désert', 1);
+('race', 2, 'Origine', 'Peuple ancien du désert', 1),
+('region', 2, 'Géographie et paysages', 'Le Rohan, ou Riddermark, est un vaste royaume de plaines et de collines verdoyantes, situé au nord du Gondor, entre la rivière Isen à l''ouest et l''Anduin à l''est. Ses prairies sans fin, balayées par les vents, sont idéales pour l''élevage des chevaux qui font la renommée du peuple rohirrim. Au nord s''étend la trouée du Rohan, frontière stratégique entre les Montagnes du Nord et les Montagnes Blanches. Au sud s''élèvent ces dernières, dont les pics enneigés dominent les vallées et abritent de nombreux torrents. Le Rohan partage également une frontière avec Fangorn, ancienne forêt habitée par les Ents, gardiens des arbres. Les principales rivières sont l''Isen, le Snowbourn et l''Entalluve, toutes descendant des Montagnes Blanches. Les vastes plaines de l''Ouestfold et de l''Estfold forment le cœur agricole et pastoral du royaume. Le climat y est tempéré, marqué par des hivers froids et venteux et des étés secs et lumineux. Les tempêtes venues des montagnes y sont fréquentes, forgeant la rudesse du peuple rohirrim.', 1),
+('region', 2, 'Histoire', 'Le Rohan fut fondé en l''an 2510 du Troisième Âge, lorsque le roi Eorl le Jeune mena les cavaliers du Nord à la rescousse du Gondor lors de la Bataille des Champs du Celebrant. En remerciement, le surintendant Cirion offrit aux Éothéod ces vastes terres, anciennement appelées Calenardhon. Eorl devint le premier roi du Rohan, jurant le serment d''Eorl, scellant l''alliance éternelle entre Gondor et Rohan. Pendant des siècles, les rois du Rohan protégèrent le Gondor contre les invasions venues du nord et de l''est. Le royaume connut plusieurs crises : les guerres contre les Dunlendings, la longue sécheresse, et la trahison de Saroumane, qui manipula le roi Théoden à travers Gríma Langue-de-Serpent. Lors de la Guerre de l''Anneau (3018–3019), le Rohan fut attaqué par les armées d''Isengard. Le peuple dut fuir vers le Gouffre de Helm. Sous le commandement de Théoden et de son neveu Éomer, les Rohirrim remportèrent la victoire lors de la Bataille du Gouffre de Helm. Peu après, Théoden mena sa cavalerie à la Bataille des Champs du Pelennor pour secourir Minas Tirith. Il y trouva la mort, honorée par tous les peuples libres. Son neveu Éomer devint roi, tandis qu''Éowyn, sa sœur, combattit le Roi-Sorcier d''Angmar et survécut à la bataille. Après la guerre, le Rohan connut une ère de prospérité et de paix sous le règne d''Éomer Éadig.', 2),
+('region', 2, 'Culture et peuple', 'Le peuple du Rohan, les Rohirrim, descend des Éothéod, cavaliers du Nord. Ils sont grands, blonds, fiers, et renommés pour leur bravoure et leur lien presque mystique avec les chevaux. Leur langue, le rohirrique, est proche de celle des Hommes du Nord. Leur culture repose sur la loyauté, l''honneur et la tradition orale : chants, sagas et récits héroïques sont transmis de génération en génération. Les Rohirrim vivent dans des maisons en bois couvertes de chaume, décorées de motifs équins. Leur artisanat privilégie le cuir, le métal et le bois sculpté. Les femmes y jouent un rôle fort, souvent responsables des foyers et des troupeaux lors des campagnes.
+Leur société est hiérarchisée :
+
+- Le roi, chef militaire et spirituel.
+- Les maréchaux, commandants des différentes marches (Ouestfold, Estfold, etc.).
+- Les éoreds, compagnies de cavaliers fidèles au roi.
+- Les fermiers et bergers, cœur du peuple rohirrim.
+La musique et la poésie épiques tiennent une grande place dans leur vie quotidienne. Les chants funèbres du Rohan sont célèbres pour leur beauté solennelle.', 3),
+('capitale', 6, 'Géographie et paysages', 'c''est de la merde ton pays de gitan', 1);
 
 
 -- -----------------------------
@@ -384,7 +394,7 @@ ON CONFLICT (name) DO NOTHING;
 
 INSERT INTO map_marker (name, location, type, place_id)
 VALUES
-('Foret Noire', ST_GeomFromGeoJSON('{"type":"Point","coordinates":[3632,1375]}'), 'foret'::marker_type, (SELECT id FROM places WHERE title='foret Noire'))
+('Forêt Noire', ST_GeomFromGeoJSON('{"type":"Point","coordinates":[3632,1375]}'), 'foret'::marker_type, (SELECT id FROM places WHERE title='Forêt Noire'))
 ON CONFLICT (name) DO NOTHING;
 
 INSERT INTO map_marker (name, location, type, place_id)

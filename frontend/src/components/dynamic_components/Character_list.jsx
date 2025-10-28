@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../../styles/perso-race-liste.css';
-import { Link } from 'react-router-dom';
-import getImagePath from '../../services/getImage';
 
 function CharactersListe() {
   const [characters, setCharacters] = useState([]);
@@ -54,10 +52,8 @@ function CharactersListe() {
       <div className="character-grid">
         {characters.map(char => (
           <div key={char.id} className="card">
-          <Link to={`/characters/${char.id}`}>
-            <img src={getImagePath(char.name, 'characters')} alt={char.name} className="image_card" />
-          </ Link>
             <h2>{char.name}</h2>
+            <p>{char.profession}</p>
             <p>{char.citation}</p>
 
             {/* Descriptions */}

@@ -93,7 +93,7 @@ a:hover {
 .contenu-principal {
   background-color: #f2eee3;
   color: #403221;
-  padding-bottom: 3.6rem;
+  padding-bottom: 80px;
   padding-top: 3.2rem;
   min-height: calc(100vh - 120px);
   flex: 1;

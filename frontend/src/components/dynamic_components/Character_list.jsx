@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../../styles/liste.css';
+import '../../styles/perso-race-liste.css';
 import { Link } from 'react-router-dom';
 import getImagePath from '../../services/getImage';
 
@@ -60,7 +60,7 @@ function CharactersListe() {
             <h2>{char.name}</h2>
             <p>{char.citation}</p>
 
-            {/* Descriptions - maintenant simplifié ✅ */}
+            {/* Descriptions */}
             {descriptions[char.id]?.map(d => (
               <div key={d.id}>
                 {d.title && <h3>{d.title}</h3>}

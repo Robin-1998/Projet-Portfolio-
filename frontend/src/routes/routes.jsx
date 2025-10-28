@@ -8,6 +8,7 @@ import HistoryZoom from "../pages/History_zoom";
 import Races from "../pages/Races";
 import RaceZoom from "../pages/Race_zoom";
 import Creations from "../pages/Creations";
+import CreationZoom from "../pages/Creation_zoom";
 
 const routes = [
   { path: '/', element: <Home_map /> },
@@ -20,7 +21,8 @@ const routes = [
   { path: "/races", element: <Races />},
   { path: "/races/:id", element: <RaceZoom /> },
 	{ path: "/creations", element: <Creations /> },
-	{ path: "/histoires/:id", element: <HistoryZoom /> }
+	{ path: "/histoires/:id", element: <HistoryZoom /> },
+  { path: "/creations/:id", element: <CreationZoom /> }
 ]
 
 export default routes;

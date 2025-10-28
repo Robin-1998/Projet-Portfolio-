@@ -52,10 +52,8 @@ const Map2 = () => {
   // Fonction pour charger les descriptions d'un lieu
   const fetchDescriptions = async (entityType, entityId) => {
     try {
-		console.log("Appel API descriptions avec:", entityType, entityId);
       const response = await fetch(`http://127.0.0.1:5000/api/v1/descriptions/${entityType}/${entityId}`);
       const data = await response.json();
-      console.log("Descriptions reçues pour", entityType, entityId, data);
 	  if (!data.success) return [];
       return data.data;
     } catch (err) {
@@ -72,7 +70,6 @@ const loadPlaceDetails = async (placeId, placeName, placeDescription, placeDetai
 
     // Charger les descriptions avec le type normalisé
     const descriptions = await fetchDescriptions(typeNormalized, placeId);
-    console.log('Descriptions chargées pour modal:', descriptions);
 
     // Charger les détails complets depuis l'API
     const response = await fetch(`http://localhost:5000/api/v1/map/places/${placeId}/details`);
@@ -94,7 +91,6 @@ const loadPlaceDetails = async (placeId, placeName, placeDescription, placeDetai
     setLoadingDetails(false);
   }
 };
-
 
   const closeDetailedView = () => {
     setDetailedInfo(null);
@@ -313,7 +309,6 @@ const chargerDonneesCarte = async () => {
                   <button
                     className="map2-popup-details-btn"
                     onClick={() => {
-                      console.log('Place ID:', marker.placeId);
                       loadPlaceDetails(
                         marker.placeId,
                         marker.name,

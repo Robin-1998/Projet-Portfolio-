@@ -12,10 +12,8 @@ import L from 'leaflet';
 import { CATEGORY_ICONS } from './Bulle_map.jsx';
 import DetailPlace from './Detail_place.jsx';
 
-// Chemin pour l'image de la carte
 const terre_du_milieu = '/public/terre_du_milieu.jpg';
 
-// Fix pour les icônes de marqueurs Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
@@ -27,126 +25,150 @@ L.Icon.Default.mergeOptions({
 });
 
 const Map2 = () => {
-  const [markers, setMarkers] = useState([]); // Liste des marqueurs
-  const [polygons, setPolygons] = useState([]); // Liste des polygones
-  const [loading, setLoading] = useState(true); // État de chargement
-  const [error, setError] = useState(null); // Gestion des erreurs
+  const [markers, setMarkers] = useState([]);
+  const [polygons, setPolygons] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [iconSize, setIconSize] = useState(30);
 
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [detailedInfo, setDetailedInfo] = useState(null);
   const [loadingDetails, setLoadingDetails] = useState(false);
 
-  const MAP_WIDTH = 5658; // Largeur en pixels de la carte
-  const MAP_HEIGHT = 3633; // Hauteur en pixels de la carte
+  const MAP_WIDTH = 5658;
+  const MAP_HEIGHT = 3633;
 
   const bounds = [
     [0, 0],
     [MAP_HEIGHT, MAP_WIDTH],
-  ]; // Définition des limites de l'image (pour l'affichage CRS.Simple)
+  ];
 
   const pixelToLeaflet = (x, y) => {
-    return [MAP_HEIGHT - y, x]; // Convertit des coordonnées pixels en coordonnées Leaflet
+    return [MAP_HEIGHT - y, x];
   };
 
-  // Fonction pour charger les détails d'un lieu
-  const loadPlaceDetails = async (placeId, placeName, placeDescription, placeDetails, placeType) => {
-    setLoadingDetails(true);
+
+
+  // Fonction pour charger les descriptions d'un lieu
+  const fetchDescriptions = async (entityType, entityId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/v1/map/places/${placeId}/details`);
+		console.log("Appel API descriptions avec:", entityType, entityId);
+      const response = await fetch(`http://127.0.0.1:5000/api/v1/descriptions/${entityType}/${entityId}`);
+      const data = await response.json();
+      console.log("Descriptions reçues pour", entityType, entityId, data);
+	  if (!data.success) return [];
+      return data.data;
+    } catch (err) {
+      console.error('Erreur lors du chargement des descriptions:', err);
+      return [];
+    }
+  };
 
-      if (!response.ok) {
-        throw new Error(`Erreur HTTP: ${response.status}`);
-      }
+const loadPlaceDetails = async (placeId, placeName, placeDescription, placeDetails, placeType) => {
+  setLoadingDetails(true);
+  try {
+    // Normaliser le type pour enlever les accents
+    const typeNormalized = placeType.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-      const result = await response.json();
+    // Charger les descriptions avec le type normalisé
+    const descriptions = await fetchDescriptions(typeNormalized, placeId);
+    console.log('Descriptions chargées pour modal:', descriptions);
 
-      if (result.success) {
-        setDetailedInfo({
-          name: placeName,
-          description: placeDescription,
-          details: placeDetails,
-          type: placeType,
-          ...result.data // image_url, detailed_sections, etc.
-        });
-      }
-    } catch (error) {
-      console.error('Erreur lors du chargement des détails:', error);
-      // Affiche quand même les infos de base
+    // Charger les détails complets depuis l'API
+    const response = await fetch(`http://localhost:5000/api/v1/map/places/${placeId}/details`);
+    const result = await response.json();
+
+    if (result.success) {
       setDetailedInfo({
         name: placeName,
         description: placeDescription,
         details: placeDetails,
-        type: placeType,
-        detailed_sections: [],
-        error: 'Impossible de charger les détails complets'
+        type: typeNormalized,
+        descriptions,
+        ...result.data
       });
-    } finally {
-      setLoadingDetails(false);
     }
-  };
+  } catch (error) {
+    console.error('Erreur lors du chargement des détails:', error);
+  } finally {
+    setLoadingDetails(false);
+  }
+};
 
-  // Fonction pour fermer la modal
+
   const closeDetailedView = () => {
     setDetailedInfo(null);
   };
 
   // Fonction pour charger les données depuis l'API backend
-  const chargerDonneesCarte = async () => {
-    try {
-      setLoading(true); // Active le mode chargement
-      setError(null); // Réinitialise les erreurs
+const chargerDonneesCarte = async () => {
+  try {
+    setLoading(true);
+    setError(null);
 
-      const response = await fetch('http://localhost:5000/api/v1/map/data'); // Appel API backend
+    const response = await fetch('http://localhost:5000/api/v1/map/data');
+    if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
 
-      if (!response.ok) {
-        throw new Error(`Erreur HTTP: ${response.status}`); // Gère les erreurs HTTP
-      }
+    const result = await response.json();
 
-      const result = await response.json(); // extrait la réponse JSON
+    if (result.success) {
+      const mapData = result.data;
 
-      if (result.success) {
-        const mapData = result.data;
+      const transformedMarkers = await Promise.all(
+        mapData.markers.map(async (marker) => {
+          // Normalisation du type pour enlever les accents
+          const normalizedType = (marker.type || 'default').normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+          const descriptions = await fetchDescriptions(normalizedType, marker.place_id);
 
-        // Transformation des marqueurs (coordonnées pixels → coordonnées Leaflet)
-        const transformedMarkers = mapData.markers.map((marker) => ({
-          id: marker.id,
-          name: marker.name,
-          position: pixelToLeaflet(
-            marker.geometry.coordinates[0],
-            marker.geometry.coordinates[1]
-          ),
-          placeId: marker.place_id,
-          type: marker.type || "default",
-          description: marker.description || "Aucune description disponible",
-          details: marker.details || {},
-        }));
+          return {
+            id: marker.id,
+            name: marker.name,
+            position: pixelToLeaflet(
+              marker.geometry.coordinates[0],
+              marker.geometry.coordinates[1]
+            ),
+            placeId: marker.place_id,
+            type: normalizedType,
+            description: marker.description || "Aucune description disponible",
+            details: marker.details || {},
+            descriptions,
+          };
+        })
+      );
 
-        // Transformation des régions (liste de points)
-        const transformedPolygons = mapData.regions.map((region) => ({
-          id: region.id,
-          name: region.name,
-          positions: region.geometry.coordinates.map((coord) =>
-            pixelToLeaflet(coord[0], coord[1])
-          ),
-          placeId: region.place_id,
-          description: region.description || "Aucune description disponible",
-          details: region.details || {},
-        }));
+      const transformedPolygons = await Promise.all(
+        mapData.regions.map(async (region) => {
+          // Normaliser le type "région" pour enlever les accents
+          const normalizedType = 'région'.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+          const descriptions = await fetchDescriptions(normalizedType, region.place_id);
 
-        setMarkers(transformedMarkers); // Met à jour les marqueurs
-        setPolygons(transformedPolygons); // Met à jour les polygones
+          return {
+            id: region.id,
+            name: region.name,
+            positions: region.geometry.coordinates.map((coord) =>
+              pixelToLeaflet(coord[0], coord[1])
+            ),
+            placeId: region.place_id,
+            description: region.description || "Aucune description disponible",
+            details: region.details || {},
+            descriptions,
+          };
+        })
+      );
 
-      } else {
-        throw new Error('Échec du chargement des données'); // Erreur personnalisée si échec du backend
-      }
-    } catch (error) {
-      console.error('Erreur lors du chargement:', error); // Log de l'erreur
-      setError(error.message); // Stocke l'erreur dans l'état
-    } finally {
-      setLoading(false); // Désactive le mode chargement
+      setMarkers(transformedMarkers);
+      setPolygons(transformedPolygons);
+    } else {
+      throw new Error('Échec du chargement des données');
     }
-  };
+  } catch (error) {
+    console.error('Erreur lors du chargement:', error);
+    setError(error.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   useEffect(() => {
     chargerDonneesCarte();
@@ -176,7 +198,6 @@ const Map2 = () => {
     );
   }
 
-  // Adapte la taille des icônes en fonction du zoom
   function ZoomAdaptiveIcons({ setIconSize }) {
     const map = useMapEvents({
       zoom: () => {
@@ -194,17 +215,13 @@ const Map2 = () => {
     return null;
   }
 
-  // Fonction pour calculer la taille adaptive des icônes
   function computeIconSize(zoom) {
-    const minSize = 30;      // taille minimale
-    const maxSize = 96;      // taille maximale
-    const baseSize = 30;     // taille de référence
-    const factor = 8;        // sensibilité du zoom
+    const minSize = 30;
+    const maxSize = 96;
+    const baseSize = 30;
+    const factor = 8;
 
-    // Formule : taille proportionnelle au zoom
-    let size = baseSize + (zoom + 3) * factor; // +3 pour compenser le zoom négatif initial
-
-    // Clamp pour rester entre min et max
+    let size = baseSize + (zoom + 3) * factor;
     size = Math.max(minSize, Math.min(maxSize, size));
 
     return size;
@@ -238,7 +255,6 @@ const Map2 = () => {
           interactive={false}
         />
 
-        {/* Affichage des Régions */}
         {polygons.map((polygon) => (
           <Polygon
             key={polygon.id}
@@ -247,7 +263,7 @@ const Map2 = () => {
               className: 'polygon-style',
               color: 'black',
               fillColor: '#403221',
-              fillOpacity: 0.1,
+              fillOpacity: 0,
               weight: 0,
             }}
           >
@@ -256,19 +272,15 @@ const Map2 = () => {
                 <h3 className="map2-popup-title">{polygon.name}</h3>
                 <p className="map2-popup-description">{polygon.description}</p>
 
-                {/* Bouton pour voir les détails */}
                 <button
                   className="map2-popup-details-btn"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    loadPlaceDetails(
-                      polygon.placeId,
-                      polygon.name,
-                      polygon.description,
-                      polygon.details,
-                      'région'
-                    );
-                  }}
+                  onClick={() => loadPlaceDetails(
+                    polygon.placeId,
+                    polygon.name,
+                    polygon.description,
+                    polygon.details,
+                    'région'
+                  )}
                 >
                   Voir les détails
                 </button>
@@ -277,17 +289,12 @@ const Map2 = () => {
           </Polygon>
         ))}
 
-        {/* Affichage des Marqueurs */}
         {markers.map((marker) => {
           const iconType = marker.type || "default";
           const icon = CATEGORY_ICONS[iconType]?.(iconSize) || CATEGORY_ICONS.default(iconSize);
 
           return (
-            <Marker
-              key={marker.id}
-              position={marker.position}
-              icon={icon}
-            >
+            <Marker key={marker.id} position={marker.position} icon={icon}>
               <Popup>
                 <div className="map2-popup">
                   <h3 className="map2-popup-title">{marker.name}</h3>
@@ -303,11 +310,10 @@ const Map2 = () => {
                     </div>
                   )}
 
-                  {/* Bouton pour voir les détails */}
                   <button
                     className="map2-popup-details-btn"
-                    onClick={(e) => {
-                      e.stopPropagation();
+                    onClick={() => {
+                      console.log('Place ID:', marker.placeId);
                       loadPlaceDetails(
                         marker.placeId,
                         marker.name,
@@ -327,7 +333,6 @@ const Map2 = () => {
         })}
       </MapContainer>
 
-      {/* Modal de détails */}
       {detailedInfo && (
         <DetailPlace
           place={detailedInfo}

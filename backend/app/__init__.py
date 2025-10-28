@@ -69,7 +69,6 @@ def create_app(config_name=None):
     from backend.app.api.V1.api_search import api as search_ns
     from backend.app.api.V1.api_map_data import api as map_ns
     from backend.app.api.V1.api_description import api as description_ns
-    from backend.app.models.entity_description import EntityDescription
     from backend.app.models.relation_type import RelationType
 
     # Initialiser Flask-RESTX

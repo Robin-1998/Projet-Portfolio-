@@ -50,7 +50,7 @@ class PlaceMap(BaseModel):
     map_regions = db.relationship('MapRegion', back_populates='place', cascade='all, delete-orphan', lazy='select')
     map_markers = db.relationship('MapMarker', back_populates='place', cascade='all, delete-orphan', lazy='select')
 
-    def __init__(self, title, type_place, description, parent_id):
+    def __init__(self, title, type_place, description, parent_id, image_url):
         super().__init__()
         self.title = title
         self.type_place = type_place

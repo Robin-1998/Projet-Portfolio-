@@ -208,29 +208,24 @@ CREATE TABLE map_marker (
     place_id BIGINT REFERENCES places(id)
 );
 
--- -----------------------------
--- Table Entity Descriptions
--- -----------------------------
-DROP TYPE IF EXISTS entity_type_enum;
-CREATE TYPE entity_type_enum AS ENUM ('character', 'place', 'race', 'history');
-
-DROP TABLE IF EXISTS entity_descriptions CASCADE;
-CREATE TABLE entity_descriptions (
-    id BIGSERIAL PRIMARY KEY,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    title VARCHAR(100) NOT NULL UNIQUE,
-    content TEXT NOT NULL,
-    image_url VARCHAR(500),
-    order_index INT,
-    relation_type_id BIGINT REFERENCES relation_types(id),
-    entity_type entity_type_enum NOT NULL,
-    entity_id BIGINT NOT NULL
-);
-
 CREATE TABLE descriptions (
     id BIGSERIAL PRIMARY KEY,
-    entity_type VARCHAR(50) NOT NULL CHECK (entity_type IN ('character', 'place', 'race', 'history')),
+    entity_type VARCHAR(50) NOT NULL CHECK (entity_type IN ('character', 'place', 'race', 'history', 'region', 'foret',
+    'montagne',
+    'forteresse',
+    'ville',
+    'capitale',
+    'eau',
+    'ruine',
+    'dark',
+    'mine',
+    'port',
+    'pont',
+    'plaine',
+    'chemin',
+    'monument',
+    'special',
+    'default')),
     entity_id BIGINT NOT NULL,
     title VARCHAR(100),
     content TEXT NOT NULL,

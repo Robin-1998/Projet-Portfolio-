@@ -15,6 +15,8 @@ class Character(BaseModel):
     gender = db.Column(db.String(10), nullable=True)
     profession = db.Column(db.String(100), nullable=True)
     description = db.Column(db.Text, nullable=True)
+    citation = db.Column(db.String(400))
+
 
     race_id = db.Column(db.BigInteger, db.ForeignKey('races.id'))
 
@@ -31,6 +33,7 @@ class Character(BaseModel):
             "gender": self.gender,
             "profession": self.profession,
             "description": self.description,
+            "citation": self.citation
         #   "race": self.race.name if self.race else None
         }
 

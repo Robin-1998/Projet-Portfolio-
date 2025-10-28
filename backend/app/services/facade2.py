@@ -7,23 +7,28 @@ from backend.app.models.map_region import MapRegion
 from backend.app.models.map_marker import MapMarker
 from sqlalchemy.orm import joinedload
 from geoalchemy2.shape import to_shape
-from backend.app.models.entity_description import EntityDescription
 from backend.app.models.relation_type import RelationType
 from backend.app.models.description import Description
+from sqlalchemy import func
 
 from backend.app import db
 
 class PortfolioFacade:
 
 # -------------------------DESCRIPTION----------------------------------------
+
     def get_descriptions(self, entity_type, entity_id):
-        """Récupère toutes les descriptions pour une entité donnée."""
+        """Récupère toutes les descriptions pour une entité donnée (insensible à la casse)."""
         return (
             Description.query
-            .filter_by(entity_type=entity_type, entity_id=entity_id)
+            .filter(
+                func.lower(Description.entity_type) == entity_type.lower(),
+                Description.entity_id == entity_id
+            )
             .order_by(Description.order_index)
             .all()
         )
+
 # -------------------------RACES-----------------------------------------------
 
     def get_all_races(self):
@@ -282,70 +287,30 @@ class PortfolioFacade:
 # ------------------------- PLACE DETAILED INFO ------------------------------------------
     @staticmethod
     def get_place_detailed_info(place_id):
-        """
-        Récupère les informations détaillées d'un lieu incluant :
-        - Les infos de base depuis PlaceMap
-        - Les sections détaillées depuis EntityDescription
-
-        Args:
-            place_id: ID du Place
-
-        Returns:
-            Dict avec structure :
-            {
-                "id": 42,
-                "title": "Forteresse de Kar-Dun",
-                "type_place": "forteresse",
-                "description": "...",
-                "image_url": "/images/...",
-                "details": {
-                    "population": 2000,
-                    "climate": "Montagnard",
-                    ...
-                },
-                "detailed_sections": [
-                    {
-                        "id": 1,
-                        "title": "Architecture",
-                        "content": "...",
-                        "image_url": "/images/...",
-                        "order_index": 1,
-                        "relation_type": "Construit par"
-                    },
-                    ...
-                ]
-            }
-        """
-        # On récupère le lieu de base
+        # Récupération du lieu de base
         place = db.session.query(PlaceMap).filter_by(id=place_id).first()
-
         if not place:
             return None
 
-        # On récupère les descriptions détaillées lié à ce lieu
-        descriptions = db.session.query(EntityDescription).outerjoin(
-            RelationType, EntityDescription.relation_type_id == RelationType.id
-        ).filter(
-            EntityDescription.entity_type == 'place',
-            EntityDescription.entity_id == place_id
-        ).order_by(EntityDescription.order_index).all()
+        # Récupération des descriptions liées à ce lieu
+        descriptions = db.session.query(Description).filter_by(
+            entity_type='place',
+            entity_id=place_id
+        ).order_by(Description.order_index).all()
 
-        # On formate les sections détaillées
-        detailed_sections = []
-        for desc in descriptions:
-            detailed_sections.append({
+        detailed_sections = [
+            {
                 'id': desc.id,
                 'title': desc.title,
                 'content': desc.content,
-                'image_url': desc.image_url if hasattr(desc, 'image_url') else None,
-                'order_index': desc.order_index,
-                'relation_type': desc.relation_type.name if desc.relation_type else None
-            })
+                'order_index': desc.order_index
+            }
+            for desc in descriptions
+        ]
 
-        # on renvoi l'objet
         return {
             'id': place.id,
-            'title': place.title,
+            'name': place.title,
             'type_place': place.type_place,
             'description': place.description,
             'image_url': getattr(place, 'image_url', None),

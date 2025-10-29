@@ -24,6 +24,7 @@ import Races from "../pages/Races";
 import RaceZoom from "../pages/Race_zoom";
 import Creations from "../pages/Creations";
 import CreationZoom from "../pages/Creation_zoom";
+import CharacterZoom from "../pages/Characters_zoom";
 
 const routes = [
   { path: '/', element: <Home_map /> },
@@ -37,7 +38,9 @@ const routes = [
   { path: "/races/:id", element: <RaceZoom /> },
 	{ path: "/creations", element: <Creations /> },
 	{ path: "/histoires/:id", element: <HistoryZoom /> },
-  { path: "/creations/:id", element: <CreationZoom /> }
+  { path: "/creations/:id", element: <CreationZoom /> },
+  { path: "/creations/:id", element: <CreationZoom /> },
+  { path: "/characters/:id", element: <CharacterZoom /> }
 ]
 
 export default routes;

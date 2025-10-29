@@ -1,8 +1,20 @@
+/**
+ * Composant de galerie et publication de créations artistiques
+ * @module CreationsList
+ */
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import '../../styles/creations.css';
 
+/**
+ * Affiche la galerie de créations artistiques et permet aux utilisateurs authentifiés
+ * de publier leurs propres créations
+ *
+ * @component
+ * @returns {JSX.Element} Page de galerie avec formulaire de publication
+ */
 function CreationsList() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -14,6 +26,9 @@ function CreationsList() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
+  /**
+   * Effet pour vérifier l'authentification et charger les images au montage
+   */
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsAuthenticated(!!token);
@@ -27,6 +42,11 @@ function CreationsList() {
       });
   }, []);
 
+  /**
+   * Gère la sélection d'un fichier image et sa conversion en base64
+   *
+   * @param {Event} e - Événement de changement de fichier
+   */
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (!selectedFile) return;
@@ -42,6 +62,13 @@ function CreationsList() {
     reader.readAsDataURL(selectedFile);
   };
 
+  /**
+   * Soumet une nouvelle création artistique à l'API
+   * Nécessite une authentification valide
+   *
+   * @async
+   * @param {Event} e - Événement de soumission du formulaire
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
 

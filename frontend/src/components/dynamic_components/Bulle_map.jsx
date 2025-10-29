@@ -1,9 +1,21 @@
+/**
+ * Module de gestion des icônes de marqueurs pour la carte interactive
+ * @module Bulle_map
+ */
+
 import React, { useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import 'leaflet/dist/leaflet.css';
 
-// Fonction pour créer une bulle colorée avec une icone au centre avec zoom
+/**
+ * Crée une icône de marqueur personnalisée avec bulle colorée et image
+ *
+ * @param {string} imageUrl - Chemin vers l'image de l'icône
+ * @param {string} [color="#3b7a2f"] - Couleur de fond (hex)
+ * @param {number} [size=48] - Taille en pixels
+ * @returns {L.DivIcon} Icône Leaflet
+ */
 export const createStickerIcon = (imageUrl, color = "#3b7a2f", size = 48) => {
   const svg = `
     <svg width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
@@ -20,7 +32,12 @@ export const createStickerIcon = (imageUrl, color = "#3b7a2f", size = 48) => {
   });
 };
 
-// Dictionnaire des icônes par catégorie
+/**
+ * Dictionnaire des icônes par type de lieu
+ * Chaque fonction retourne une icône Leaflet avec couleur et image appropriées
+ *
+ * @constant {Object.<string, Function>}
+ */
 export const CATEGORY_ICONS = {
   montagne: (size = 48) => createStickerIcon("/bulle_map/montagne.png", "#8b5e3b81", size),
   forteresse: (size = 48) => createStickerIcon("/bulle_map/fortresse.png", "#7978777c", size),

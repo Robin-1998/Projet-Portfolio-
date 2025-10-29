@@ -1,3 +1,18 @@
+/**
+ * Configuration des routes de l'application
+ * @module Routes
+ */
+
+/**
+ * Définit toutes les routes de l'application avec leurs composants associés
+ * Utilisé par React Router pour la navigation
+ *
+ * @constant
+ * @type {Array<Object>}
+ * @property {string} path - Chemin de la route
+ * @property {JSX.Element} element - Composant à rendre
+ */
+
 import Login from "../pages/Login";
 import Home_map from "../pages/Home_map";
 import Mentions from "../pages/Mentions";
@@ -9,6 +24,7 @@ import Races from "../pages/Races";
 import RaceZoom from "../pages/Race_zoom";
 import Creations from "../pages/Creations";
 import CreationZoom from "../pages/Creation_zoom";
+import CharacterZoom from "../pages/Characters_zoom";
 
 const routes = [
   { path: '/', element: <Home_map /> },
@@ -22,7 +38,9 @@ const routes = [
   { path: "/races/:id", element: <RaceZoom /> },
 	{ path: "/creations", element: <Creations /> },
 	{ path: "/histoires/:id", element: <HistoryZoom /> },
-  { path: "/creations/:id", element: <CreationZoom /> }
+  { path: "/creations/:id", element: <CreationZoom /> },
+  { path: "/creations/:id", element: <CreationZoom /> },
+  { path: "/characters/:id", element: <CharacterZoom /> }
 ]
 
 export default routes;

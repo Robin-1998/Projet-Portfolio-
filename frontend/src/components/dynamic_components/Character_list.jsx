@@ -4,45 +4,35 @@ import '../../styles/perso-race-liste.css';
 import { Link } from 'react-router-dom';
 import getImagePath from '../../services/getImage';
 
+/**
+ * Composant CharactersListe
+ * Affiche une grille de tous les personnages avec image, nom et citation
+ * Les données sont récupérées depuis l'API backend
+ *
+ * @component
+ * @returns {JSX.Element} Liste de personnages
+ */
 function CharactersListe() {
-  const [characters, setCharacters] = useState([]);
-  const [descriptions, setDescriptions] = useState({});
-  const [loading, setLoading] = useState(true);
-
-  // Récupération des descriptions d'un personnage
-  const fetchDescriptions = async (characterId) => {
-    try {
-      const res = await axios.get(`http://127.0.0.1:5000/api/v1/descriptions/character/${characterId}`);
-      return res.data.data || []; // un data en plus car rajout d'un tableau en plus à cause de région
-    } catch (err) {
-      console.error(`Erreur lors de la récupération des descriptions pour character ${characterId}:`, err);
-      return [];
-    }
-  };
+  const [characters, setCharacters] = useState([]); // Liste des personnages
+  const [descriptions, setDescriptions] = useState({}); // Potentiel stockage des descriptions (non utilisé ici)
+  const [loading, setLoading] = useState(true); // Indique si les données sont en cours de chargement
 
   useEffect(() => {
     const fetchCharactersWithDescriptions = async () => {
       try {
+        // Requête vers l'API pour récupérer tous les personnages
         const res = await axios.get('http://127.0.0.1:5000/api/v1/characters');
         const chars = res.data;
-        setCharacters(chars);
-
-        // Récupération des descriptions pour chaque personnage
-        const descs = {};
-        for (let char of chars) {
-          descs[char.id] = await fetchDescriptions(char.id);
-        }
-        setDescriptions(descs);
-
-        setLoading(false);
+        setCharacters(chars); // Met à jour l'état characters
+        setLoading(false);    // Fin du chargement
       } catch (err) {
         console.error("Erreur lors de la récupération des personnages :", err);
-        setLoading(false);
+        setLoading(false); // Fin du chargement même en cas d'erreur
       }
     };
 
     fetchCharactersWithDescriptions();
-  }, []);
+  }, []); // [] : s'exécute une seule fois au montage du composant
 
   if (loading) return <p>Chargement des personnages...</p>;
 
@@ -58,15 +48,11 @@ function CharactersListe() {
             <img src={getImagePath(char.name, 'characters')} alt={char.name} className="image_card" />
           </ Link>
             <h2>{char.name}</h2>
-            <p>{char.citation}</p>
-
-            {/* Descriptions */}
-            {descriptions[char.id]?.map(d => (
-              <div key={d.id}>
-                {d.title && <h3>{d.title}</h3>}
-                <p>{d.content}</p>
-              </div>
-            ))}
+            <div className='paragraphe_center'>
+            <div className='paragraphe_hide'>
+              <p>{char.citation}</p>
+            </div>
+            </div>
           </div>
         ))}
       </div>

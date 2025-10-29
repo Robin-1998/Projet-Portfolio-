@@ -1,7 +1,18 @@
+/**
+ * Composant de formulaire d'inscription utilisateur
+ * @module FormulaireRegister
+ */
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../../styles/login.css';
 
+/**
+ * Affiche un formulaire d'inscription permettant de créer un nouveau compte utilisateur
+ * Collecte les informations (nom, prénom, email, mot de passe) et les envoie à l'API
+ *
+ * @component
+ * @returns {JSX.Element} Formulaire d'inscription
+ */
 function FormulaireRegister() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -9,6 +20,13 @@ function FormulaireRegister() {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
+  /**
+   * Gère la soumission du formulaire d'inscription
+   * Crée un nouveau compte utilisateur via l'API et réinitialise le formulaire en cas de succès
+   *
+   * @async
+   * @param {Event} e - Événement de soumission du formulaire
+   */
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
 

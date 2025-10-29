@@ -5,7 +5,7 @@ from datetime import timedelta
 # Déterminer l'environnement courant
 ENV = os.getenv("FLASK_ENV", "development")
 
-# Charger le bon fichier .env
+# Charger le fichier .env correspondant à l'environnement
 if ENV == "testing":
     load_dotenv(".env.test")
 else:
@@ -65,7 +65,7 @@ class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL")
 
 
-# Dictionnaire global pour Flask
+# Dictionnaire de configuration global pour Flask
 config = {
     "development": DevelopmentConfig,
     "testing": TestingConfig,

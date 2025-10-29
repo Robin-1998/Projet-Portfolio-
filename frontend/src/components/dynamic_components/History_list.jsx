@@ -1,3 +1,8 @@
+/**
+ * Composant d'affichage de la liste des événements historiques
+ * @module HistoryList
+ */
+
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import getImagePath from '../../services/getImage';
@@ -5,12 +10,23 @@ import { Link } from 'react-router-dom';
 // Import de la bibliothèque axios pour faire les requêtes HTTP
 import '../../styles/histoire-liste.css';
 
+/**
+ * Affiche une grille de cartes d'événements historiques de l'univers du Seigneur des Anneaux
+ * Récupère les données depuis l'API et gère le chargement asynchrone
+ *
+ * @component
+ * @returns {JSX.Element} Grille d'événements historiques
+ */
 function HistoryList() {
   const [History, setHistory] = useState([]);
   // Déclaration de l'état local "characters" . permetttra de stocker les histoires
   const [loading, setLoading] = useState(true);
   // loading permet d’afficher quelque chose à l’utilisateur pendant que la page est en train de charger les données
 
+  /**
+   * Effet pour charger la liste des événements historiques au montage du composant
+   * Récupère les données depuis l'API et met à jour l'état
+   */
   useEffect(() => {
     axios.get('http://127.0.0.1:5000/api/v1/histories')
       .then(res => {

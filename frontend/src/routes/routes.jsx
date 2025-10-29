@@ -1,3 +1,18 @@
+/**
+ * Configuration des routes de l'application
+ * @module Routes
+ */
+
+/**
+ * Définit toutes les routes de l'application avec leurs composants associés
+ * Utilisé par React Router pour la navigation
+ *
+ * @constant
+ * @type {Array<Object>}
+ * @property {string} path - Chemin de la route
+ * @property {JSX.Element} element - Composant à rendre
+ */
+
 import Login from "../pages/Login";
 import Home_map from "../pages/Home_map";
 import Mentions from "../pages/Mentions";

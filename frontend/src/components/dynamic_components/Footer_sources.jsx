@@ -1,3 +1,15 @@
+/**
+ * Composant d'affichage des sources et crédits du site
+ * @module MentionsSource
+ */
+
+/**
+ * Affiche la page des sources listant les images, polices, bibliothèques
+ * et ressources utilisées pour la création du site
+ *
+ * @component
+ * @returns {JSX.Element} Page des sources et crédits
+ */
 function MentionsSource() {
   return (
     <div>

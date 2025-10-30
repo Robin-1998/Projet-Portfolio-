@@ -90,16 +90,19 @@ function FormulaireLogin() {
           />
         </div>
 
+        {/* Affichage du message d'erreur/succès */}
+        {message && (
+          <p className="login-message">{message}</p>
+        )}
+
         <img className="ornement" src={ornement} alt="Ornement" />
 
-        {/* 🔹 Affiche le bouton seulement si non connecté */}
+        {/* Affiche le bouton seulement si non connecté */}
         {!isLoggedIn && (
           <button type="submit" className="btn">
             Se connecter
           </button>
         )}
-
-        {message && <p>{message}</p>}
       </form>
     </div>
   );

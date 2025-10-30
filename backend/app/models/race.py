@@ -1,8 +1,20 @@
+"""
+Module contenant le modèle des races
+
+Classes :
+    Race : Modèle de race, en lecture seule, associé à une race.
+"""
 from backend.app import db
 from backend.app.models.basemodel import BaseModel
 
 class Race(BaseModel):
-    "classe Race en lecture seule"
+    """
+    classe race en lecture seule
+    
+    Cette classe modélise une race avec ses attributs principaux : nom, faiblesses,
+    force, description, et citation. Elle est liée à la table `races`
+    dans la base de données et possède une relation vers le modèle `Character`.
+    """
 
     __tablename__ = "races"
 
@@ -17,6 +29,7 @@ class Race(BaseModel):
 
 
     def to_dict(self):
+
         return {
             "id": self.id,
             "name": self.name,

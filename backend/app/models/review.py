@@ -1,14 +1,32 @@
+"""
+Ce module définit le modèle `Review`, représentant un commentaire laissé par un utilisateur
+sur une image publiée dans l'application.
+
+Chaque commentaire est lié :
+- à un utilisateur (`User`), via `user_id`,
+- à une image (`ImagePost`), via `image_post_id`.
+"""
 from backend.app.models.basemodel import BaseModel
 from backend.app import db
 from sqlalchemy.orm import validates
 
 class Review(BaseModel):
-    """Commentaire d'image"""
+    """
+    Modèle représentant un commentaire d'image postée par un utilisateur.
+
+    Relations :
+        user (User) : L'utilisateur qui a écrit le commentaire.
+        image_post (ImagePost) : L'image à laquelle le commentaire est associé.
+    """
     __tablename__ = 'reviews'
 
     comment = db.Column(db.String(400), nullable=False)
     user_id = db.Column(db.BigInteger, db.ForeignKey('users.id'), nullable=False)
     image_post_id = db.Column(db.BigInteger, db.ForeignKey('image_post.id'), nullable=False)
+
+    # ---------------------
+    # Relations ORM
+    # ---------------------
 
     user = db.relationship('User', backref='reviews')
     image_post = db.relationship('ImagePost', backref='reviews')
@@ -18,6 +36,10 @@ class Review(BaseModel):
         self.comment = self.validate_text("comment", comment)
         self.user_id = self.validate_user_id("user_id", user_id)
         self.image_post_id = self.validate_image_post_id("image_post_id", image_post_id)
+
+    # ---------------------
+    # Validations des champs
+    # ---------------------
 
     @validates('comment')
     def validate_text(self, _key, comment):
@@ -53,7 +75,9 @@ class Review(BaseModel):
         return image_post_id
 
     def to_dict(self):
-        """Convert the Review instance to a Python dictionary for serialization."""
+        """
+        Sérialise l'objet Review en dictionnaire JSON-compatible.
+        """
         return {
             "id": self.id,
             "comment": self.comment,

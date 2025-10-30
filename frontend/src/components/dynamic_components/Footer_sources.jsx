@@ -13,7 +13,7 @@
 function MentionsSource() {
   return (
     <div className="mention">
-      <h2>Sources</h2>
+      <h1 className="titre-mention">Sources</h1>
       <p>Voici les sources utilisées pour la création de ce portfolio :</p>
 
       <ul>

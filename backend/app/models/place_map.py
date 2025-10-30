@@ -1,12 +1,21 @@
+"""
+Module contenant le modèle de chaque lieu
+Chaque lieu (ville, forêt, région, etc.) peut être visualisé sur une carte via des marqueurs ou des polygones PostGIS.
+
+Ce modèle hérite de `BaseModel`, qui fournit les attributs communs (id, timestamps, etc.).
+"""
 from backend.app.models.basemodel import BaseModel
 from backend.app import db
 from sqlalchemy.orm import validates
 
 
 class PlaceMap(BaseModel):
-    """ N'importe quel utilisateur pourra voir le contenu de chaque lieux
-        - lieu pour les villes/forêt/village identifié via un marqueur POSTGIS
-        - lieu pour les régions via un tracé polygone DE POSTGIS
+    """
+    Modèle représentant un lieu géographique affichable sur une carte.
+
+    Un lieu peut être :
+    - ponctuel (ville, forêt, ruine...) via un marqueur PostGIS,
+    - ou étendu (région, montagne...) via un polygone PostGIS.
 
         info importante
         SQLAlchemy doit connaître les valeurs possibles de l'enum dans le code Python, pour pouvoir :
@@ -14,6 +23,12 @@ class PlaceMap(BaseModel):
         sérialiser/désérialiser correctement les données,
         générer le mapping entre Postgres et Python,
         éviter les erreurs ORM à l'exécution.
+
+    Notes importantes :
+        - SQLAlchemy doit connaître toutes les valeurs possibles de l'enum `type_place`
+          pour effectuer correctement les vérifications et le mapping ORM.
+        - Les validations assurent que les champs critiques ne sont pas vides
+          et que le type du lieu est cohérent.
     """
     __tablename__ = "places"
 
@@ -47,6 +62,10 @@ class PlaceMap(BaseModel):
     parent_id = db.Column(db.BigInteger, db.ForeignKey('places.id'))
     image_url = db.Column(db.String(500), nullable=True)
 
+    # ---------------------
+    # Relations ORM
+    # ---------------------
+
     map_regions = db.relationship('MapRegion', back_populates='place', cascade='all, delete-orphan', lazy='select')
     map_markers = db.relationship('MapMarker', back_populates='place', cascade='all, delete-orphan', lazy='select')
 
@@ -57,6 +76,10 @@ class PlaceMap(BaseModel):
         self.description = description
         self.parent_id = parent_id
         self.image_url = image_url
+
+    # ---------------------
+    # Validations des champs
+    # ---------------------
 
     @validates("title", "description")
     def validate_non_empty(self, key, value):
@@ -74,6 +97,12 @@ class PlaceMap(BaseModel):
         return value
 
     def to_dict(self, include_geometry=False):
+        """
+        Sérialise l'objet PlaceMap en dictionnaire JSON-compatible.
+
+        Args:
+            include_geometry (bool): Si True, inclut les marqueurs et régions liés.
+        """
         data = {
             "id": self.id,
             "title": self.title,
@@ -83,10 +112,17 @@ class PlaceMap(BaseModel):
             "parent_id": self.parent_id
         }
 
+        # Inclure la géométrie uniquement si demandé
+        # Le paramètre include_geometry est un booléen optionnel (par défaut False) 
+        # qui permet de choisir si tu veux inclure ces données dans le dictionnaire.
+
         if include_geometry:
             data["markers"] = [marker.to_dict() for marker in self.map_markers]
             data["regions"] = [region.to_dict() for region in self.map_regions]
 
         return data
+# ---------------------
+# Relation auto-référencée : un lieu peut avoir un parent et des enfants
+# ---------------------
 
 PlaceMap.parent = db.relationship('PlaceMap', remote_side=[PlaceMap.id], backref='children')

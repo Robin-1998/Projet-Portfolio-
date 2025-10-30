@@ -1,8 +1,17 @@
+"""
+Module contenant le modèle des histoires
+"""
 from backend.app import db
 from backend.app.models.basemodel import BaseModel
 
 class History(BaseModel):
-    "classe History en lecture seule"
+    """
+    classe History en lecture seule
+
+    Cette classe modélise une histoire avec ses attributs principaux : nom, description rapide,
+    l'année du début de l'évènement, l'année de fin de l'évènement, la période de l'histoire (l'ère), et une citation.
+    Elle est liée à la table `history` dans la base de données
+    """
 
     __tablename__ = "history"
 

@@ -1,31 +1,65 @@
 /* Détail des page Race - Personnage - histoire */
-.bloc-info {
-	background-image: url('../assets/background_body.jpg');
-	background-size: 100% 100%;
-	padding-top: 2rem;
-	padding-bottom: 2rem;
-	padding-left: 4rem;
-	padding-right: 4rem ;
-	display: flex;
-	justify-content: space-between;
+.detail-page-container {
+  padding-top: 20px;      /* Espace avec le header */
+  padding-bottom: 80px;   /* Espace avec le footer */
+}
 
+.bloc-info {
+  background-image: url('../assets/background_body.jpg');
+  background-size: 100% 100%;
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+  padding-left: 4rem;
+  padding-right: 4rem ;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3.44rem;
+  margin-right: 1.3rem;
+  margin-left: 1.3rem;
+  text-align: justify;
+  height: calc(100% - 3.44rem);
+  margin-bottom: 2rem;
+  overflow-y: auto;
+}
+
+.bloc-info p {
+  padding-bottom: 1rem;
+}
+
+.bloc-info::-webkit-scrollbar {
+  width: 12px;
+}
+
+.bloc-info::-webkit-scrollbar-track {
+  background: rgba(139, 69, 19, 0.2);
+  border-radius: 6px;
+}
+
+.bloc-info::-webkit-scrollbar-thumb {
+  background: #6b4f2c;
+  border-radius: 6px;
+  border: 2px solid rgba(139, 69, 19, 0.2);
+}
+
+.bloc-info::-webkit-scrollbar-thumb:hover {
+  background: #6d4c41;
 }
 
 .bloc_info_zoom_left {
-	max-width: 1000px;
-	padding: 1rem;
+  max-width: 1000px;
+  padding: 1rem;
 }
 
 .bloc_info_zoom_right {
-	padding: 1rem;
+  padding: 1rem;
 }
 
 .para_justify {
-	text-align: justify;
+  text-align: justify;
 }
 
 .image_info {
-	width: 300px;
-	height: 300px;
-	object-fit: contain;
+  width: 300px;
+  height: 300px;
+  object-fit: contain;
 }

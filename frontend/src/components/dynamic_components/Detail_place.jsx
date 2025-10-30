@@ -1,6 +1,25 @@
+/**
+ * Composant modal d'affichage du détail d'un lieu de la Terre du Milieu
+ * @module DetailPlace
+ */
+
 import React from 'react';
 import '../../styles/detail_place.css';
 
+/**
+ * Affiche une modale avec les informations détaillées d'un lieu
+ * (nom, description, image et sections descriptives)
+ *
+ * @component
+ * @param {Object} props - Propriétés du composant
+ * @param {Object|null} props.place - Données du lieu à afficher
+ * @param {string} props.place.name - Nom du lieu
+ * @param {string} props.place.description - Description principale
+ * @param {string} [props.place.image_url] - URL de l'image principale
+ * @param {Array} [props.place.descriptions] - Sections descriptives additionnelles
+ * @param {Function} props.onClose - Callback pour fermer la modale
+ * @returns {JSX.Element|null} Modale ou null si pas de lieu
+ */
 const DetailPlace = ({ place, onClose }) => {
   if (!place) return null;
 

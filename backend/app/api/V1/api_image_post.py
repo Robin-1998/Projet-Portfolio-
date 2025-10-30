@@ -1,3 +1,11 @@
+"""
+Module de gestion des posts d'images
+
+Ce module contient les endpoints REST permettant de créer, consulter, modifier
+et supprimer des posts d'images. Les images sont stockées en base64 dans la base
+de données avec leur type MIME. Certaines opérations nécessitent une authentification JWT.
+Ce module con
+"""
 from flask import request
 from backend.app.services import facade
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -9,9 +17,22 @@ api = Namespace('images', description='Image post operations')
 
 @api.route('/')
 class ImagePostList(Resource):
+    """Gestion de la liste des posts d'images (création et consultation)."""
     @jwt_required()
     def post(self):
-        """Crée un nouveau post image"""
+        """
+        Crée un nouveau post image
+        
+        Cette méthode permet à un utilisateur authentiifé de créer un nouveau 
+        post contenant une image encodée en base64.
+
+        Authentication:
+            Requiert un token JWT valide.
+
+        Note:
+            L'image doit être encodée en base64 avant l'envoi.
+            Le user_id est automatiquement récupéré depuis le token JWT.
+        """
         image_data = request.json
         if not image_data:
             return {"error": "Données manquantes"}, 400
@@ -54,7 +75,16 @@ class ImagePostList(Resource):
             return {"error": f"Erreur serveur: {str(e)}"}, 500
 
     def get(self):
-        """Liste tous les posts d'images"""
+        """
+        Liste tous les posts d'images
+        
+        Cette méthode retourne la liste complète de tous les posts d'images
+        présents dans la base de données, avec les informations de l'utilisateur créateur.
+
+        Note:
+            Les images sont converties en Data URI pour permettre un affichage direct
+            dans les balises HTML <img>.
+        """
         try:
             images = facade.get_all_post_images()
             result = []
@@ -90,8 +120,17 @@ class ImagePostList(Resource):
 
 @api.route('/<int:image_id>')
 class ImagePostResource(Resource):
+    """Gestion d'un post d'image spécifique (consultation, modification, suppression)."""
     def get(self, image_id):
-        """Récupère un post image spécifique"""
+        """
+        Récupère un post image spécifique.
+
+        Cette méthode retourne les détails complets d'un post d'image,
+        incluant l'image encodée et les informations de l'utilisateur créateur.
+
+        Args:
+            image_id (int): Identifiant unique du post image
+        """
         try:
             image = facade.get_post_image(image_id)
             if not image:
@@ -125,9 +164,34 @@ class ImagePostResource(Resource):
         except Exception as e:
             return {'error': f"Erreur serveur: {str(e)}"}, 500
 
+# Note -> Hasattr : véirife si un objet possède un attribut donné
+#      -> Getattr : récupère l'attribut ou retourne une valeur par défaut
+
     @jwt_required()
     def put(self, image_id):
-        """Met à jour un post image"""
+        """
+        Met à jour un post image
+        
+        Cette méthode permet à l'utilisateur créateur de modifier le titre,
+        la description ou l'image d'un post existant.
+
+        Authentication:
+            Requiert un token JWT valide. Seul le créateur du post peut le modifier.
+
+        Args:
+            image_id (int): Identifiant unique du post image à modifier
+
+        Request Body (JSON):
+            {
+                "title": str (optionnel) - Nouveau titre,
+                "description": str (optionnel) - Nouvelle description,
+                "image_data": str (optionnel) - Nouvelle image encodée en base64,
+                "image_mime_type": str (optionnel) - Nouveau type MIME
+            }
+
+        Note:
+            Seul l'utilisateur ayant créé le post peut le modifier.
+        """
         update_data = request.json
         if not update_data:
             return {'error': 'Données manquantes'}, 400
@@ -166,7 +230,24 @@ class ImagePostResource(Resource):
 
     @jwt_required()
     def delete(self, image_id):
-        """Supprime un post image"""
+        """
+        Supprime un post image
+        
+        Cette méthode permet à l'utilisateur créateur de supprimer définitivement
+        un post d'image.
+
+        Authentication:
+            Requiert un token JWT valide. Seul le créateur du post peut le supprimer.
+
+        Args:
+            image_id (int): Identifiant unique du post image à supprimer
+
+        Warning:
+            Cette action est irréversible. Le post et l'image seront définitivement supprimés.
+
+        Note:
+            Seul l'utilisateur ayant créé le post peut le supprimer.
+        """
         try:
             user_id = get_jwt_identity()["id"]
             image = facade.get_post_image(image_id)
@@ -189,7 +270,19 @@ class ImagePostResource(Resource):
 @api.route('/users/<int:user_id>')
 class UserImagePosts(Resource):
     def get(self, user_id):
-        """Récupère tous les posts d'un utilisateur"""
+        """
+        Récupère tous les posts d'un utilisateur
+
+        Cette méthode retourne la liste complète de tous les posts d'images
+        créés par un utilisateur donné.
+
+        Args:
+            user_id (int): Identifiant unique de l'utilisateur
+        
+        Note:
+            Cette route est publique et ne nécessite pas d'authentification.
+            Les posts sont triés par date de création (du plus récent au plus ancien).
+        """
         try:
             images = facade.get_post_images_by_user(user_id)
             result = []

@@ -1,9 +1,21 @@
+/**
+ * Composant d'affichage des mentions légales du site
+ * @module MentionsLegales
+ */
+
+/**
+ * Affiche la page des mentions légales incluant les informations sur l'éditeur,
+ * l'hébergeur, la propriété intellectuelle, les règles de publication et le RGPD
+ *
+ * @component
+ * @returns {JSX.Element} Page des mentions légales
+ */
 function MentionsLegales() {
   return (
-    <div>
-      <h1>Mentions légales</h1>
+    <div className="mention">
+      <h1 className="titre-mention">Mentions légales</h1>
 
-      <h2>Éditeur du site</h2>
+      <h2 className="titre2-mention">Éditeur du site</h2>
       <p>
         Nom : Thérèse-Marie Lefoulon et Robin David
         <br />

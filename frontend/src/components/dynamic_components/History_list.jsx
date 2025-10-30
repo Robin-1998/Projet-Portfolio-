@@ -1,21 +1,35 @@
+/**
+ * Composant d'affichage de la liste des événements historiques
+ * @module HistoryList
+ */
+
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import getImagePath from '../../services/getImage';
 import { Link } from 'react-router-dom';
 // Import de la bibliothèque axios pour faire les requêtes HTTP
-import '../../styles/liste.css';
+import '../../styles/histoire-liste.css';
 
+/**
+ * Affiche une grille de cartes d'événements historiques de l'univers du Seigneur des Anneaux
+ * Récupère les données depuis l'API et gère le chargement asynchrone
+ *
+ * @component
+ * @returns {JSX.Element} Grille d'événements historiques
+ */
 function HistoryList() {
   const [History, setHistory] = useState([]);
   // Déclaration de l'état local "characters" . permetttra de stocker les histoires
   const [loading, setLoading] = useState(true);
   // loading permet d’afficher quelque chose à l’utilisateur pendant que la page est en train de charger les données
 
+  /**
+   * Effet pour charger la liste des événements historiques au montage du composant
+   * Récupère les données depuis l'API et met à jour l'état
+   */
   useEffect(() => {
     axios.get('http://127.0.0.1:5000/api/v1/histories')
       .then(res => {
-            console.log(res.data); // 👀 regarde ce qui s’affiche ici
-
         setHistory(res.data);
         setLoading(false);
       })
@@ -30,22 +44,22 @@ function HistoryList() {
   if (loading) return <p>Chargement des évènements de l'histoire...</p>;
 
   return (
-  <div className='container-histoire'>
-      <h1 className='titre-histoire'>Histoires</h1>
-    <div className="character-grid">
+  <div className='container-histoire2'>
+      <h1 className='titre-histoire2'>Histoires</h1>
+    <div className="character-grid2">
       {History.map(char => (
-        <div key={char.id} className="card">
+        <div key={char.id} className="card2">
           <Link to={`/histoires/${char.id}`}>
             <img
               src={getImagePath(char.name, 'history')}
               alt={char.name}
-              className="image_card"
+              className="image_card2"
               onError={() => console.log("❌ Image introuvable :", getImagePath(char.name, 'history'))}
             />
           </Link>
         <h2>{char.name}</h2>
-          <div className='paragraphe_center'>
-            <div className='paragraphe_hide'>
+          <div className='paragraphe_center2'>
+            <div className='paragraphe_hide2'>
               <p>{char.citation}</p>
             </div>
           </div>

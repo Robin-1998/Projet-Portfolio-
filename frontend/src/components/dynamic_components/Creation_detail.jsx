@@ -1,8 +1,20 @@
+/**
+ * Composant de détail d'une création artistique avec système de commentaires
+ * @module CreationDetail
+ */
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../../styles/creation_detail.css';
 
+/**
+ * Affiche le détail d'une création artistique avec son image, informations et commentaires
+ * Permet aux utilisateurs authentifiés de laisser des commentaires
+ *
+ * @component
+ * @returns {JSX.Element} Page de détail de la création
+ */
 function CreationDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -14,6 +26,10 @@ function CreationDetail() {
   const [newComment, setNewComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
+  /**
+   * Effet pour charger la création et ses commentaires au montage
+   * Vérifie également l'état d'authentification de l'utilisateur
+   */
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsAuthenticated(!!token);
@@ -51,6 +67,13 @@ function CreationDetail() {
     fetchData();
   }, [id]);
 
+  /**
+   * Soumet un nouveau commentaire sur la création
+   * Nécessite une authentification valide
+   *
+   * @async
+   * @param {Event} e - Événement de soumission du formulaire
+   */
   const handleSubmitComment = async (e) => {
     e.preventDefault();
 

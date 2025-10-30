@@ -1,14 +1,30 @@
+/**
+ * Composant d'affichage détaillé d'un événement historique
+ * @module HistoryZoom
+ */
+
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import getImagePath from '../../services/getImage';
 import '../../styles/detail_RPH.css';
 
+/**
+ * Affiche les détails d'un événement historique de l'univers du Seigneur des Anneaux
+ * Récupère les informations depuis l'API et affiche nom, description, citation, date et lieu
+ *
+ * @component
+ * @returns {JSX.Element} Page de détail de l'événement historique
+ */
 function HistoryZoom() {
   const { id } = useParams();
   const [history, setHistory] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  /**
+   * Effet pour récupérer les détails de l'événement historique au montage
+   * Utilise l'ID récupéré depuis les paramètres d'URL
+   */
   useEffect(() => {
     const fetchData = async () => {
       try {

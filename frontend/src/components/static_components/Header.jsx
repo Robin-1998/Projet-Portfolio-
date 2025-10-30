@@ -1,3 +1,18 @@
+/**
+ * Composant d'en-tête avec logo, titre et authentification
+ * @module Header
+ */
+
+/**
+ * Affiche l'en-tête du site avec logo, titre et bouton de connexion/déconnexion
+ * Gère l'état de connexion et la déconnexion de l'utilisateur
+ *
+ * @component
+ * @param {Object} props
+ * @param {boolean} props.menuOpen - État d'ouverture du menu
+ * @returns {JSX.Element} En-tête du site
+ */
+
 import React, { useEffect, useState } from 'react';
 import logoArbre from '../../assets/logo_arbre.png';
 import { Link, useNavigate} from 'react-router-dom';
@@ -7,13 +22,13 @@ function Header({ menuOpen }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-  // 🔹 Vérifie au chargement si un token existe déjà
+  // Vérifie au chargement si un token existe déjà
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsLoggedIn(!!token);
   }, []);
 
-  // 🔹 Fonction de déconnexion
+  // Fonction de déconnexion
   const handleLogout = () => {
     localStorage.removeItem('token'); // Supprime le token du stockage local
     setIsLoggedIn(false);             // Met à jour l'état
@@ -45,7 +60,8 @@ function Header({ menuOpen }) {
           <button>🔍</button>
         </div>
         */}
-      {/* 🔹 Si connecté → bouton Déconnexion, sinon → lien vers /login */}
+
+      {/* Si connecté → bouton Déconnexion, sinon → lien vers /login */}
       {isLoggedIn ? (
       <button className="login-bouton" onClick={handleLogout}>
         Déconnexion

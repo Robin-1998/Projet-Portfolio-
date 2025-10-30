@@ -2,22 +2,23 @@ import os
 from dotenv import load_dotenv
 from datetime import timedelta
 
-# Déterminer l'environnement courant
+# Déterminer l'environnement courant (development, testing, production)
 ENV = os.getenv("FLASK_ENV", "development")
 
-# Charger le bon fichier .env
+# Charger le fichier .env correspondant à l'environnement
 if ENV == "testing":
-    load_dotenv(".env.test")
+    load_dotenv(".env.test") # variables spécifiques aux tests
 else:
-    load_dotenv(".env")
+    load_dotenv(".env")      # variables standard pour dev ou prod
 
+# Répertoire de base du projet
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config:
     """Configuration de base commune à tous les environnements."""
 
-    # Clé secrète obligatoire
+    # Clé secrète Flask (nécessaire pour sessions et JWT)
     SECRET_KEY = os.getenv("SECRET_KEY")
     if not SECRET_KEY:
         raise ValueError("La variable d'environnement SECRET_KEY doit être définie !")
@@ -25,10 +26,10 @@ class Config:
     # SQLAlchemy
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    # UTF-8 pour JSON
+    # UTF-8 pour JSON (évite les caractères bizarres)
     JSON_AS_ASCII = False
 
-    # JWT
+    # JWT (durée de validité du token)
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(days=365)
 
     # Pagination (optionnelle)
@@ -65,7 +66,7 @@ class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL")
 
 
-# Dictionnaire global pour Flask
+# Dictionnaire de configuration global pour Flask
 config = {
     "development": DevelopmentConfig,
     "testing": TestingConfig,

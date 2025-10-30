@@ -1,5 +1,14 @@
+/**
+ * @module Home
+ * Page d’accueil affichant le contenu principal.
+ */
+
 import BodyPage from '../components/static_components/Body_page';
 
+/**
+ * Composant de la page d’accueil.
+ * @returns {JSX.Element} Conteneur affichant le contenu principal de la page d’accueil.
+ */
 function Home() {
   return (
     <BodyPage>

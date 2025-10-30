@@ -7,9 +7,17 @@ from backend.app.persistence.review_repository import ReviewRepository
 from backend.app.persistence.image_post_repository import ImagePostRepository
 import base64
 
-# from app.persistence.repository import SQLAlchemyRepository
-
 class PortfolioFacade:
+    """
+    Façade principale de l'application 
+
+    Cette classe centralise l'accès aux repositories spécifiques
+    et fournit des méthodes de service pour la logique métier
+    (création, mise à jour, suppression, authentification, etc.).
+    
+    Chaque méthode applique les règles de validation et gère
+    les transactions avec rollback en cas d'erreur.
+    """
     def __init__(self):
         self.user_repo = UserRepository()
         self.review_repo = ReviewRepository()
@@ -18,7 +26,12 @@ class PortfolioFacade:
 # -------------------- Authentification de l'utilisateur --------------------
 
     def create_user(self, user_data):
-        """ Création du compte utilisateur """
+        """
+        Crée un nouvel utilisateur et le sauvegarde dans la base de données.
+        Code Erreur:
+            ValueError: Si l'email existe déjà, si le mot de passe est manquant
+                        ou si une erreur survient lors de la création.
+        """
         try:
         # Vérifie si l'email existe déjà
             existing_user = self.user_repo.get_user_by_email(user_data.get('email'))
@@ -29,7 +42,6 @@ class PortfolioFacade:
                 raise ValueError("Le mot de passe est requis pour la création de l'utilisateur.")
         # Si l'email n'existe pas, on créé un utilisateur
             user = User(**user_data)
-            # user.hash_password(user_data['password']) DOUBLON ????
             self.user_repo.add(user)
             return user
 
@@ -43,6 +55,12 @@ class PortfolioFacade:
             raise ValueError(f"Erreur lors de la création de l'utilisateur: {str(e)}")
 
     def login_user(self, email, password):
+        """
+        Authentifie un utilisateur avec son email et mot de passe.
+
+        Code Erreur:
+            ValueError: Si l'email ou le mot de passe est incorrect ou manquant.
+        """
         try:
             # Validation des paramètres
             if not email or not password:
@@ -64,7 +82,11 @@ class PortfolioFacade:
 
 
     def get_users(self, user_id):
-        """ On retourne un utilisateur par son ID """
+        """
+        On retourne un utilisateur par son ID
+        Code Erreur:
+            ValueError: Si aucun utilisateur n'est trouvé avec l'ID fourni.
+        """
         try:
             user = self.user_repo.get(user_id)
             if not user:
@@ -78,7 +100,11 @@ class PortfolioFacade:
             raise ValueError(f"Erreur lors de la récupération de l'utilisateur : {str(e)}")
 
     def get_all_user(self):
-        """ Liste tout les utilisateurs dans un format type dictionnaire """
+        """
+        Liste tout les utilisateurs dans un format type dictionnaire
+        Code Erreur:
+            ValueError: Si une erreur survient lors de la récupération.
+        """
         try:
             users = self.user_repo.get_all()
             return [user.to_dict() for user in users]
@@ -87,7 +113,11 @@ class PortfolioFacade:
             raise ValueError(f"Erreur lors de la récupération des utilisateurs : {str(e)}")
 
     def get_user_by_email(self, email):
-        """ Cherche utilsateur à partir de son email """
+        """ 
+        Récupère un utilisateur à partir de son email.
+        Code Erreur:
+            ValueError: Si l'email est vide ou aucun utilisateur n'est trouvé.
+        """
         try:
             if not email:
                 raise ValueError("L'email ne peut pas être vide.")
@@ -122,16 +152,12 @@ class PortfolioFacade:
         IMPORTANT : Ne pas inclure 'password' dans data.
         Utilisez update_user_password() pour changer le mot de passe.
 
-        Args:
-            user_id: ID de l'utilisateur
-            data (dict): Dictionnaire contenant les champs à mettre à jour
 
-        Returns:
-            User: L'objet utilisateur mis à jour
-
-        Raises:
-            ValueError: Si tentative de modification du mot de passe ou données invalides
+        Code Erreur:
+            ValueError: Si tentative de modifier le mot de passe ou si l'utilisateur n'existe pas.
+            PermissionError: Si l'utilisateur n'a pas le droit de modifier ce profil.
         """
+        # ⚠️ Remarque : le mot de passe doit toujours être mis à jour via `update_user_password`.
         try:
             # Sécurité : empêche la modification directe du mot de passe
             if 'password' in data:
@@ -182,15 +208,10 @@ class PortfolioFacade:
         """
         Met à jour le mot de passe d'un utilisateur de manière sécurisée.
 
-        Args:
-            user_id: ID de l'utilisateur
-            old_password (str): Ancien mot de passe pour vérification
-            new_password (str): Nouveau mot de passe
-
         Returns:
             User: L'objet utilisateur mis à jour
 
-        Raises:
+        Code Erreur:
             ValueError: Si l'ancien mot de passe est incorrect
         """
         try:
@@ -220,13 +241,7 @@ class PortfolioFacade:
         """
         Supprime un utilisateur (opération admin).
 
-        Args:
-            user_id: ID de l'utilisateur à supprimer
-
-        Returns:
-            bool: True si la suppression a réussi
-
-        Raises:
+        Code Erreur:
             ValueError: Si l'utilisateur n'existe pas
         """
         try:
@@ -363,40 +378,52 @@ class PortfolioFacade:
 
 # -------------------- Post_image  --------------------
     def create_image_post(self, image_post_data):
+        """
+            Crée un nouveau post image pour un utilisateur.
+            Code Erreur:
+                ValueError: si des données sont manquantes ou invalides
+        """
         try:
+            # Vérification de la présence de user_id
             user_id = image_post_data.get("user_id")
             if not user_id:
                 raise ValueError("user_id est requis")
 
-            # S'assurer que user_id est bien un int
+            # Conversion de user_id en int si nécessaire
+            # Permet d'empêcher que n'importe qu'elle valeur non valide se retrouve
+            # dans l'user_id (utile pour les INSERT dans la db)
             if not isinstance(user_id, int):
                 try:
                     user_id = int(user_id)
                 except (ValueError, TypeError):
                     raise ValueError("user_id doit être un entier valide")
 
+            # Vérification que l'utilisateur existe
             user = self.get_user_by_id(user_id)
             if not user:
                 raise ValueError("Aucun utilisateur trouvé avec cet ID")
 
             title = image_post_data.get("title")
 
-            # Vérifie s’il existe déjà un post du même titre pour cet utilisateur
+             # Vérifie l'unicité du titre pour cet utilisateur pour éviter qu'un
+             # utilisateur créé plusieurs posts avec le même titre
             existing_post = self.image_post_repo.get_by_title_and_user(title, user_id)
+            # cherche dans la base si un post existe déjà pour l'user id avec le titre
             if existing_post:
                 raise ValueError("Cette image existe déjà pour cet utilisateur")
 
-            # ✅ Décodage base64 → bytes
+            # Décodage de l'image base64 en bytes
             image_data_b64 = image_post_data.get("image_data")
             try:
                 image_data_bytes = base64.b64decode(image_data_b64)
             except Exception:
                 raise ValueError("L'image n'est pas un base64 valide")
 
-            # 🔒 Vérification finale du type
+             # Vérification que le décodage a bien produit des bytes
             if not isinstance(image_data_bytes, bytes):
                 raise ValueError("L'image doit être de type binaire (bytes)")
-            # Le modèle gère lui-même la validation complète
+            
+            # Création de l'objet ImagePost
             new_post = ImagePost(
                 title=image_post_data.get("title"),
                 description=image_post_data.get("description"),
@@ -404,6 +431,7 @@ class PortfolioFacade:
                 image_mime_type=image_post_data.get("image_mime_type"),
                 user_id=user_id
             )
+
             # Ajout via le repository (qui fait le commit)
             self.image_post_repo.add(new_post)
             return new_post
@@ -416,7 +444,7 @@ class PortfolioFacade:
             raise ValueError(f"Erreur lors de la création du post : {str(e)}")
 
     def get_post_image(self, image_post_id):
-        """ retourne une image spécifique """
+        """ Récupère un post image spécifique par son ID. """
         try:
             image = self.image_post_repo.get(image_post_id)
             if not image:
@@ -428,7 +456,7 @@ class PortfolioFacade:
             raise ValueError(f"Erreur lors de la récupération de l'image : {str(e)}")
 
     def get_all_post_images(self):
-        """Liste toutes les images postées"""
+        """ Récupère tous les posts images. """
         try:
             return self.image_post_repo.get_all()  # retourne des objets ImagePost, pas des dicts
         except Exception as e:
@@ -436,7 +464,7 @@ class PortfolioFacade:
 
 
     def get_post_images_by_user(self, user_id):
-        """Retourne toutes les images d'un utilisateur"""
+        """ Récupère tous les posts images d'un utilisateur. """
         try:
             images = self.image_post_repo.get_by_user_id(user_id)
             return images
@@ -444,24 +472,30 @@ class PortfolioFacade:
             raise ValueError(f"Erreur lors de la récupération des images : {str(e)}")
 
     def update_image_post(self, post_id, user_id, update_data):
-        """Met à jour un post image"""
+        """
+        Met à jour un post image
+        
+        Code Erreur:
+            ValueError: si le post n'existe pas ou données invalides
+            PermissionError: si l'utilisateur n'est pas le propriétaire du post
+        """
         try:
             image_post = self.image_post_repo.get(post_id)
             if not image_post:
                 raise ValueError("Image non trouvée")
 
-            # S'assurer que user_id est bien un int
+            # Conversion user_id en int si nécessaire
             if not isinstance(user_id, int):
                 try:
                     user_id = int(user_id)
                 except (ValueError, TypeError):
                     raise ValueError("user_id doit être un entier valide")
 
-            # Vérification de propriété
+            # Vérification que l'utilisateur est bien le propriétaire
             if image_post.user_id != user_id:
                 raise PermissionError("Vous n'êtes pas autorisé à modifier cette image")
 
-            # 🔁 Si l'image est mise à jour, la décoder du base64
+            # Décodage base64 si l'image est mise à jour
             if "image_data" in update_data:
                 try:
                     update_data["image_data"] = base64.b64decode(update_data["image_data"])
@@ -471,7 +505,7 @@ class PortfolioFacade:
                 if not isinstance(update_data["image_data"], bytes):
                     raise ValueError("L'image doit être de type binaire (bytes).")
 
-            # Mise à jour
+            # Mise à jour via le repository
             self.image_post_repo.update(post_id, update_data)
             updated_post = self.image_post_repo.get(post_id)
 
@@ -485,25 +519,30 @@ class PortfolioFacade:
             raise ValueError(f"Erreur lors de la mise à jour : {str(e)}")
 
     def delete_image_post(self, post_id, user_id):
-        """Supprime un post image"""
+        """
+        Supprime un post image
+        
+        Code Erreur:
+            ValueError: si le post n'existe pas
+            PermissionError: si l'utilisateur n'est pas le propriétaire
+        """
         try:
-            # Récupération via le repository
             image_post = self.image_post_repo.get(post_id)
             if not image_post:
                 raise ValueError("Image non trouvée")
 
-            # S'assurer que user_id est bien un int
+            # Conversion user_id en int si nécessaire
             if not isinstance(user_id, int):
                 try:
                     user_id = int(user_id)
                 except (ValueError, TypeError):
                     raise ValueError("user_id doit être un entier valide")
 
-            # Vérification de propriété
+            # Vérification que l'utilisateur est bien le propriétaire
             if image_post.user_id != user_id:
                 raise PermissionError("Vous n'êtes pas autorisé à supprimer cette image")
 
-            # Suppression via le repository (qui fait le commit)
+            # Suppression via le repository
             self.image_post_repo.delete(post_id)
             return True
 

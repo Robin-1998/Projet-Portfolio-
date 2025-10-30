@@ -3,6 +3,7 @@
   width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
+
 }
 
 .titre-histoire {
@@ -16,6 +17,7 @@
 	flex-wrap: wrap;
   justify-content: center;
   gap: 60px;
+  padding-bottom: 70px;
 }
 
 .character-grid h2 {

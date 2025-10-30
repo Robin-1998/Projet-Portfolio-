@@ -1,3 +1,16 @@
+"""
+Module pour la récupération des différents types de lieu
+
+Ce module définit l'ensemble des routes de l'API Flask-RESTX liées à la carte interactive.
+Il permet de récupérer les régions (polygones), les lieux (marqueurs), et leurs hiérarchies.
+Il s'agit d'endpoints en lecture seule (GET uniquement).
+
+Structure hiérarchique :
+- Régions : Zones géographiques définies par des polygones (ex: Mordor, Rohan)
+- Lieux : Points d'intérêt avec marqueurs (ex: villes, forteresses, ports)
+- Chaque entité peut avoir des enfants (sous-régions ou sous-lieux)
+"""
+
 from flask_restx import Namespace, Resource
 from backend.app.services.facade2 import PortfolioFacade
 
@@ -10,16 +23,17 @@ api = Namespace('map', description='API Carte interactive')
 
 @api.route('/regions')
 class RegionsList(Resource):
+    """Gestion de la liste complète des régions avec leur hiérarchie."""
     def get(self):
         """
-        GET /api/map/regions
         Récupère TOUTES les régions avec leur hiérarchie complète d'enfants
 
-        Retourne une liste de régions, chacune avec :
-        - id, title, type_place, description
-        - children[] : liste récursive de tous les enfants/petits-enfants
-        - region_shape : coordonnées du polygone (si c'est une région)
-        - marker_location : coordonnées du point (si c'est un lieu avec marqueur)
+        Cette méthode retourne la liste de toutes les régions géographiques
+        de la carte, incluant leurs sous-régions et lieux enfants de manière récursive.
+
+        Note:
+            La hiérarchie est récursive : chaque enfant peut lui-même avoir des enfants.
+            Les régions ont un polygon (region_shape), les lieux ont un point (marker_location).
         """
         regions_data = facade.get_all_regions_with_hierarchy()
 
@@ -32,16 +46,20 @@ class RegionsList(Resource):
 
 @api.route('/regions/<int:region_id>')
 class RegionDetail(Resource):
+    """Gestion d'une région spécifique avec sa hiérarchie."""
     def get(self, region_id):
         """
-        GET /api/map/regions/<region_id>
         Récupère UNE région spécifique avec sa hiérarchie complète
 
-        Retourne :
-        - Les infos de la région (id, title, type_place, description)
-        - children[] : tous les enfants/petits-enfants récursivement
-        - region_shape : coordonnées du polygone
-        - marker_location : null (car c'est une région)
+        Cette méthode retourne les détails d'une région particulière,
+        incluant tous ses enfants et descendants de manière récursive.
+
+        Args:
+            region_id (int): Identifiant unique de la région
+
+        Note:
+            Cette route est utile pour charger dynamiquement les détails
+            d'une région au clic sur la carte.
         """
         region_data = facade.get_region_by_id_with_hierarchy(region_id)
 
@@ -61,16 +79,20 @@ class RegionDetail(Resource):
 
 @api.route('/places/<int:place_id>')
 class PlaceDetail(Resource):
+    """Gestion d'un lieu spécifique (marqueur sur la carte)."""
     def get(self, place_id):
         """
-        GET /api/map/places/<place_id>
-        Récupère UN lieu spécifique (ville, village, etc.)
+        Récupère un lieu spécifique avec ses informations de base.
 
-        Retourne :
-        - Les infos du lieu (id, title, type_place, description)
-        - marker_location : coordonnées du point
-        - region_shape : null (car c'est un marqueur, pas une région)
-        - children[] : liste vide ou enfants si applicable
+        Cette méthode retourne les détails d'un lieu particulier
+        (ville, village, forteresse, port, etc.) avec sa position sur la carte.
+
+        Args:
+            place_id (int): Identifiant unique du lieu
+
+        Note:
+            Pour obtenir les descriptions détaillées d'un lieu, utilisez plutôt
+            l'endpoint /api/descriptions/<entity_type>/<entity_id>.
         """
         place_data = facade.get_place_by_id(place_id)
 
@@ -90,11 +112,19 @@ class PlaceDetail(Resource):
 
 @api.route('/data')
 class MapData(Resource):
+    """Gestion des données complètes pour l'initialisation de la carte."""
     def get(self):
         """
-        GET /api/map/data
-        Récupère TOUTES les données pour initialiser la carte
-        (Version légère sans détails, juste pour affichage initial)
+        Récupère toutes les données nécessaires pour initialiser la carte interactive.
+
+        Cette méthode retourne un ensemble complet mais léger de données
+        permettant d'afficher la carte initiale sans surcharger le client.
+        Version optimisée pour le premier chargement.
+
+        Note:
+            Cette route est typiquement appelée une seule fois au chargement
+            de la page pour initialiser la carte complète. Les détails
+            supplémentaires sont ensuite chargés à la demande.
         """
         map_data = facade.get_map_data()
         return {
@@ -106,14 +136,17 @@ class MapData(Resource):
 
 @api.route('/places/<int:place_id>/details')
 class PlaceDetailedInfo(Resource):
+    """
+    Gestion des informations détaillées d'un lieu
+    """
     def get(self, place_id):
         """
-        GET /api/map/places/<place_id>/details
-        Récupère les informations détaillées d'un lieu avec :
-        - Infos de base (title, description, type_place)
-        - Image principale du lieu
-        - Sections détaillées depuis entity_descriptions
-        - Détails additionnels
+        Récupère les informations complètes et détaillées d'un lieu.
+
+        Cette méthode retourne un ensemble enrichi de données sur un lieu,
+        incluant ses descriptions organisées par sections, ses métadonnées
+        (ex: titre + texte descriptif), son image principale,
+        et potentiellement sa hiérarchie d'enfants.
         """
         detailed_data = facade.get_place_detailed_info(place_id)
 

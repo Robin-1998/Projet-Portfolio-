@@ -1,17 +1,32 @@
+/**
+ * Composant de formulaire de connexion utilisateur
+ * @module FormulaireLogin
+ */
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ornement from '../../assets/ornement.PNG';
 import {useNavigate} from 'react-router-dom';
 import '../../styles/login.css';
 
-
+/**
+ * Affiche un formulaire de connexion avec gestion de l'authentification JWT
+ * Vérifie l'état de connexion au chargement et redirige après succès
+ *
+ * @component
+ * @returns {JSX.Element} Formulaire de connexion
+ */
 function FormulaireLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
-  // 🔹 Vérifie si un token est déjà présent au chargement
+  /**
+   * Vérifie si un token JWT est déjà présent dans le localStorage au montage
+   * Si présent, marque l'utilisateur comme déjà connecté
+   */
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -19,8 +34,13 @@ function FormulaireLogin() {
     }
   }, []);
 
-  const navigate = useNavigate();
-
+  /**
+   * Gère la soumission du formulaire de connexion
+   * Envoie les identifiants à l'API et stocke le token JWT en cas de succès
+   *
+   * @async
+   * @param {Event} e - Événement de soumission du formulaire
+   */
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
 
@@ -70,16 +90,19 @@ function FormulaireLogin() {
           />
         </div>
 
+        {/* Affichage du message d'erreur/succès */}
+        {message && (
+          <p className="login-message">{message}</p>
+        )}
+
         <img className="ornement" src={ornement} alt="Ornement" />
 
-        {/* 🔹 Affiche le bouton seulement si non connecté */}
+        {/* Affiche le bouton seulement si non connecté */}
         {!isLoggedIn && (
           <button type="submit" className="btn">
             Se connecter
           </button>
         )}
-
-        {message && <p>{message}</p>}
       </form>
     </div>
   );

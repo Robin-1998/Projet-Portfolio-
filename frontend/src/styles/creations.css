@@ -14,7 +14,9 @@
   background-size: 100% 100%;
   padding: 2rem;
   max-width: 25%;
-  margin-right: 20px;
+  margin-right: 1.3rem;
+  margin-left: 1.3rem;
+
 }
 
 .block_creations_right {
@@ -39,9 +41,9 @@ section p {
   color: #f5f0e6;
   font-size: 1rem;
   cursor: pointer;
-  max-width: 150px;
+  max-width: 160px;
   border-radius: 20px;
-  padding: 8px 45px;
+  padding: 8px 40px;
   border: none;
   transition: all 0.3s ease;
   font-family: 'kalamR';
@@ -131,6 +133,7 @@ h3 {
   font-size: 0.9rem;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   border: none;
+  max-width: 160px;
 }
 
 .post_disconected p,

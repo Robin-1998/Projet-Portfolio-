@@ -6,22 +6,22 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from flask_restx import Api
 from flask_migrate import Migrate
-from dotenv import load_dotenv  # 👈 on ajoute ceci
+from dotenv import load_dotenv  # 👈 pour charger les fichiers .env
 from config import config
 from flask_cors import CORS
 
 # Permet d'importer depuis la racine du projet
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
-# Initialisation des extensions
-db = SQLAlchemy()
-bcrypt = Bcrypt()
-jwt = JWTManager()
-migrate = Migrate()
+# Initialisation des extensions Flask
+db = SQLAlchemy()   # ORM SQLAlchemy
+bcrypt = Bcrypt()   # Pour le hashage des mots de passe
+jwt = JWTManager()  # Pour gérer les JWT
+migrate = Migrate() # Pour gérer les migrations de la base de données
 
 def create_app(config_name=None):
-    """Factory pour créer l'application Flask"""
-    # Déterminer l'environnement
+    """ Crée et configure l'application Flask selon l'environnement. """
+    # Déterminer l'environnement (development, testing, production)
     if config_name is None:
         config_name = os.environ.get("FLASK_ENV", "development")
 
@@ -35,9 +35,11 @@ def create_app(config_name=None):
     load_dotenv(env_path)
     # ---------------------------------
 
-    # Créer l'application Flask
+    # Création l'application Flask
     app = Flask(__name__)
-    app.url_map.strict_slashes = False
+    app.url_map.strict_slashes = False # Flask accepte les deux versions d’une URL, avec ou sans slash sur les routes
+
+    # Configuration du CORS pour autoriser le front local
     CORS(app, resources={
         r"/api/*": {
             "origins": ["http://localhost:5173", "http://127.0.0.1:5173"],
@@ -48,16 +50,16 @@ def create_app(config_name=None):
         }
     })
 
-    # Charger la configuration selon l'environnement
+    ## Charger la configuration depuis config.py
     app.config.from_object(config[config_name])
 
-    # Initialiser les extensions
+    # Initialisation des extensions avec l'app
     db.init_app(app)
     bcrypt.init_app(app)
     jwt.init_app(app)
     migrate.init_app(app, db)
 
-    # Importer les namespaces APRÈS l'initialisation des extensions
+    # Importer les namespaces RESTX APRÈS init des extensions
     from backend.app.api.V1.api_users import api as users_ns
     from backend.app.api.V1.api_auth import api as auth_ns
     from backend.app.api.V1.api_admin import api as admin_ns
@@ -80,7 +82,7 @@ def create_app(config_name=None):
         doc="/api/v1/"
     )
 
-    # Ajouter les namespaces
+    # Ajouter tous les namespaces à l'API avec leur chemin
     api.add_namespace(users_ns, path="/api/v1/users")
     api.add_namespace(auth_ns, path="/api/v1/auth")
     api.add_namespace(admin_ns, path="/api/v1/admin")

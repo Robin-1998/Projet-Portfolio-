@@ -1,25 +1,39 @@
+"""
+Ce module définit le `UserRepository`, responsable de la gestion
+des entités `User` (utilisateurs).
+
+Il hérite de `SQLAlchemyRepository`, qui fournit les opérations CRUD de base,
+et ajoute des méthodes spécifiques pour :
+    - Récupérer un utilisateur par email,
+    - Vérifier l'existence d'un email,
+    - Récupérer tous les administrateurs,
+    - Récupérer tous les utilisateurs réguliers.
+
+Le repository isole la logique d'accès aux données utilisateur,
+afin que le reste de l'application n'interagisse jamais directement avec SQLAlchemy.
+"""
 from backend.app.models.user import User
 from backend.app.persistence.repository import SQLAlchemyRepository
 
 class UserRepository(SQLAlchemyRepository):
-    """Repository spécifique pour les utilisateurs."""
+    """
+    Repository spécifique pour les utilisateurs.
+    
+    Fournit des méthodes de récupération ciblées pour les entités User :
+    - par email,
+    - par type d'utilisateur (admin ou régulier).
+    """
     def __init__(self):
-        """ Initializes the UserRepository with the User model."""
+        """ Initialise le repository avec le modèle `User`."""
         super().__init__(User)
 
     def get_user_by_email(self, email):
-        """ Retrieve a user instance by their email address."""
+        """ Récupère un utilisateur par son adresse email."""
         return self.model.query.filter_by(email=email).first()
     
     def email_exists(self, email):
         """
         Vérifie si un email existe déjà dans la base de données.
-        
-        Args:
-            email (str): L'adresse email à vérifier
-        
-        Returns:
-            bool: True si l'email existe, False sinon
         """
         return self.get_user_by_email(email) is not None
 

@@ -13,9 +13,9 @@
 function MentionsLegales() {
   return (
     <div className="mention">
-      <h1>Mentions légales</h1>
+      <h1 className="titre-mention">Mentions légales</h1>
 
-      <h2>Éditeur du site</h2>
+      <h2 className="titre2-mention">Éditeur du site</h2>
       <p>
         Nom : Thérèse-Marie Lefoulon et Robin David
         <br />

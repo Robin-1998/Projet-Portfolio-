@@ -1,7 +1,7 @@
 /* Détail des page Race - Personnage - histoire */
 .detail-page-container {
-  padding-top: 20px;      /* ✅ Espace avec le header */
-  padding-bottom: 80px;   /* ✅ Espace avec le footer */
+  padding-top: 20px;      /* Espace avec le header */
+  padding-bottom: 80px;   /* Espace avec le footer */
 }
 
 .bloc-info {
@@ -13,8 +13,10 @@
   padding-right: 4rem ;
   display: flex;
   justify-content: space-between;
-  margin-top: 55px;
-  margin-right: 20px;
+  margin-top: 3.44rem;
+  margin-right: 1.3rem;
+  margin-left: 1.3rem;
+  text-align: justify;
 }
 
 .bloc_info_zoom_left {

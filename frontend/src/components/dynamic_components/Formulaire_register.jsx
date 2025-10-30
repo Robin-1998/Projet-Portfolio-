@@ -90,10 +90,15 @@ function FormulaireRegister() {
           required
         />
       </div>
+
+      {/* Affichage du message d'erreur/succès */}
+      {message && (
+        <p className="login-message">{message}</p>
+      )}
+
       <button type="submit" className="btn">
         Créer le compte
       </button>
-      {message && <p>{message}</p>}
     </form>
   );
 }

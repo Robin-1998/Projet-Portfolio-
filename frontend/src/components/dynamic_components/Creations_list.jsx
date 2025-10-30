@@ -169,6 +169,12 @@ function CreationsList() {
                 />
               </label>
 
+              {file && (
+                <p className="file-name-display">
+                  Fichier sélectionné : {file.name}
+                </p>
+              )}
+
               <button type="submit" className='button_creation'>Envoyer</button>
 
               {message && <p>{message}</p>}

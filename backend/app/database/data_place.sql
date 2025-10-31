@@ -1,12 +1,38 @@
 -- Image Place-détail
-UPDATE places
-SET image_url = '/place/rohan.png'
-WHERE title = 'Rohan';
+UPDATE places SET image_url = '/place/rohan.png' WHERE title = 'Rohan';
+UPDATE places SET image_url = '/place/minas-tirith.png' WHERE title = 'Minas Tirith';
+UPDATE places SET image_url = '/place/champ_de_Pelennor.png' WHERE title = 'Champ de Pelennor';
+UPDATE places SET image_url = '/place/comte.png' WHERE title = 'La Comté';
+UPDATE places SET image_url = '/place/Edoras.png' WHERE title = 'Edoras';
+UPDATE places SET image_url = '/place/erebor.png' WHERE title = 'Erebor (Montagne Solitaire)';
+UPDATE places SET image_url = '/place/Fangorn.png' WHERE title = 'Fangorn';
+UPDATE places SET image_url = '/place/Fondcombe.png' WHERE title = 'Fondcombe';
+UPDATE places SET image_url = '/place/Gouffre_de_helm.png' WHERE title = 'Gouffre de Helm';
+UPDATE places SET image_url = '/place/Isengard.png' WHERE title = 'Isengard';
+UPDATE places SET image_url = '/place/moria.png' WHERE title = 'Moria';
+UPDATE places SET image_url = '/place/Lothlórien.png' WHERE title = 'Lothlórien';
+UPDATE places SET image_url = '/place/marais_des_morts.png' WHERE title = 'Marais des Morts';
+UPDATE places SET image_url = '/place/montagne_du_destin.png' WHERE title = 'Montagne du Destin (Orodruin)';
+UPDATE places SET image_url = '/place/Mordor.png' WHERE title = 'Mordor';
+UPDATE places SET image_url = '/place/osgiliath.png' WHERE title = 'Osgiliath';
+UPDATE places SET image_url = '/place/Gondor.png' WHERE title = 'Gondor';
+UPDATE places SET image_url = '/place/Eriador.png' WHERE title = 'Eriador';
+UPDATE places SET image_url = '/place/Rhovanion.png' WHERE title = 'Rhovanion';
+UPDATE places SET image_url = '/place/Passage_des_Morts.png' WHERE title = 'Passage des Morts';
+UPDATE places SET image_url = '/place/Barad-dûr.png' WHERE title = 'Barad-dûr';
+UPDATE places SET image_url = '/place/Cirith_Ungol.png' WHERE title = 'Cirith Ungol';
+UPDATE places SET image_url = '/place/Hobbitebourg.png' WHERE title = 'Hobbitebourg';
+UPDATE places SET image_url = '/place/Cul_de_sac.png' WHERE title = 'Cul-de-Sac';
+UPDATE places SET image_url = '/place/Bree.png' WHERE title = 'Bree';
+UPDATE places SET image_url = '/place/Havre_gris.png' WHERE title = 'Havre Gris';
+UPDATE places SET image_url = '/place/Amon_Sûl.png' WHERE title = 'Amon Sûl';
+UPDATE places SET image_url = '/place/Fourré_aux_Trolls.png' WHERE title = 'Fourré aux Trolls';
+UPDATE places SET image_url = '/place/Col_de_Caradhras.png' WHERE title = 'Col de Caradhras';
+UPDATE places SET image_url = '/place/Champs_aux_Iris.png' WHERE title = 'Champs aux Iris';
+UPDATE places SET image_url = '/place/Caras_Galadhon.png' WHERE title = 'Caras Galadhon';
+UPDATE places SET image_url = '/place/statue.png' WHERE title = 'Statues des Rois d''Argonath';
+UPDATE places SET image_url = '/place/Emyn_Muil.png' WHERE title = 'Emyn Muil';
 
-
-UPDATE places
-SET image_url = '/place/minas-tirith.png'
-WHERE title = 'Minas Tirith';
 
 -- Insertion des descriptions de personnages et races
 INSERT INTO descriptions (entity_type, entity_id, title, content, order_index) VALUES

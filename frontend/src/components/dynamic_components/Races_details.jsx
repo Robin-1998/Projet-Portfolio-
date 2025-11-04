@@ -44,7 +44,6 @@ function RaceDetail() {
     <div className="bloc-info">
       <div className='bloc_info_zoom_left'>
         <h2>{race.name}</h2>
-        <p className="citation">"{race.citation}"</p>
         <p>{race.description}</p>
         <p className='para_justify'></p>
       </div>

@@ -18,7 +18,7 @@ function MentionsSource() {
 
       <ul>
         <li>
-          Images et illustrations : microsoft Copilot, ou images libres de
+          Images et illustrations : Microsoft Copilot, ou images libres de
           droits mentionnées individuellement.
         </li>
         <li>
@@ -29,9 +29,15 @@ function MentionsSource() {
           Bibliothèques et frameworks : React, React Router, Leaflet, etc.
         </li>
         <li>
-          Documentation et tutoriels : sites officiels des technologies
+          Documentation et tutoriels : Sites officiels des technologies
           utilisées.
         </li>
+		<li>Intelligence artificielle : Claude et ChatGPT.</li>
+		<li>Aide d'autres étudiants d'holberton : Merci Mr VANDEVILLE.</li>
+		<li> Générération de diagramme : Drawio et dbdiagram</li>
+		<li>Visual Studio Code: Editeur de code.</li>
+		<li>Réalisation des tests : Postman.</li>
+		<li>Base de donnée : PostgreSQL.</li>
       </ul>
 
       <p>

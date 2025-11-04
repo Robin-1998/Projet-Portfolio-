@@ -4,12 +4,11 @@ email-validator
 flask-sqlalchemy
 flask-bcrypt
 flask-jwt-extended
-PyJWT==2.8.0
-psycopg2-binary
-python-dotenv
-geoalchemy2
-Shapely
-flask-Migrate
+PyJWT==2.8.0 # JSON WEB TOKEN
+psycopg2-binary # bibliothèque python qui sert à se connecter à une base de donnée POSTGRESQL (c'est un version pré-compilé)
+python-dotenv # Permet de charger automatiquement les variables d'environnement
+geoalchemy2 # ORM python qui permet de gérer des données géospatiales directement dans une db (via postgresql)
+Shapely #utilisé seulement pour les tests
 pytest
 pytest-mock
 flask_cors

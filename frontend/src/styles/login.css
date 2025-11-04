@@ -123,3 +123,11 @@
   /* Pour les erreurs */
   color: #d32f2f;
 }
+
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+	gap: 50px;
+	margin-top: 10px;
+  }
+}

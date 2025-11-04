@@ -1,7 +1,9 @@
 -- Image Place-détail
 UPDATE places SET image_url = '/place/rohan.png' WHERE title = 'Rohan';
 UPDATE places SET image_url = '/place/minas-tirith.png' WHERE title = 'Minas Tirith';
-UPDATE places SET image_url = '/place/champ_de_Pelennor.png' WHERE title = 'Champ de Pelennor';
+UPDATE places SET image_url = '/place/champ_de_pelennor.png' WHERE title = 'Champ de Pelennor';
+UPDATE places SET image_url = 'place/foret_noire.png' WHERE title = 'Forêt Noire';
+UPDATE places SET image_url = 'place/minas_morgul.png' WHERE title = 'Minas Morgul';
 UPDATE places SET image_url = '/place/comte.png' WHERE title = 'La Comté';
 UPDATE places SET image_url = '/place/Edoras.png' WHERE title = 'Edoras';
 UPDATE places SET image_url = '/place/erebor.png' WHERE title = 'Erebor (Montagne Solitaire)';

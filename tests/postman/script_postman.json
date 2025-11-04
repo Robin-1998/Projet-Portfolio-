@@ -1,0 +1,1565 @@
+{
+  "info": {
+    "name": "Portfolio API - Base",
+    "_postman_id": "Portfolio-api-base-collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:5000/api/v1"
+    },
+    {
+      "key": "user_id",
+      "value": ""
+    },
+    {
+      "key": "access_token_user",
+      "value": ""
+    },
+    {
+      "key": "access_token_admin",
+      "value": ""
+    },
+    {
+      "key": "admin_user_id",
+      "value": ""
+    },
+	{
+      "key": "region_id",
+      "value": ""
+    },
+    {
+      "key": "place_id",
+      "value": ""
+    },
+    {
+      "key": "image_id",
+      "value": ""
+    },
+    {
+      "key": "review_id",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "1. UTILISATEURS",
+      "item": [
+        {
+          "name": "Créer un utilisateur",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Alice\",\n  \"last_name\": \"Dupont\",\n  \"email\": \"alice.dupont@gmail.com\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                ""
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 201 : utilisateur créé', function () { pm.response.to.have.status(201); });",
+                  "const jsonData = pm.response.json();",
+                  "pm.environment.set('user_id', jsonData.id);",
+                  "pm.test('L'ID utilisateur est bien présent', function () { pm.expect(jsonData).to.have.property('id'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Lister tous les utilisateurs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                ""
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 : liste récupérée', function () { pm.response.to.have.status(200); });",
+                  "const data = pm.response.json();",
+                  "pm.expect(data).to.be.an('array');"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Récupérer un utilisateur par ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/{{user_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "{{user_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 : utilisateur trouvé', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.expect(json).to.have.property('email');"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Mettre à jour son propre utilisateur",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token_user}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Alice\",\n  \"last_name\": \"Modifiée\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/{{user_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "{{user_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 : utilisateur mis à jour', function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2. AUTHENTIFICATION",
+      "item": [
+        {
+          "name": "Connexion utilisateur",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"10616@holbertonstudents.com\",\n  \"password\": \"Boromir2978!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 : connexion réussie', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.environment.set('access_token_user', json.access_token);",
+                  "pm.test('Le token est bien présent', function () { pm.expect(json).to.have.property('access_token'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Route protégée (JWT)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token_user}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/protected",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "protected"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 : accès autorisé', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.expect(json).to.have.property('message');"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "3. ADMINISTRATION",
+      "item": [
+        {
+          "name": "Créer un utilisateur admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Admin\",\n  \"last_name\": \"Root\",\n  \"email\": \"admin@gmail.com\",\n  \"password\": \"AdminPass123!\",\n  \"is_admin\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                ""
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 201 : admin créé', function () { pm.response.to.have.status(201); });",
+                  "const json = pm.response.json();",
+                  "pm.environment.set('admin_user_id', json.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Connexion admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@gmail.com\",\n  \"password\": \"AdminPass123!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 : connexion admin OK', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.environment.set('access_token_admin', json.access_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin crée un utilisateur",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token_admin}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Test\",\n  \"last_name\": \"UserAdmin\",\n  \"email\": \"test.useradmin@gmail.com\",\n  \"password\": \"User123!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/users/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "users",
+                ""
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 201 : utilisateur créé par admin', function () { pm.response.to.have.status(201); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "4. RESSOURCES LECTURE / RECHERCHE",
+      "item": [
+        {
+          "name": "Recherche globale",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/search?q=test",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "test"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 : recherche effectuée', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.expect(json).to.be.an('array');"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Lister toutes les races",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/races/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "races",
+                ""
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 : races récupérées', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.expect(json).to.be.an('array');",
+                  "if (json.length > 0) { pm.environment.set('race_id', json[0].id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Récupérer une race par ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/races/{{race_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "races",
+                "{{race_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 ou 404 : détail race', function () { pm.expect(pm.response.code).to.be.oneOf([200, 404]); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Lister toutes les histoires",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/histories/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "histories",
+                ""
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 : histoires récupérées', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.expect(json).to.be.an('array');",
+                  "if (json.length > 0) { pm.environment.set('history_id', json[0].id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Récupérer une histoire par ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/histories/{{history_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "histories",
+                "{{history_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 ou 404 : détail histoire', function () { pm.expect(pm.response.code).to.be.oneOf([200, 404]); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Lister tous les personnages",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/characters/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "characters",
+                ""
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 : personnages récupérés', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.expect(json).to.be.an('array');",
+                  "if (json.length > 0) { pm.environment.set('character_id', json[0].id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Récupérer un personnage par ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/characters/{{character_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "characters",
+                "{{character_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 ou 404 : détail personnage', function () { pm.expect(pm.response.code).to.be.oneOf([200, 404]); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+	    {
+      "name": "5. MAP - Carte interactive",
+      "item": [
+        {
+          "name": "Lister toutes les régions ✅",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/map/regions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "map",
+                "regions"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 : régions récupérées', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.expect(json).to.have.property('success', true);",
+                  "pm.expect(json).to.have.property('data');",
+                  "if (json.data && json.data.length > 0) { pm.environment.set('region_id', json.data[0].id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Récupérer une région ✅",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/map/regions/{{region_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "map",
+                "regions",
+                "{{region_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 : région trouvée', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.expect(json).to.have.property('success', true);",
+                  "pm.expect(json.data).to.have.property('id');"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Récupérer une région ❌ (ID inexistant)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/map/regions/999999",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "map",
+                "regions",
+                "999999"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 404 attendu (région non trouvée)', function () { pm.response.to.have.status(404); });",
+                  "const json = pm.response.json();",
+                  "pm.expect(json).to.have.property('success', false);",
+                  "pm.expect(json).to.have.property('error');"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Récupérer un lieu ✅",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/map/places/{{place_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "map",
+                "places",
+                "{{place_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 : lieu trouvé', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.expect(json).to.have.property('success', true);",
+                  "pm.expect(json.data).to.have.property('id');"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Récupérer un lieu ❌ (ID inexistant)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/map/places/999999",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "map",
+                "places",
+                "999999"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 404 attendu (lieu non trouvé)', function () { pm.response.to.have.status(404); });",
+                  "const json = pm.response.json();",
+                  "pm.expect(json).to.have.property('success', false);",
+                  "pm.expect(json).to.have.property('error');"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Récupérer toutes les données de la carte ✅",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/map/data",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "map",
+                "data"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 : données carte récupérées', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.expect(json).to.have.property('success', true);",
+                  "pm.expect(json).to.have.property('data');"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "6. IMAGES",
+      "item": [
+		{
+          "name": "Créer un post image",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token_user}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Mon premier post image\",\n  \"description\": \"Une belle image de test\",\n  \"image_data\": \"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==\",\n  \"image_mime_type\": \"image/png\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/images/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "images",
+                ""
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 201 : image créée', function () { pm.response.to.have.status(201); });",
+                  "const json = pm.response.json();",
+                  "pm.environment.set('image_id', json.id);",
+                  "pm.test('L\\'ID image est bien présent', function () { pm.expect(json).to.have.property('id'); });",
+                  "pm.test('Le titre est bien présent', function () { pm.expect(json).to.have.property('title'); });",
+                  "pm.test('Le message de succès est présent', function () { pm.expect(json).to.have.property('message'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Créer un post image (données manquantes) ❌",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token_user}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Titre incomplet\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/images/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "images",
+                ""
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 400 : champs requis manquants', function () { pm.response.to.have.status(400); });",
+                  "const json = pm.response.json();",
+                  "pm.test('Message d\\'erreur présent', function () { pm.expect(json).to.have.property('error'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Lister tous les posts images",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/images/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "images",
+                ""
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 : images récupérées', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('Retour est un tableau', function () { pm.expect(json).to.be.an('array'); });",
+                  "if (json.length > 0) { pm.environment.set('image_id', json[0].id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Récupérer un post image par ID ✓",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/images/{{image_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "images",
+                "{{image_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 : image trouvée', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('Les propriétés requises sont présentes', function () { pm.expect(json).to.have.property('title'); pm.expect(json).to.have.property('image_data'); pm.expect(json).to.have.property('image_mime_type'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Récupérer un post image (ID inexistant) ❌",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/images/999999",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "images",
+                "999999"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 404 : image non trouvée', function () { pm.response.to.have.status(404); });",
+                  "const json = pm.response.json();",
+                  "pm.test('Message d\\'erreur présent', function () { pm.expect(json).to.have.property('error'); });"
+                ]
+              }
+        }
+            ]
+        },
+        {
+          "name": "Mettre à jour un post image",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token_user}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Titre modifié\",\n  \"description\": \"Description modifiée\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/images/{{image_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "images",
+                "{{image_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 : image mise à jour', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('Message de succès présent', function () { pm.expect(json).to.have.property('message'); });",
+                  "pm.test('Les données mises à jour sont présentes', function () { pm.expect(json.image).to.have.property('title'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Mettre à jour un post image (non propriétaire) ❌",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token_user}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Je ne dois pas pouvoir modifier\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/images/999999",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "images",
+                "999999"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 403 ou 404', function () { pm.expect(pm.response.code).to.be.oneOf([403, 404]); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Supprimer un post image",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token_user}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/images/{{image_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "images",
+                "{{image_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 : image supprimée', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('Message de succès présent', function () { pm.expect(json).to.have.property('message'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Récupérer les posts images d'un utilisateur",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/images/users/{{user_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "images",
+                "users",
+                "{{user_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 : images utilisateur récupérées', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('Retour est un tableau', function () { pm.expect(json).to.be.an('array'); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "7. REVIEWS",
+      "item": [
+        {
+          "name": "Créer une review/commentaire",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token_user}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"image_post_id\": 1,\n  \"comment\": \"Superbe image ! J'adore la composition et les couleurs.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/reviews/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reviews",
+                ""
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 201 : review créée', function () { pm.response.to.have.status(201); });",
+                  "const json = pm.response.json();",
+                  "pm.environment.set('review_id', json.id);",
+                  "pm.test('L\\'ID review est bien présent', function () { pm.expect(json).to.have.property('id'); });",
+                  "pm.test('Le commentaire est présent', function () { pm.expect(json).to.have.property('comment'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Créer une review (image inexistante) ❌",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token_user}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"image_post_id\": 999999,\n  \"comment\": \"Commentaire sur une image inexistante\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/reviews/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reviews",
+                ""
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 404 : image non trouvée', function () { pm.response.to.have.status(404); });",
+                  "const json = pm.response.json();",
+                  "pm.test('Message d\\'erreur présent', function () { pm.expect(json).to.have.property('error'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Créer une review (double commentaire) ❌",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token_user}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"image_post_id\": 1,\n  \"comment\": \"Deuxième tentative de commentaire\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/reviews/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reviews",
+                ""
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 400 : commentaire déjà existant', function () { pm.response.to.have.status(400); });",
+                  "const json = pm.response.json();",
+                  "pm.test('Message d\\'erreur présent', function () { pm.expect(json).to.have.property('error'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Lister toutes les reviews",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reviews/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reviews",
+                ""
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 : reviews récupérées', function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Récupérer une review par ID ✓",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token_user}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reviews/{{review_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reviews",
+                "{{review_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 : review trouvée', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('Les propriétés requises sont présentes', function () { pm.expect(json).to.have.property('id'); pm.expect(json).to.have.property('comment'); pm.expect(json).to.have.property('user_id'); pm.expect(json).to.have.property('image_post_id'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Récupérer une review (ID inexistant) ❌",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token_user}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reviews/999999",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reviews",
+                "999999"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 404 : review non trouvée', function () { pm.response.to.have.status(404); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Mettre à jour une review",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token_user}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"comment\": \"Commentaire modifié - une image vraiment splendide!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/reviews/{{review_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reviews",
+                "{{review_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 : review mise à jour', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('Message de succès présent', function () { pm.expect(json).to.have.property('message'); });",
+                  "pm.test('Les données mises à jour sont présentes', function () { pm.expect(json.review).to.have.property('comment'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Mettre à jour une review (commentaire vide) ❌",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token_user}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"comment\": \"   \"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/reviews/{{review_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reviews",
+                "{{review_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 400 : commentaire vide', function () { pm.response.to.have.status(400); });",
+                  "const json = pm.response.json();",
+                  "pm.test('Message d\\'erreur présent', function () { pm.expect(json).to.have.property('error'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Supprimer une review",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token_user}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reviews/{{review_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reviews",
+                "{{review_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 : review supprimée', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('Message de succès présent', function () { pm.expect(json).to.have.property('message'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Récupérer les reviews d'un utilisateur",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token_user}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reviews/user/{{user_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reviews",
+                "user",
+                "{{user_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 ou 404 : reviews utilisateur', function () { pm.expect(pm.response.code).to.be.oneOf([200, 404]); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Récupérer les reviews d'une image",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token_user}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reviews/image/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reviews",
+                "image",
+                "1"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Statut 200 ou 404 : reviews image', function () { pm.expect(pm.response.code).to.be.oneOf([200, 404]); });",
+                  "const json = pm.response.json();",
+                  "if (pm.response.code === 200) { pm.test('Reviews est présent', function () { pm.expect(json).to.have.property('reviews'); }); }"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

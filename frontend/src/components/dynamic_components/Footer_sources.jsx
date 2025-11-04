@@ -33,7 +33,7 @@ function MentionsSource() {
           utilisées.
         </li>
 		<li>Intelligence artificielle : Claude et ChatGPT.</li>
-		<li>Aide d'autres étudiants d'holberton : Merci Mr VENDEVILLE.</li>
+		<li>Aide d'autres étudiants d'holberton : Merci Mr VANDEVILLE.</li>
 		<li> Générération de diagramme : Drawio et dbdiagram</li>
 		<li>Visual Studio Code: Editeur de code.</li>
 		<li>Réalisation des tests : Postman.</li>

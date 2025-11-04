@@ -5,7 +5,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from flask_restx import Api
-from flask_migrate import Migrate
 from dotenv import load_dotenv  # 👈 pour charger les fichiers .env
 from config import config
 from flask_cors import CORS
@@ -17,7 +16,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '.
 db = SQLAlchemy()   # ORM SQLAlchemy
 bcrypt = Bcrypt()   # Pour le hashage des mots de passe
 jwt = JWTManager()  # Pour gérer les JWT
-migrate = Migrate() # Pour gérer les migrations de la base de données
 
 def create_app(config_name=None):
     """ Crée et configure l'application Flask selon l'environnement. """
@@ -57,7 +55,6 @@ def create_app(config_name=None):
     db.init_app(app)
     bcrypt.init_app(app)
     jwt.init_app(app)
-    migrate.init_app(app, db)
 
     # Importer les namespaces RESTX APRÈS init des extensions
     from backend.app.api.V1.api_users import api as users_ns

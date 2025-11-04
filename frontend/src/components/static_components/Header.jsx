@@ -47,7 +47,7 @@ function Header({ menuOpen }) {
             />
           </Link>
         </Tooltip>
-        <h1 className="titre-site">Le Seigneur des Anneaux</h1>
+        <h1 className="titre-site">Voyage en Terre du Milieu</h1>
       </div>
 
       {/*

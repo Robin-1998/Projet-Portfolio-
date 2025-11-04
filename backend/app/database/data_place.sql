@@ -36,11 +36,7 @@ UPDATE places SET image_url = '/place/statue.png' WHERE title = 'Statues des Roi
 UPDATE places SET image_url = '/place/Emyn_Muil.png' WHERE title = 'Emyn Muil';
 
 
--- Insertion des descriptions de personnages et races
-INSERT INTO descriptions (entity_type, entity_id, title, content, order_index) VALUES
-('character', 1, 'Apparence', 'Grand, cheveux argentés', 1),
-('character', 1, 'Histoire', 'Né dans les montagnes du Nord', 2),
-('race', 2, 'Origine', 'Peuple ancien du désert', 1);
+-- Insertion des lieux
 
 -- ROHAN
 INSERT INTO descriptions (entity_type, entity_id, title, content, order_index) VALUES

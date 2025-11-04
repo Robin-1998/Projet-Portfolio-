@@ -95,7 +95,7 @@ a:hover {
   color: #403221;
   padding-bottom: 60px;
   padding-top: 3.2rem;
-  min-height: calc(100vh - 120px);
+  height: auto;
   flex: 1;
 }
 
@@ -460,9 +460,7 @@ footer nav ul {
     font-size: 0.85rem;
   }
 
-  .contenu-principal {
-    padding-top: 5.5rem;
-  }
+
 }
 
 /* ==========================================

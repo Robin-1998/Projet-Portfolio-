@@ -47,7 +47,6 @@ const Map2 = () => {
   const [iconSize, setIconSize] = useState(30);       // Taille des icônes des marqueurs (adaptative)
 
   // États pour la modal de détails
-  const [selectedPlace, setSelectedPlace] = useState(null);
   const [detailedInfo, setDetailedInfo] = useState(null);
   const [loadingDetails, setLoadingDetails] = useState(false);
 

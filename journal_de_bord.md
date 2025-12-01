@@ -193,3 +193,9 @@ Mise en place des bases de données locales dédiées pour Robin & Timi
 - Page styilisé de l'image post presque finalisé
 - Début du responsive
 - Finalisation du style detail place
+
+## 27/11
+Modification de la base de donnée pour facilité acru
+
+## 01/12
+Finalisation des modifications des tables et des inserts sur la db pour utilisation plus simple et compréhensible

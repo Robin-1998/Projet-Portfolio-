@@ -194,8 +194,18 @@ Mise en place des bases de données locales dédiées pour Robin & Timi
 - Début du responsive
 - Finalisation du style detail place
 
+Journal de Bord - Robin Solo
+
 ## 27/11
 Modification de la base de donnée pour facilité acru
 
 ## 01/12
 Finalisation des modifications des tables et des inserts sur la db pour utilisation plus simple et compréhensible
+
+## 02/12
+Rédaction du dossier de Projet RNCP
+Finalisation de la page de garde + introduction et contexte du projet 
+
+## 03/12
+Modèle métier modifié par rapport aux changements de la base de donnée
+

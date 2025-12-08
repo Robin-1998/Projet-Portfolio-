@@ -18,17 +18,15 @@ class Character(BaseModel):
 
     __tablename__ = "characters"
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    birth_date = db.Column(db.Integer, nullable=True)
-    death_date = db.Column(db.Integer, nullable=True)
+    name = db.Column(db.String(100), nullable=False, unique=True)
+    birth_date = db.Column(db.SmallInteger, nullable=True)
+    death_date = db.Column(db.SmallInteger, nullable=True)
     era_birth = db.Column(db.String(25), nullable=False)
     era_death = db.Column(db.String(25), nullable=True)
-    gender = db.Column(db.String(10), nullable=True)
-    profession = db.Column(db.String(100), nullable=True)
-    description = db.Column(db.Text, nullable=True)
+    gender = db.Column(db.String(10), nullable=False)
+    profession = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text, nullable=False)
     citation = db.Column(db.String(400))
-
 
     race_id = db.Column(db.BigInteger, db.ForeignKey('races.id'))
     # Relation ORM vers la classe Race

@@ -54,7 +54,7 @@ class MapMarker(BaseModel):
 
     __tablename__ = "map_marker"
 
-    name = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(100), nullable=False, unique=True)
 
     # Coordonnées géographiques (PostGIS POINT)
     # SRID 0 utilisé ici pour un système de coordonnées arbitraire (peut être modifié)

@@ -32,7 +32,7 @@ class PlaceMap(BaseModel):
     """
     __tablename__ = "places"
 
-    title = db.Column(db.String(200), nullable=False)
+    title = db.Column(db.String(200), nullable=False, unique=True)
     type_place = db.Column(
         db.Enum(
             'region',

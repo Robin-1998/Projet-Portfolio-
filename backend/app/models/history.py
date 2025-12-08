@@ -15,14 +15,18 @@ class History(BaseModel):
 
     __tablename__ = "history"
 
-    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    start_year = db.Column(db.Integer, nullable=True)
-    end_year = db.Column(db.Integer, nullable=True)
+    start_year = db.Column(db.SmallInteger, nullable=True)
+    end_year = db.Column(db.SmallInteger, nullable=True)
     era = db.Column(db.String(25), nullable=True)
     citation = db.Column(db.String(400))
 
+    place_id = db.Column(db.BigInteger, db.ForeignKey('places.id'))
+    relation_type_id = db.Column(db.BigInteger, db.ForeignKey('relation_types.id'))
+
+    place = db.relationship("Place", back_populates="histories")
+    relation_type = db.relationship("RelationType", back_populates="histories")
 
     def to_dict(self):
         return {

@@ -29,7 +29,7 @@ class MapRegion(BaseModel):
     """
     __tablename__ = "map_region"
 
-    name = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(100), nullable=False, unique=True)
 
     # Forme géographique de la région (polygone PostGIS)
     shape_data = db.Column(Geometry('POLYGON', srid=0), nullable=False)

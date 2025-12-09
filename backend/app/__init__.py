@@ -65,7 +65,6 @@ def create_app(config_name=None):
     from backend.app.api.V1.api_characters import api as characters_ns
     from backend.app.api.V1.api_histories import api as histories_ns
     from backend.app.api.V1.api_image_post import api as image_post_ns
-    from backend.app.api.V1.api_search import api as search_ns
     from backend.app.api.V1.api_map_data import api as map_ns
     from backend.app.api.V1.api_description import api as description_ns
     from backend.app.models.relation_type import RelationType
@@ -87,7 +86,6 @@ def create_app(config_name=None):
     api.add_namespace(characters_ns, path="/api/v1/characters")
     api.add_namespace(histories_ns, path="/api/v1/histories")
     api.add_namespace(review_ns, path="/api/v1/reviews")
-    api.add_namespace(search_ns, path="/api/v1/search")
     api.add_namespace(image_post_ns, path="/api/v1/images")
     api.add_namespace(map_ns, path="/api/v1/map")
     api.add_namespace(description_ns, path="/api/v1/descriptions")

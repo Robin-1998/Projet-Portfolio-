@@ -209,3 +209,11 @@ Finalisation de la page de garde + introduction et contexte du projet
 ## 03/12
 Modèle métier modifié par rapport aux changements de la base de donnée
 
+## 08/12
+Finalisation des modèles corrigés par rapport à la nouvelle base de donnée
+
+## 09/12
+- Finalisation des façades notamment pour la partie image_post qui sont gérés par URL
+- Correctif Repository
+- Commencement des modifs API sur le post d'image en supprimant la base 64
+- Se renseigner sur le token dans le cookie

@@ -29,7 +29,7 @@ class UserRepository(SQLAlchemyRepository):
 
     def get_user_by_email(self, email):
         """ Récupère un utilisateur par son adresse email."""
-        return self.model.query.filter_by(email=email).first()
+        return self.get_by_attribute("email", email)
     
     def email_exists(self, email):
         """

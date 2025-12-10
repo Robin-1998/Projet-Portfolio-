@@ -50,17 +50,6 @@ function Header({ menuOpen }) {
         <h1 className="titre-site">Voyage en Terre du Milieu</h1>
       </div>
 
-      {/*
-      <div className="right-side">
-        <div className="search-bar">
-          <input
-            type="text"
-            placeholder="Rechercher un lieu, un personnage..."
-          />
-          <button>🔍</button>
-        </div>
-        */}
-
       {/* Si connecté → bouton Déconnexion, sinon → lien vers /login */}
       {isLoggedIn ? (
       <button className="login-bouton" onClick={handleLogout}>

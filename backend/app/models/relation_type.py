@@ -21,6 +21,9 @@ class RelationType(BaseModel):
 
     name = db.Column(db.String(50), nullable=False, unique=True)
 
+    histories = db.relationship("History", back_populates="relation_type", lazy='select')
+
+
     @validates('name')
     def validate_text(self, _key, name):
         """ Vérifier que le texte est une chaîne non vide d'une longueur maximale de 50 caractères. """

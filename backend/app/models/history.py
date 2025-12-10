@@ -25,7 +25,7 @@ class History(BaseModel):
     place_id = db.Column(db.BigInteger, db.ForeignKey('places.id'))
     relation_type_id = db.Column(db.BigInteger, db.ForeignKey('relation_types.id'))
 
-    place = db.relationship("Place", back_populates="histories")
+    place = db.relationship("PlaceMap", back_populates="histories")
     relation_type = db.relationship("RelationType", back_populates="histories")
 
     def to_dict(self):

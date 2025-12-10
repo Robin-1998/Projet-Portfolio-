@@ -5,8 +5,7 @@ permettant aux admin seulement de gérer les utilisateurs de l'appli
 (supprimer un user / mettre à jour le profil d'un utilisateur 
 / créer un nouvel utilisateur admin)
 
-Note du 29/10/2025 : le côté Admin n'a pas encore été implémenté sur le front,
-il sera fait pour le RNCP
+Note du 29/10/2025 : le côté Admin n'a pas encore été implémenté sur le front
 """
 from flask_restx import Namespace, Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity

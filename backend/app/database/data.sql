@@ -436,16 +436,3 @@ INSERT INTO map_marker (name, location, type, place_id)
 VALUES
 ('Passage des Morts', ST_GeomFromGeoJSON('{"type":"Point","coordinates":[2688,2447]}'), 'chemin'::marker_type, (SELECT id FROM places WHERE title='Passage des Morts'))
 ON CONFLICT (name) DO NOTHING;
-
--- Image-Post
-INSERT INTO image_post (title, description, image_url, image_mime_type, user_id)
-VALUES
-('Pendentif d''Arwen', 'Pendentif d''Arwen, en contreplaqué, feutre acrylique', 'collier_arwen/png', 'image/png', (SELECT id FROM users WHERE email='10616@holbertonstudents.com'));
-
--- Reviews
-INSERT INTO reviews (comment, user_id, image_post_id)
-VALUES (
-  'Jolie travail !',
-  (SELECT id FROM users WHERE email='10616@holbertonstudents.com'),
-  (SELECT id FROM image_post WHERE title='Pendentif d''Arwen' LIMIT 1)
-);

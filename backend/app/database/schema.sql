@@ -22,7 +22,7 @@ CREATE TABLE image_post (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     title VARCHAR(200) NOT NULL,
     description VARCHAR(400) NOT NULL,
-    image_url VARCHAR(500) NOT NULL,
+    image_data BYTEA NOT NULL,
     image_mime_type VARCHAR(50) NOT NULL,
     user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE
 );

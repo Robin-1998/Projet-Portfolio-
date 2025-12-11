@@ -205,13 +205,6 @@ INSERT INTO descriptions (entity_type, entity_id, title, content, order_index) V
 ('montagne', 15, 'Symbolisme', 'La Montagne du Destin incarne la fatalité. C’est là que le destin de la Terre du Milieu s’est joué, reliant les débuts du mal à sa fin. Elle représente la tentation du pouvoir absolu et le prix du courage nécessaire pour y renoncer.', 3),
 ('montagne', 15, 'Environnement', 'Autour du volcan s’étendent des champs de lave noire, craquelés et brûlants. L’air y est irrespirable, saturé de soufre et de cendres. Aucun être vivant ne peut y subsister longtemps, sauf les créatures forgées par Sauron.', 4);
 
--- Amon Sûl
-INSERT INTO descriptions (entity_type, entity_id, title, content, order_index) VALUES
-('ruine', 24, 'Géographie', 'Amon Sûl, ou Mont Venteux, est une colline isolée des Hauts des Galgals, surplombant les terres d’Eriador. Le sommet, souvent balayé par les vents, offre une vue panoramique sur la Grande Route de l’Est et les Monts Brumeux.', 1),
-('ruine', 24, 'Histoire', 'Autrefois, Amon Sûl abritait une tour de garde du royaume d’Arnor, contenant l’un des palantíri. Elle fut détruite lors des guerres contre Angmar. Les ruines subsistantes témoignent encore de son importance stratégique et spirituelle.', 2),
-('ruine', 24, 'Architecture et vestiges', 'Les fondations circulaires et les fragments de pierre blanche marquent encore l’ancien emplacement de la tour. Des escaliers taillés dans la roche mènent aux restes des salles effondrées. Par temps clair, on distingue jusqu’à Bree et la vallée de la Bruinen.', 3),
-('ruine', 24, 'Symbolisme', 'Amon Sûl évoque la vigilance et la chute des royaumes anciens. C’est un lieu de mémoire, où souffle encore l’écho du passé des Dúnedain.', 4);
-
 -- Minas Morgul
 INSERT INTO descriptions (entity_type, entity_id, title, content, order_index) VALUES
 ('forteresse', 9, 'Architecture', 'Minas Morgul, anciennement Minas Ithil, est une forteresse aux murailles blanches devenues vert pâle sous la corruption du Mordor. Elle est bâtie dans une vallée étroite, éclairée par une lueur spectrale émanant de ses tours. Un grand escalier descend jusqu’à la route menant à Cirith Ungol.', 1),

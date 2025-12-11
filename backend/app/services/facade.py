@@ -6,6 +6,7 @@ from backend.app.persistence.user_repository import UserRepository
 from backend.app.persistence.review_repository import ReviewRepository
 from backend.app.persistence.image_post_repository import ImagePostRepository
 import base64
+import os
 
 class PortfolioFacade:
     """
@@ -157,7 +158,7 @@ class PortfolioFacade:
             ValueError: Si tentative de modifier le mot de passe ou si l'utilisateur n'existe pas.
             PermissionError: Si l'utilisateur n'a pas le droit de modifier ce profil.
         """
-        # ⚠️ Remarque : le mot de passe doit toujours être mis à jour via `update_user_password`.
+        # le mot de passe doit toujours être mis à jour via `update_user_password`.
         try:
             # Sécurité : empêche la modification directe du mot de passe
             if 'password' in data:
@@ -375,8 +376,11 @@ class PortfolioFacade:
         except Exception as e:
             db.session.rollback()
             raise ValueError(f"Erreur lors de la suppression : {str(e)}")
-
+        
+# -----------------------------------------------------
 # -------------------- Post_image  --------------------
+# -----------------------------------------------------
+
     def create_image_post(self, image_post_data):
         """
             Crée un nouveau post image pour un utilisateur.
@@ -552,4 +556,3 @@ class PortfolioFacade:
         except Exception as e:
             db.session.rollback()
             raise ValueError(f"Erreur lors de la suppression : {str(e)}")
-

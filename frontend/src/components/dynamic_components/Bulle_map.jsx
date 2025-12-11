@@ -3,8 +3,6 @@
  * @module Bulle_map
  */
 
-import React, { useEffect, useState } from "react";
-import { MapContainer, Marker, Popup, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import 'leaflet/dist/leaflet.css';
 

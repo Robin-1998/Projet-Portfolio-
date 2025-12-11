@@ -36,8 +36,8 @@ const routes = [
   { path: "/histoires", element: <History />},
   { path: "/races", element: <Races />},
   { path: "/races/:id", element: <RaceZoom /> },
-	{ path: "/creations", element: <Creations /> },
-	{ path: "/histoires/:id", element: <HistoryZoom /> },
+  { path: "/creations", element: <Creations /> },
+  { path: "/histoires/:id", element: <HistoryZoom /> },
   { path: "/creations/:id", element: <CreationZoom /> },
   { path: "/creations/:id", element: <CreationZoom /> },
   { path: "/characters/:id", element: <CharacterZoom /> }

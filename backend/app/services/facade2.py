@@ -79,37 +79,6 @@ class PortfolioFacade:
             raise ValueError(f"History avec id {history_id} introuvable.")
         return history
 
-
-# ------------------------- SEARCH ------------------------------------------
-
-    def search_all(self, query):
-        """
-        Effectue une recherche globale sur plusieurs entités : personnages, races,
-        histoires et posts d'images.
-
-        Code Erreur:
-            ValueError: Si le terme de recherche est vide
-        """
-        if not query or query.strip() == '':
-            raise ValueError("Aucun terme de recherche fourni")
-
-        # Recherche insensible à la casse dans chaque table
-        characters = Character.query.filter(Character.name.ilike(f"%{query}%")).all()
-        races = Race.query.filter(Race.name.ilike(f"%{query}%")).all()
-        history = History.query.filter(History.name.ilike(f"%{query}%")).all()
-        image_post = ImagePost.query.filter(ImagePost.title.ilike(f"%{query}%")).all()
-
-        # Retour sous forme structurée (dict)
-        return {
-            "query": query,
-            "results": {
-                "characters": [c.to_dict() for c in characters],
-                "races": [r.to_dict() for r in races],
-                "history": [h.to_dict() for h in history],
-                "image_post": [i.to_dict() for i in image_post]
-            }
-        }
-
 #-------------------------- PLACE -----------------------------------------
 # -- Get all régions avec enfants
     @staticmethod

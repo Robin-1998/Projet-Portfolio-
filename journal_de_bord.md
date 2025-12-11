@@ -217,3 +217,19 @@ Finalisation des modèles corrigés par rapport à la nouvelle base de donnée
 - Correctif Repository
 - Commencement des modifs API sur le post d'image en supprimant la base 64
 - Se renseigner sur le token dans le cookie
+
+## 10/12 
+
+Finalisation du back avec reprise des post_image en BYTEA pour simplicité
+Suppression de commentaire inutile dans le code
+
+- Objectif futur : 
+	refaire le diagramme de db pour les prochaines
+	s'intéresser au fonctionnement de docker
+	continuer le dossier RNCP
+	Revoir le front
+
+## 11/12
+Relecture du front et suppression de code non utile
+Diagramme db terminé et envoyer dans le dossier documentation
+

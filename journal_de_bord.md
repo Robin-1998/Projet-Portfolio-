@@ -233,3 +233,20 @@ Suppression de commentaire inutile dans le code
 Relecture du front et suppression de code non utile
 Diagramme db terminé et envoyer dans le dossier documentation
 
+# 12/12 
+Apprentissage sur d'autre cours
+
+# 15/12
+Apprentissage sur d'autre cours
+
+# 18/12 
+Utilisation de Dockerfile pour le back et le front
+
+# 19/12 
+Continuation du dossier de projet commencé fin du mois de Novembre
+
+# 26/12
+Création d'un Dockercompose pour lancement des dockerfiles back / front + base de donnée
+modification de vite.config pour concordance avec Docker
+
+# 27/12

@@ -1,0 +1,43 @@
+services:
+  database:
+    image: postgis/postgis:15-3.4
+    container_name: containerdb
+    environment:
+      POSTGRES_DB: databaserd
+      POSTGRES_USER: robin
+      POSTGRES_PASSWORD: rob53!
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database:/database
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.back
+    container_name: containerback
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    depends_on:
+      - database
+    volumes:
+      - .:/app
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.front
+    container_name: containerfront
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+volumes:
+  postgres_data:

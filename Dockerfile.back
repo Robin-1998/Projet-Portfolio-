@@ -1,0 +1,12 @@
+# utilisation de python slim car poids beaucoup plus réduit et suffisant pour faire démarrer l'application
+FROM python:3.12-slim
+# fichier où se trouve notre back-end
+WORKDIR /app
+# récupérer les dépendances du back-end
+COPY requirements.txt .
+# installer des dépendances du requierements
+RUN pip install --no-cache-dir -r requirements.txt
+# copie tout le projet dans /app (WORKDIR), y compris run.py
+COPY . .
+EXPOSE 5000
+CMD ["python", "run.py"]

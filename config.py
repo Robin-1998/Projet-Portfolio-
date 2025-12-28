@@ -2,14 +2,7 @@ import os
 from dotenv import load_dotenv
 from datetime import timedelta
 
-# Déterminer l'environnement courant (development, testing, production)
-ENV = os.getenv("FLASK_ENV", "development")
-
-# Charger le fichier .env correspondant à l'environnement
-if ENV == "testing":
-    load_dotenv(".env.test") # variables spécifiques aux tests
-else:
-    load_dotenv(".env")      # variables standard pour dev ou prod
+load_dotenv()
 
 # Répertoire de base du projet
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -44,21 +37,6 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_ECHO = True  # afficher les requêtes SQL pour le debug
 
 
-class TestingConfig(Config):
-    """Configuration utilisée pendant les tests pytest."""
-
-    TESTING = True
-    DEBUG = False
-    SQLALCHEMY_DATABASE_URI = os.getenv(
-        "TEST_DATABASE_URL", "postgresql://postgres:test@localhost:5432/database_test"
-    )
-
-    if "test" not in SQLALCHEMY_DATABASE_URI:
-        raise RuntimeError(
-            "⚠️ Vous tentez de lancer les tests sur une base non dédiée aux tests !"
-        )
-
-
 class ProductionConfig(Config):
     """Configuration pour la production (déploiement)."""
 
@@ -69,7 +47,6 @@ class ProductionConfig(Config):
 # Dictionnaire de configuration global pour Flask
 config = {
     "development": DevelopmentConfig,
-    "testing": TestingConfig,
     "production": ProductionConfig,
     "default": DevelopmentConfig,
 }

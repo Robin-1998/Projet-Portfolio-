@@ -1,13 +1,11 @@
 from backend.app.models.race import Race
 from backend.app.models.character import Character
 from backend.app.models.history import History
-from backend.app.models.image_post import ImagePost
 from backend.app.models.place_map import PlaceMap
 from backend.app.models.map_region import MapRegion
 from backend.app.models.map_marker import MapMarker
 from sqlalchemy.orm import joinedload
 from geoalchemy2.shape import to_shape
-from backend.app.models.relation_type import RelationType
 from backend.app.models.description import Description
 from sqlalchemy import func
 
@@ -80,116 +78,6 @@ class PortfolioFacade:
         return history
 
 #-------------------------- PLACE -----------------------------------------
-# -- Get all régions avec enfants
-    @staticmethod
-    def get_all_regions_with_hierarchy():
-        """
-        Récupère toutes les régions (places de type 'Région') sans parent
-        et construit leur hiérarchie complète d'enfants.
-        """
-        # Récupérer toutes les régions qui n'ont pas de parents (racines)
-        regions = db.session.query(PlaceMap).join(
-            MapRegion, PlaceMap.id == MapRegion.place_id
-        ).filter(PlaceMap.parent_id.is_(None)).all()
-
-        # Construire récursivement la hiérarchie pour chaque région
-        return [PortfolioFacade._build_place_hierarchy(region) for region in regions]
-
-# -- Get 1 region by ID avec enfant
-    @staticmethod
-    def get_region_by_id_with_hierarchy(region_id):
-        """
-        Récupère UNE région spécifique (map_region) avec sa hiérarchie complète
-
-        Returns:
-            Dict avec structure identique à get_all_regions_with_hierarchy
-        """
-        map_region = db.session.query(MapRegion).options(
-            joinedload(MapRegion.place)
-        ).filter_by(id=region_id).first()
-
-        if not map_region or not map_region.place:
-            return None
-
-        return PortfolioFacade._build_place_hierarchy(map_region.place)
-
-# -- Get 1 Place by ID
-    @staticmethod
-    def get_place_by_id(place_id):
-        """
-        Récupère un lieu spécifique (ville, village, etc.) avec son marqueur
-        et construit la hiérarchie si des enfants existent.
-
-        Returns:
-            Dict avec structure :
-            {
-                "id": 3,
-                "title": "Minas Tirith",
-                "type_place": "Ville",
-                "description": "...",
-                "children": [],
-                "region_shape": null,
-                "marker_location": {...}  # coordonnées du point
-            }
-        """
-        place = db.session.query(PlaceMap).filter_by(id=place_id).first()
-
-        if not place:
-            return None
-
-        return PortfolioFacade._build_place_hierarchy(place)
-
-#-- Construit dictionnaire Région place
-    @staticmethod
-    def _build_place_hierarchy(place):
-        """
-        Construit récursivement le dictionnaire d'un lieu avec ses enfants,
-        sa forme géométrique si région, et son marqueur si présent.
-
-        Returns:
-            Dict avec toute la hiérarchie
-        """
-        # Forme géométrique du polygone si la place est une région
-        region_shape = None
-        if place.map_regions:
-            region = place.map_regions[0]  # Un place n'a qu'une seule région
-            geom = to_shape(region.shape_data)
-            region_shape = {
-                "type": "Polygon",
-                "coordinates": list(geom.exterior.coords)
-            }
-
-        # Récupérer les coordonnées du marqueur (si lieu avec marqueur)
-        marker_location = None
-        if place.map_markers:
-            marker = place.map_markers[0]  # Un place n'a qu'un seul marqueur
-            geom = to_shape(marker.location)
-            marker_location = {
-                "type": "Point",
-                "coordinates": [geom.x, geom.y]
-            }
-
-        # Construire la structure de base
-        place_dict = {
-            "id": place.id,
-            "title": place.title,
-            "type_place": place.type_place,
-            "description": place.description,
-            "children": [],
-            "region_shape": region_shape,
-            "marker_location": marker_location
-        }
-
-        # Construction récursive pour tous les enfants
-        if place.children:
-            place_dict["children"] = [
-                PortfolioFacade._build_place_hierarchy(child)
-                for child in place.children
-            ]
-
-        return place_dict
-
-
     # -- Get marker des Place ou région
     @staticmethod
     def get_map_data():
@@ -198,9 +86,6 @@ class PortfolioFacade:
         - Tous les markers avec leur lieu
         - Toutes les régions avec leur lieu
         """
-        from sqlalchemy.orm import joinedload
-        from geoalchemy2.shape import to_shape
-
         # Récupérer tous les markers et leur Place associé (eager loading)
         markers = db.session.query(MapMarker).options(
             joinedload(MapMarker.place)

@@ -3,15 +3,6 @@
  * @module Body_page
  */
 
-/**
- * Wrapper pour le contenu principal avec layout responsive
- *
- * @component
- * @param {Object} props
- * @param {React.ReactNode} props.children - Contenu à afficher
- * @returns {JSX.Element} Conteneur du contenu principal
- */
-
 import { useState } from 'react';
 import Navigation from './Navigation';
 import Header from './Header';

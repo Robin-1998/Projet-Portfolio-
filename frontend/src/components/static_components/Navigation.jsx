@@ -1,17 +1,8 @@
 /**
  * Composant de menu de navigation principal
- * @module Navigation
- */
-
-/**
  * Affiche le menu de navigation avec liens vers toutes les sections du site
  * Gère l'ouverture/fermeture du menu et les sous-menus
- *
- * @component
- * @param {Object} props
- * @param {boolean} props.menuOpen - État d'ouverture du menu
- * @param {Function} props.toggleMenu - Fonction pour basculer l'état du menu
- * @returns {JSX.Element} Menu de navigation
+ * @module Navigation
  */
 
 import { Link, useLocation } from 'react-router-dom';

@@ -1,16 +1,8 @@
 /**
  * Composant d'en-tête avec logo, titre et authentification
- * @module Header
- */
-
-/**
  * Affiche l'en-tête du site avec logo, titre et bouton de connexion/déconnexion
  * Gère l'état de connexion et la déconnexion de l'utilisateur
- *
- * @component
- * @param {Object} props
- * @param {boolean} props.menuOpen - État d'ouverture du menu
- * @returns {JSX.Element} En-tête du site
+ * @module Header
  */
 
 import React, { useEffect, useState } from 'react';

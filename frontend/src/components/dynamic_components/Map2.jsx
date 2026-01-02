@@ -256,11 +256,8 @@ const chargerDonneesCarte = async () => {
   /**
    * Composant interne pour gérer le zoom adaptatif des icônes
    * Écoute les événements de zoom et ajuste la taille des icônes en conséquence
-   *
    * @component
-   * @param {Object} props
    * @param {Function} props.setIconSize - Fonction pour mettre à jour la taille des icônes
-   * @returns {null} Ne rend rien visuellement
    */
   function ZoomAdaptiveIcons({ setIconSize }) {
     const map = useMapEvents({

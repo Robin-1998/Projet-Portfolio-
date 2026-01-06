@@ -10,12 +10,10 @@ from backend.app.models.basemodel import BaseModel
 class Character(BaseModel):
     """
     classe Character en lecture seule
-    
     Cette classe modélise un personnage avec ses attributs principaux : nom, dates,
     genre, profession, description, et citation. Elle est liée à la table `characters`
     dans la base de données et possède une relation vers le modèle `Race`.
     """
-
     __tablename__ = "characters"
 
     name = db.Column(db.String(100), nullable=False, unique=True)

@@ -8,9 +8,6 @@ import getImagePath from '../../services/getImage';
  * Composant CharactersListe
  * Affiche une grille de tous les personnages avec image, nom et citation
  * Les données sont récupérées depuis l'API backend
- *
- * @component
- * @returns {JSX.Element} Liste de personnages
  */
 function CharactersListe() {
   const [characters, setCharacters] = useState([]); // Liste des personnages

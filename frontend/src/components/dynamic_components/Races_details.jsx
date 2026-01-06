@@ -1,5 +1,6 @@
 /**
  * Composant d'affichage détaillé d'une race de l'univers du Seigneur des Anneaux
+ * Récupère les informations depuis l'API et affiche nom, description, forces et faiblesses
  * @module RaceDetail
  */
 
@@ -9,13 +10,6 @@ import axios from 'axios';
 import getImagePath from '../../services/getImage';
 import '../../styles/detail_RPH.css';
 
-/**
- * Affiche les détails complets d'une race (Elfes, Hobbits, Nains, etc.)
- * Récupère les informations depuis l'API et affiche nom, description, forces et faiblesses
- *
- * @component
- * @returns {JSX.Element} Page de détail de la race
- */
 function RaceDetail() {
   const { id } = useParams();
   const [race, setRace] = useState(null);

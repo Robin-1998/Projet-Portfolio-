@@ -1,5 +1,6 @@
 /**
- * Composant de formulaire de connexion utilisateur
+ * Affiche un formulaire de connexion avec gestion de l'authentification JWT
+ * Vérifie l'état de connexion au chargement et redirige après succès
  * @module FormulaireLogin
  */
 
@@ -9,13 +10,6 @@ import ornement from '../../assets/ornement.PNG';
 import {useNavigate} from 'react-router-dom';
 import '../../styles/login.css';
 
-/**
- * Affiche un formulaire de connexion avec gestion de l'authentification JWT
- * Vérifie l'état de connexion au chargement et redirige après succès
- *
- * @component
- * @returns {JSX.Element} Formulaire de connexion
- */
 function FormulaireLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -37,9 +31,6 @@ function FormulaireLogin() {
   /**
    * Gère la soumission du formulaire de connexion
    * Envoie les identifiants à l'API et stocke le token JWT en cas de succès
-   *
-   * @async
-   * @param {Event} e - Événement de soumission du formulaire
    */
   const handleLoginSubmit = async (e) => {
     e.preventDefault();

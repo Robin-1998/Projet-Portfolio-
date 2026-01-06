@@ -1,5 +1,6 @@
 /**
  * Composant de galerie et publication de créations artistiques
+ * et permet aux utilisateurs authentifiés de publier leurs propres créations
  * @module CreationsList
  */
 
@@ -8,13 +9,6 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import '../../styles/creations.css';
 
-/**
- * Affiche la galerie de créations artistiques et permet aux utilisateurs authentifiés
- * de publier leurs propres créations
- *
- * @component
- * @returns {JSX.Element} Page de galerie avec formulaire de publication
- */
 function CreationsList() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -44,8 +38,6 @@ function CreationsList() {
 
   /**
    * Gère la sélection d'un fichier image et sa conversion en base64
-   *
-   * @param {Event} e - Événement de changement de fichier
    */
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -63,11 +55,7 @@ function CreationsList() {
   };
 
   /**
-   * Soumet une nouvelle création artistique à l'API
-   * Nécessite une authentification valide
-   *
-   * @async
-   * @param {Event} e - Événement de soumission du formulaire
+   * Soumet une nouvelle création artistique à l'API Nécessite une authentification valide
    */
   const handleSubmit = async (e) => {
     e.preventDefault();

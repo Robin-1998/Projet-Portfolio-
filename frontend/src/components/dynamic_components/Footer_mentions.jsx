@@ -13,20 +13,20 @@
 function MentionsLegales() {
   return (
     <div className="mention">
-      <h1 className="titre-mention">Mentions légales</h1>
+      <h2 className="titre-mention">Mentions légales</h2>
 
 	  <p>
 		Ce site est un projet personnel à but non lucratif.
 		Il a pour objectif de regrouper et partager des informations sur l’univers du Seigneur des Anneaux à des fins de documentation et de passion.
 	  </p>
 
-      <h2 className="titre2-mention">Éditeur du site</h2>
+      <h3 className="titre2-mention">Éditeur du site</h3>
       <p>
         Thérèse-Marie Lefoulon et Robin David
         <br />
       </p>
 
-      <h2>Propriété intellectuelle</h2>
+      <h3>Propriété intellectuelle</h3>
       <p>
         Tous les contenus originaux du site (textes, images, design) sont la
         propriété de Thérèse-Marie Lefoulon et Robin David. Toute reproduction
@@ -40,7 +40,7 @@ function MentionsLegales() {
         héberger ces contenus dans le cadre du site.
       </p>
 
-	<h2>Génération d'image à l'aide de l'intelligence artificielle</h2>
+	<h3>Génération d'image à l'aide de l'intelligence artificielle</h3>
 	  <p>
 		Les images utilisées sont générées par intelligence artificielle à l’aide de Microsoft Copilot.
 		<ul>
@@ -73,7 +73,7 @@ function MentionsLegales() {
         partager.
       </p>
 
-      <h2>Données personnelles</h2>
+      <h3>Données personnelles</h3>
       <p>
         Les informations fournies lors de la création d’un compte (nom, email,
         mot de passe) sont utilisées uniquement pour permettre l’accès au site
@@ -87,7 +87,7 @@ function MentionsLegales() {
         l’administrateur du site.
       </p>
 
-      <h2>Cookies</h2>
+      <h3>Cookies</h3>
       <p>
         Ce site n’utilise pas de cookies à des fins publicitaires. Si des
         cookies techniques sont utilisés, vous pouvez les refuser via les

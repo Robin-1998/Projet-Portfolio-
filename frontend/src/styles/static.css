@@ -416,6 +416,8 @@ footer nav ul {
 .titre-mention {
   font-family: 'RingR';
   color: #403221;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
 }
 
 .titre2-mention {

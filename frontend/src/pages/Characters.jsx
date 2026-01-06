@@ -6,7 +6,7 @@ import BodyPage from '../components/static_components/Body_page';
 import CharacterList from '../components/dynamic_components/Character_list';
 
 
-function HistoryList() {
+function Characters() {
 	return (
 		<>
 			<BodyPage>
@@ -16,4 +16,5 @@ function HistoryList() {
 	);
 }
 
-export default HistoryList
+export default Characters
+

@@ -45,7 +45,7 @@ function HistoryList() {
 
   return (
   <div className='container-histoire2'>
-      <h1 className='titre-histoire2'>Histoires</h1>
+      <h2 className='titre-histoire2'>Histoires</h2>
     <div className="character-grid2">
       {History.map(char => (
         <div key={char.id} className="card2">

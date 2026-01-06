@@ -45,7 +45,7 @@ function RacesList() {
 
   return (
     <div className='container-histoire'>
-      <h1 className='titre-histoire'>Les Espèces</h1>
+      <h2 className='titre-histoire'>Les Espèces</h2>
       <div className="character-grid">
         {Races.map(char => (
           <div key={char.id} className="card">

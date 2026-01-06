@@ -36,7 +36,7 @@ function CharactersListe() {
   return (
     <div className='container-histoire'>
       <div className="head-filter">
-        <h1 className='titre-histoire'>Personnages</h1>
+        <h2 className='titre-histoire'>Personnages</h2>
       </div>
       <div className="character-grid">
         {characters.map(char => (

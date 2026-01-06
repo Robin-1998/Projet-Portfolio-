@@ -171,7 +171,7 @@ function CreationDetail() {
             </div>
 
             <div className="creation-info">
-              <h1>{creation.title}</h1>
+              <h2>{creation.title}</h2>
               {creation.description && (
                 <p className="creation-description">{creation.description}</p>
               )}

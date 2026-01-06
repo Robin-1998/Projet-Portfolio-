@@ -46,7 +46,7 @@ function HistoryZoom() {
   return (
     <div className="bloc-info">
       <div className="bloc_info_zoom_left">
-        <h1>{history.name}</h1>
+        <h2>{history.name}</h2>
 
         {history.citation && (
           <p className="citation">

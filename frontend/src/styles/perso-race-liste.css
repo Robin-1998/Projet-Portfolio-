@@ -8,8 +8,10 @@
 
 .titre-histoire {
   margin-top: 3rem;
+  font-size: 2rem;
   text-align: center;
   font-family: 'RingR';
+  margin-bottom: 1rem;
 }
 
 .character-grid {

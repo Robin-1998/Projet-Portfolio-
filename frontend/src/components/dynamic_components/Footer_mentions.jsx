@@ -6,9 +6,6 @@
 /**
  * Affiche la page des mentions légales incluant les informations sur l'éditeur,
  * l'hébergeur, la propriété intellectuelle, les règles de publication et le RGPD
- *
- * @component
- * @returns {JSX.Element} Page des mentions légales
  */
 function MentionsLegales() {
   return (

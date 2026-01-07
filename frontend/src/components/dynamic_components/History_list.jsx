@@ -13,10 +13,8 @@ import '../../styles/histoire-liste.css';
 /**
  * Affiche une grille de cartes d'événements historiques de l'univers du Seigneur des Anneaux
  * Récupère les données depuis l'API et gère le chargement asynchrone
- *
- * @component
- * @returns {JSX.Element} Grille d'événements historiques
  */
+
 function HistoryList() {
   const [History, setHistory] = useState([]);
   // Déclaration de l'état local "characters" . permetttra de stocker les histoires

@@ -13,10 +13,8 @@ import '../../styles/perso-race-liste.css';
 /**
  * Affiche une grille de cartes des différentes races de l'univers du Seigneur des Anneaux
  * Récupère les données depuis l'API et gère le chargement asynchrone
- *
- * @component
- * @returns {JSX.Element} Grille des races
  */
+
 function RacesList() {
   const [Races, setRaces] = useState([]);
   // Déclaration de l'état local "characters" . permetttra de stocker les histoires

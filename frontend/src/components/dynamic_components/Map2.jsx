@@ -34,10 +34,8 @@ L.Icon.Default.mergeOptions({
 /**
  * Affiche une carte interactive de la Terre du Milieu avec marqueurs et régions cliquables
  * Gère le zoom adaptatif des icônes et l'affichage de détails en modal
- *
- * @component
- * @returns {JSX.Element} Carte interactive Leaflet
  */
+
 const Map2 = () => {
   // États pour les données de la carte
   const [markers, setMarkers] = useState([]);          // Liste des marqueurs sur la carte
@@ -74,12 +72,8 @@ const Map2 = () => {
 
   /**
    * Récupère les descriptions détaillées d'une entité depuis l'API
-   *
-   * @async
-   * @param {string} entityType - Type d'entité ('region', 'ville', 'montagne', etc.)
-   * @param {number|string} entityId - ID de l'entité
-   * @returns {Promise<Array>} Liste des descriptions ou tableau vide si erreur
    */
+
   const fetchDescriptions = async (entityType, entityId) => {
     try {
       const response = await fetch(`http://127.0.0.1:5000/api/v1/descriptions/${entityType}/${entityId}`);
@@ -143,9 +137,8 @@ const loadPlaceDetails = async (placeId, placeName, placeDescription, placeDetai
 /**
  * Charge les données de la carte depuis l'API backend
  * Récupère les marqueurs et régions, puis les transforme pour Leaflet
- *
- * @async
  */
+
 const chargerDonneesCarte = async () => {
   try {
     setLoading(true);

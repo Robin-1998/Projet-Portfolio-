@@ -11,9 +11,6 @@ import '../../styles/creation_detail.css';
 /**
  * Affiche le détail d'une création artistique avec son image, informations et commentaires
  * Permet aux utilisateurs authentifiés de laisser des commentaires
- *
- * @component
- * @returns {JSX.Element} Page de détail de la création
  */
 function CreationDetail() {
   const { id } = useParams();
@@ -70,9 +67,6 @@ function CreationDetail() {
   /**
    * Soumet un nouveau commentaire sur la création
    * Nécessite une authentification valide
-   *
-   * @async
-   * @param {Event} e - Événement de soumission du formulaire
    */
   const handleSubmitComment = async (e) => {
     e.preventDefault();

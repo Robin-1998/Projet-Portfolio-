@@ -12,10 +12,8 @@ import '../../styles/detail_RPH.css';
 /**
  * Affiche les détails d'un événement historique de l'univers du Seigneur des Anneaux
  * Récupère les informations depuis l'API et affiche nom, description, citation, date et lieu
- *
- * @component
- * @returns {JSX.Element} Page de détail de l'événement historique
  */
+
 function HistoryZoom() {
   const { id } = useParams();
   const [history, setHistory] = useState(null);

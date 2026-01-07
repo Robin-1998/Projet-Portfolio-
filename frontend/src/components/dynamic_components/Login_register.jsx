@@ -9,10 +9,8 @@ import '../../styles/login.css';
 
 /**
  * Affiche côte à côte le formulaire de connexion et le formulaire d'inscription
- *
- * @component
- * @returns {JSX.Element} Page d'authentification complète
  */
+
 function LoginRegister() {
   return (
     <div className="login-container">

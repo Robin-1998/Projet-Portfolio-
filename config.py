@@ -25,10 +25,6 @@ class Config:
     # JWT (durée de validité du token)
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(days=365)
 
-    # Pagination (optionnelle)
-    # ITEMS_PER_PAGE = 20
-
-
 class DevelopmentConfig(Config):
     """Configuration pour le développement local."""
 

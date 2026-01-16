@@ -9,3 +9,4 @@ psycopg2-binary # bibliothèque python qui sert à se connecter à une base de d
 python-dotenv # Permet de charger automatiquement les variables d'environnement
 geoalchemy2 # ORM python qui permet de gérer des données géospatiales directement dans une db (via postgresql)
 flask_cors
+pytest

@@ -23,7 +23,6 @@ export const createStickerIcon = (imageUrl, color = "#3b7a2f", size = 48) => {
   `;
   return L.divIcon({
     html: svg,
-    className: "custom-sticker-icon",
     iconSize: [size, size],
     iconAnchor: [size / 2, size],
     popupAnchor: [0, -size],
@@ -33,8 +32,6 @@ export const createStickerIcon = (imageUrl, color = "#3b7a2f", size = 48) => {
 /**
  * Dictionnaire des icônes par type de lieu
  * Chaque fonction retourne une icône Leaflet avec couleur et image appropriées
- *
- * @constant {Object.<string, Function>}
  */
 export const CATEGORY_ICONS = {
   montagne: (size = 48) => createStickerIcon("/bulle_map/montagne.png", "#8b5e3b81", size),

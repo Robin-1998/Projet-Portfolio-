@@ -1,13 +1,7 @@
-/**
- * Composant d'affichage de la liste des races
- * @module RacesList
- */
-
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import getImagePath from '../../services/getImage'
 import { Link } from 'react-router-dom';
-// Import de la bibliothèque axios pour faire les requêtes HTTP
 import '../../styles/perso-race-liste.css';
 
 /**

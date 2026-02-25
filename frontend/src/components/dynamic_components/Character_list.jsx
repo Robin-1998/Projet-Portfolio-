@@ -11,7 +11,6 @@ import getImagePath from '../../services/getImage';
  */
 function CharactersListe() {
   const [characters, setCharacters] = useState([]); // Liste des personnages
-  const [descriptions, setDescriptions] = useState({}); // Potentiel stockage des descriptions (non utilisé ici)
   const [loading, setLoading] = useState(true); // Indique si les données sont en cours de chargement
 
   useEffect(() => {

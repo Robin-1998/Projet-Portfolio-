@@ -1,8 +1,3 @@
-/**
- * Composant d'affichage de la liste des événements historiques
- * @module HistoryList
- */
-
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import getImagePath from '../../services/getImage';

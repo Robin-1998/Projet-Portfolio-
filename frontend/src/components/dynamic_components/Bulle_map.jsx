@@ -4,7 +4,6 @@
  */
 
 import L from "leaflet";
-import 'leaflet/dist/leaflet.css';
 
 /**
  * Crée une icône de marqueur personnalisée avec bulle colorée et image
@@ -23,6 +22,7 @@ export const createStickerIcon = (imageUrl, color = "#3b7a2f", size = 48) => {
   `;
   return L.divIcon({
     html: svg,
+    className: "custom-sticker-icon",
     iconSize: [size, size],
     iconAnchor: [size / 2, size],
     popupAnchor: [0, -size],

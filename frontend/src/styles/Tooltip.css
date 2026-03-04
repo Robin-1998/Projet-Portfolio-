@@ -1,5 +1,5 @@
 /* =============================================================== */
-/* ================== CSS pour les info-bulles =================== */
+/* =================== CSS pour les info-bulles =================== */
 /* =============================================================== */
 
 .tooltip-container {
@@ -16,7 +16,7 @@
   padding: 5px 10px;
   position: absolute;
   top: calc(100% + 10px); /* EN DESSOUS au lieu de bottom */
-  left: 50%;
+  left: 100%;
   transform: translateX(-50%);
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -24,17 +24,6 @@
   z-index: 10001 !important;
   pointer-events: none;
   font-size: 14px;
-}
-
-/* Petite flèche en HAUT du tooltip */
-.tooltip-text::after {
-  content: '';
-  position: absolute;
-  bottom: 100%; /* Changé de top à bottom */
-  left: 50%;
-  transform: translateX(-50%);
-  border: 5px solid transparent;
-  border-bottom-color: #333; /* Changé de border-top à border-bottom */
 }
 
 .tooltip-container:hover .tooltip-text {

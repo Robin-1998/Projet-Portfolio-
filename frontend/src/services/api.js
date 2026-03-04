@@ -8,7 +8,6 @@ const API_URL = 'http://localhost:5000/api';
 export const mapAPI = {
   /**
    * Obtenir tous les marqueurs.
-   * @returns {Promise<Object>} Données des marqueurs.
    */
   getMarkers: async () => {
     // Requête API pour récupérer les marqueurs

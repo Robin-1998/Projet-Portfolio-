@@ -1,5 +1,3 @@
-import React from 'react';
-
 /**
  * Composant Tooltip
  * Affiche un texte d'info-bulle lorsque l'utilisateur survole son enfant

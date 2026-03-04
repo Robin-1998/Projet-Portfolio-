@@ -1,9 +1,11 @@
-/* Container qui contient tout */
+/* =============================================================== */
+/* ==================== CSS pour la page des listes d'évènements historiques ==================== */
+/* =============================================================== */
+
 .container-hisoire2 {
   width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
-
 }
 
 .titre-histoire2 {

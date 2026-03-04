@@ -1,4 +1,7 @@
-/* --- Page login/register --- */
+/* =============================================================== */
+/* ==================== CSS pour la page login / register ==================== */
+/* =============================================================== */
+
 .login-container {
   display: flex;
   justify-content: center;
@@ -110,7 +113,6 @@
   width: 10rem;
   display: flex;
   align-self: center;
-
 }
 
 .login-message {

@@ -93,7 +93,7 @@ function CreationsList() {
       setBase64Image('');
       setMimeType('');
 
-      // Recharger les images
+      // permet de mettre directement l'image sans recherge la page
       const res = await axios.get('http://127.0.0.1:5000/api/v1/images');
       setImages(res.data);
 
